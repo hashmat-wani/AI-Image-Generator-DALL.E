@@ -1,6 +1,6 @@
 import { Box, styled, Typography, useMediaQuery } from "@mui/material";
 import React from "react";
-import { Navigate, Outlet, useNavigate, useParams } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { FlexBox } from "../../components/common/FlexBox";
 import { shades } from "../../theme";
@@ -17,15 +17,8 @@ const SingleImageDashboard = () => {
   let { photo } = photos.find((photo) => photo.id == id);
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="space-between"
-      p="25px 15px"
-      height="100vh"
-      // border={1}
-    >
-      <FlexBox mb="-180px" justifyContent="space-between">
+    <Box display="flex" flexDirection="column" p="25px 15px" height="100vh">
+      <FlexBox mb="30px" justifyContent="space-between">
         {/* back */}
         <FlexBox
           onClick={() => navigate("/search")}
@@ -54,12 +47,14 @@ const SingleImageDashboard = () => {
         )}
       </FlexBox>
       <Outlet />
-      <Typography variant="small" color={shades.primary[300]}>
-        Once you've created the image you want, you can share it with others in
-        the community
-      </Typography>
       {isMobile && (
-        <FlexBox columnGap="10px">
+        <Typography variant="small" color={shades.primary[300]}>
+          Once you've created the image you want, you can share it with others
+          in the community
+        </Typography>
+      )}
+      {isMobile && (
+        <FlexBox mt="auto" columnGap="10px">
           <Btn
             mobile={isMobile.toString()}
             p="20px"
