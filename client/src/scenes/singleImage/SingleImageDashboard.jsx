@@ -17,8 +17,14 @@ const SingleImageDashboard = () => {
   let { photo } = photos.find((photo) => photo.id == id);
 
   return (
-    <Box display="flex" flexDirection="column" p="25px 15px" height="100vh">
-      <FlexBox justifyContent="space-between">
+    <Box
+      // border={1}
+      display="flex"
+      flexDirection="column"
+      p={{ xs: "15px 5%", md: "30px 5%" }}
+      minHeight="calc(100vh - 70px)"
+    >
+      <FlexBox mb={{ xs: "15px", md: "30px" }} justifyContent="space-between">
         {/* back */}
         <FlexBox
           onClick={() => navigate("/search")}
@@ -54,7 +60,7 @@ const SingleImageDashboard = () => {
         </Typography>
       )}
       {isMobile && (
-        <FlexBox mt="auto" columnGap="10px">
+        <FlexBox pt="30px" mt="auto" columnGap="10px">
           <Btn
             mobile={isMobile.toString()}
             p="20px"

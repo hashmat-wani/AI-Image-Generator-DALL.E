@@ -30,7 +30,7 @@ const SingleImage = () => {
         <ChevronLeftIcon />
       </SwipeBtn>
       {/* Image */}
-      <Box p={0} width={{ xs: "100%", md: "416px" }}>
+      <Box width={{ xs: "100%", md: "416px" }}>
         <img src={photo} width="100%" />
       </Box>
       {/* right swipe */}
@@ -51,13 +51,13 @@ const SingleImage = () => {
 export default SingleImage;
 
 const SwipeBtn = styled(IconButton)(({ mobile, index, idx, variant }) => ({
-  position: `${mobile === "true" && "absolute"}`,
-  top: "50%",
-  right: `${variant === "next" && "5px"}`,
-  left: `${variant === "prev" && "5px"}`,
+  position: `${mobile === "true" ? "absolute" : undefined}`,
+  top: `${mobile === "true" && "50%"}`,
+  right: `${mobile === "true" && variant === "next" && "5px"}`,
+  left: `${mobile === "true" && variant === "prev" && "5px"}`,
   color: `${mobile === "true" && "#fff"}`,
   padding: `${mobile === "true" ? "2px" : "10px"}`,
-  transform: "translateY(-50%)",
+  transform: `${mobile === "true" && "translateY(-50%)"}`,
   transition: "0.2s",
   opacity: `${index == idx ? 0 : 1}`,
   borderRadius: "5px",

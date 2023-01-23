@@ -18,7 +18,7 @@ const Home = () => {
   };
 
   return (
-    <Box padding="25px 15px">
+    <Box padding={{ xs: "20px 5%", md: "50px 5%" }}>
       {/* Heading */}
       <Box padding={{ xs: 0, md: "0 10px" }}>
         <Typography mb="5px" variant="h3">
@@ -55,7 +55,7 @@ const Home = () => {
       <Box
         padding={{ xs: "0 0 70px", md: "0 10px 70px" }}
         position={`${!isMobile && "sticky"}`}
-        top={20}
+        top={80}
       >
         <Input />
       </Box>

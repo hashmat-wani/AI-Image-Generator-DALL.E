@@ -35,7 +35,7 @@ const SearchResult = () => {
   };
 
   return (
-    <Box p="25px 15px">
+    <Box p={{ xs: "20px 5%", md: "50px 5%" }}>
       {/* Heading */}
       <FlexBox mb="15px" justifyContent="space-between">
         <Typography color={shades.primary[300]}>
