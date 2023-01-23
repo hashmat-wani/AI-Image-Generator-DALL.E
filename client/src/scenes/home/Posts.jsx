@@ -107,20 +107,21 @@ const Posts = () => {
   const [searchText, setSearchText] = useState("");
   const isSmallScreen = useMediaQuery("(max-width:499px)");
 
-  const fetchPosts = () => {
-    fetch("http://localhost:8080/api/v1/post", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => res.json())
-      .then((data) => setAllPosts(data.data.reverse()))
-      .catch((err) => alert(err))
-      .finally(() => setloading(false));
-  };
+  // const fetchPosts = () => {
+  //   fetch("http://localhost:8080/api/v1/post", {
+  //     method: "GET",
+  //     headers: { "Content-Type": "application/json" },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => setAllPosts(data.data.reverse()))
+  //     .catch((err) => alert(err))
+  //     .finally(() => setloading(false));
+  // };
 
   // useEffect(() => {
   //   fetchPosts();
   // }, []);
+  
   return (
     <Box>
       {/* Heading */}
@@ -161,7 +162,7 @@ const Posts = () => {
         ) : (
           <>
             {searchText && (
-              <Typography color={shades.primary[300]}>
+              <Typography mt="15px" mb="5px" color={shades.primary[300]}>
                 Showing results for{" "}
                 <span style={{ color: "#000000" }}>{searchText}</span>
               </Typography>

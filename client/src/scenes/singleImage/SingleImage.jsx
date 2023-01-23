@@ -11,7 +11,10 @@ import { shades } from "../../theme";
 const SingleImage = () => {
   const isMobile = useMediaQuery("(max-width:767px)");
   const navigate = useNavigate();
-  const { photos } = useSelector((state) => state.formReducer, shallowEqual);
+  const { photos, prompt } = useSelector(
+    (state) => state.formReducer,
+    shallowEqual
+  );
   const { id } = useParams();
 
   let { photo, index } = photos.find((photo) => photo.id == id);
@@ -31,7 +34,7 @@ const SingleImage = () => {
       </SwipeBtn>
       {/* Image */}
       <Box width={{ xs: "100%", md: "416px" }}>
-        <img src={photo} width="100%" />
+        <img src={photo} alt={prompt} width="100%" />
       </Box>
       {/* right swipe */}
       <SwipeBtn

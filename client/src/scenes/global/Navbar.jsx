@@ -38,7 +38,7 @@ function Navbar() {
   return (
     <FlexBox
       sx={{ borderBottom: `1px solid ${shades.primary[100]}` }}
-      p="10px 20px"
+      p={{ xs: "10px 10px 10px 0", md: "10px 15px" }}
       position="sticky"
       top={0}
       zIndex={100}
@@ -108,6 +108,7 @@ function Navbar() {
           ))}
         </Menu>
       </Box>
+
       {/* Mobile logo */}
       <Box sx={{ display: { xs: "flex", md: "none" }, mr: 1, flexGrow: 1 }}>
         <Link to="/">

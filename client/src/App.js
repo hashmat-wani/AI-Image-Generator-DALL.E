@@ -1,4 +1,3 @@
-import "./App.css";
 import Navbar from "./scenes/global/Navbar";
 import Home from "./scenes/home/Home";
 import SearchResult from "./scenes/searchResult/SearchResult";

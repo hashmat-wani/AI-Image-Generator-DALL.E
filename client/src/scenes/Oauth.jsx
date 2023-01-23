@@ -12,7 +12,7 @@ const Oauth = () => {
     <>
       <Divider
         sx={{
-          my: "20px",
+          my: "15px",
           width: "100%",
         }}
         color="red"
@@ -21,6 +21,7 @@ const Oauth = () => {
       </Divider>
       {oauth.map((el, idx) => (
         <FlexBox
+          key={idx}
           my="4px"
           width="100%"
           p="13px 15px"
@@ -30,11 +31,7 @@ const Oauth = () => {
             borderRadius: "4px",
           }}
         >
-          <img
-            // style={{ border: "1px solid red" }}
-            width="25px"
-            src={!idx ? googleLogo : fbLogo}
-          />
+          <img width="25px" src={!idx ? googleLogo : fbLogo} />
           <Typography fontSize="15px" color={shades.primary[400]}>
             {el}
           </Typography>

@@ -1,10 +1,10 @@
 import { Box, Typography, useMediaQuery } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import { FlexBox } from "../../components/common/FlexBox";
 import { shades } from "../../theme";
 import Input from "./Input";
 import Posts from "./Posts";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getRandomPrompt } from "../../utils/getRandomPrompt";
 import { updateForm } from "../../state/formSlice";
 
@@ -55,7 +55,7 @@ const Home = () => {
       <Box
         padding={{ xs: "0 0 70px", md: "0 10px 70px" }}
         position={`${!isMobile && "sticky"}`}
-        top={80}
+        top={70}
       >
         <Input />
       </Box>
