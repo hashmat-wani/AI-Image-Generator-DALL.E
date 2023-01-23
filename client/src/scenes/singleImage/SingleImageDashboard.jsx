@@ -4,8 +4,8 @@ import { Outlet, useNavigate, useParams } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { FlexBox } from "../../components/common/FlexBox";
 import { shades } from "../../theme";
-import { downloadImage } from "../../utils/getRandomPrompt";
 import { shallowEqual, useSelector } from "react-redux";
+import { downloadImage } from "../../utils";
 
 const SingleImageDashboard = () => {
   const isMobile = useMediaQuery("(max-width:767px)");

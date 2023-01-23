@@ -6,6 +6,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { shallowEqual, useSelector } from "react-redux";
 import SingleImage from "./scenes/singleImage/SingleImage";
 import SingleImageDashboard from "./scenes/singleImage/SingleImageDashboard";
+import SignUp from "./scenes/SignUp";
+import SignIn from "./scenes/SignIn";
 
 function App() {
   const state = useSelector((state) => state.formReducer, shallowEqual);
@@ -20,6 +22,8 @@ function App() {
           <Route path="/search/single" element={<SingleImageDashboard />}>
             <Route path=":id" element={<SingleImage />} />
           </Route>
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signin" element={<SignIn />} />
         </Routes>
       </BrowserRouter>
     </div>
