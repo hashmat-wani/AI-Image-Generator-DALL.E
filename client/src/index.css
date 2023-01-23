@@ -1,0 +1,21 @@
+* {
+  box-sizing: border-box;
+  font-family: ColfaxAI, Helvetica, sans-serif;
+  font-size: 14px;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background: #fafafc;
+}
+
+/* .gallery__item--6 {
+  grid-column-start: 5;
+  grid-column-end: 9;
+  grid-row-start: 6;
+  grid-row-end: 9; */
+
+/** Alternative Syntax **/
+/* grid-column: 5 / span 4; */
+/* grid-row: 6 / span 3; */
+/* } */
