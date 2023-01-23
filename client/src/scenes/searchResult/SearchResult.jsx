@@ -35,9 +35,9 @@ const SearchResult = () => {
   };
 
   return (
-    <Box>
+    <Box p="25px 15px">
       {/* Heading */}
-      <FlexBox m="20px 0 15px" justifyContent="space-between">
+      <FlexBox mb="15px" justifyContent="space-between">
         <Typography color={shades.primary[300]}>
           Edit the detailed description
         </Typography>

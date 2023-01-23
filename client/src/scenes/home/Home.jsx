@@ -18,9 +18,9 @@ const Home = () => {
   };
 
   return (
-    <Box>
+    <Box padding="25px 15px">
       {/* Heading */}
-      <Box padding="0 10px">
+      <Box padding={{ xs: 0, md: "0 10px" }}>
         <Typography mb="5px" variant="h3">
           Create
         </Typography>
@@ -52,15 +52,14 @@ const Home = () => {
       </Box>
 
       {/* Input field */}
-      <Box padding="0 10px 70px" position={`${!isMobile && "sticky"}`} top={20}>
+      <Box
+        padding={{ xs: "0 0 70px", md: "0 10px 70px" }}
+        position={`${!isMobile && "sticky"}`}
+        top={20}
+      >
         <Input />
       </Box>
 
-      {/* Share */}
-      {/* <Typography variant="small" color={shades.primary[300]}>
-        Once you've created the image you want, you can share it with others in
-        the community
-      </Typography> */}
       <Posts />
     </Box>
   );

@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import React from "react";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { shallowEqual, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { downloadImage } from "../../utils/getRandomPrompt";
+import { useNavigate, useParams } from "react-router-dom";
 import { FlexBox } from "../../components/common/FlexBox";
 import { Box, IconButton, styled, useMediaQuery } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -12,16 +11,14 @@ import { shades } from "../../theme";
 const SingleImage = () => {
   const isMobile = useMediaQuery("(max-width:767px)");
   const navigate = useNavigate();
-  const { photos, prompt, status } = useSelector(
-    (state) => state.formReducer,
-    shallowEqual
-  );
+  const { photos } = useSelector((state) => state.formReducer, shallowEqual);
   const { id } = useParams();
 
   let { photo, index } = photos.find((photo) => photo.id == id);
 
   return (
     <FlexBox position="relative" justifyContent="space-between">
+      {/* left swipe */}
       <SwipeBtn
         idx={0}
         index={index}
@@ -32,9 +29,11 @@ const SingleImage = () => {
       >
         <ChevronLeftIcon />
       </SwipeBtn>
+      {/* Image */}
       <Box p={0} width={{ xs: "100%", md: "416px" }}>
         <img src={photo} width="100%" />
       </Box>
+      {/* right swipe */}
       <SwipeBtn
         idx={3}
         index={index}
