@@ -18,7 +18,7 @@ const SingleImageDashboard = () => {
 
   return (
     <Box display="flex" flexDirection="column" p="25px 15px" height="100vh">
-      <FlexBox mb="30px" justifyContent="space-between">
+      <FlexBox justifyContent="space-between">
         {/* back */}
         <FlexBox
           onClick={() => navigate("/search")}
