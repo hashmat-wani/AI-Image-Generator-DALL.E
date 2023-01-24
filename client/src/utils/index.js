@@ -1,5 +1,3 @@
-import { STATUS } from "./enums";
-import { getRandomPrompt } from "./getRandomPrompt";
-import { downloadImage } from "./downloadImg";
-
-export { STATUS, getRandomPrompt, downloadImage };
+export { getRandomPrompt } from "./getRandomPrompt";
+export { downloadImage } from "./downloadImg";
+export { STATUS } from "./enums";

@@ -1,3 +1,1 @@
-import { surpriseMePrompts } from "./surpriseme";
-
-export { surpriseMePrompts };
+export { surpriseMePrompts } from "./surpriseme";

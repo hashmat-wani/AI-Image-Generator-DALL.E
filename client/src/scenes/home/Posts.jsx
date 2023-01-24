@@ -121,7 +121,7 @@ const Posts = () => {
   // useEffect(() => {
   //   fetchPosts();
   // }, []);
-  
+
   return (
     <Box>
       {/* Heading */}
