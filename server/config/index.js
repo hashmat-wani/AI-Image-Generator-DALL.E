@@ -7,4 +7,7 @@ export const {
   GOOGLE_CLIENT_ID,
   MONGODB_URL,
   OPENAI_API_KEY,
+  DEBUG_MODE,
+  JWT_SECRET,
+  REFRESH_SECRET,
 } = process.env;
