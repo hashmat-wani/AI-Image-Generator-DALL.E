@@ -7,8 +7,11 @@ import SingleImage from "./scenes/singleImage/SingleImage";
 import SingleImageDashboard from "./scenes/singleImage/SingleImageDashboard";
 import SignUp from "./scenes/SignUp";
 import SignIn from "./scenes/SignIn";
+import { toaster } from "./utils";
+import { useToast } from "@chakra-ui/react";
 
 function App() {
+  console.log(document.cookie);
   const state = useSelector((state) => state.formReducer, shallowEqual);
   console.log(state);
   return (

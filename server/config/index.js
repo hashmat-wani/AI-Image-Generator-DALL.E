@@ -9,5 +9,5 @@ export const {
   OPENAI_API_KEY,
   DEBUG_MODE,
   JWT_SECRET,
-  REFRESH_SECRET,
+  JWT_REFRESH_SECRET,
 } = process.env;

@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { REFRESH_SECRET } from "../../config/index.js";
+import { JWT_REFRESH_SECRET } from "../../config/index.js";
 import { RefreshToken, User } from "../../models/index.js";
 import CustomErrorHandler from "../../services/CustomErrorHandler.js";
 import JwtService from "../../services/JwtService.js";
@@ -31,7 +31,7 @@ const refreshTokenController = {
       try {
         const { _id } = await JwtService.verify(
           refreshToken.refresh_token,
-          REFRESH_SECRET
+          JWT_REFRESH_SECRET
         );
         userId = _id;
       } catch (err) {
@@ -43,19 +43,21 @@ const refreshTokenController = {
         return next(CustomErrorHandler.notFound("User not found"));
       }
 
-      //   generating tokens
+      // before generating a new refresh token
+      // its good to delete existing refresh token from database
+      // const refresh_token = JwtService.sign(
+      //   { _id: userId, email: user.email },
+      //   "1y",
+      //   JWT_REFRESH_SECRET
+      // );
+      // RefreshToken.create({ refresh_token });
 
+      //   generating new access_token
       const access_token = JwtService.sign({ _id: userId, email: user.email });
-      const refresh_token = JwtService.sign(
-        { _id: userId, email: user.email },
-        "1y",
-        REFRESH_SECRET
-      );
 
       //   database whitelist
-      RefreshToken.create({ refresh_token });
 
-      res.status(200).json({ access_token, refresh_token });
+      res.status(201).json({ success: true, access_token });
     } catch (err) {
       return next(err);
     }

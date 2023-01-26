@@ -11,7 +11,7 @@ const userController = {
       if (!user) {
         return next(CustomErrorHandler.notFound());
       }
-      res.json(user);
+      res.status(200).json({ success: true, user });
     } catch (err) {
       return next(err);
     }

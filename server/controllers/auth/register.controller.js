@@ -1,22 +1,21 @@
 import Joi from "joi";
-import { RefreshToken, User } from "../../models/index.js";
+import { User } from "../../models/index.js";
 import CustomErrorHandler from "../../services/CustomErrorHandler.js";
 import bcrypt from "bcrypt";
-import JwtService from "../../services/JwtService.js";
-import { REFRESH_SECRET } from "../../config/index.js";
+// import JwtService from "../../services/JwtService.js";
+// import { JWT_REFRESH_SECRET } from "../../config/index.js";
 
 const registerController = {
   async register(req, res, next) {
     // validation
     const schema = Joi.object({
       firstName: Joi.string().min(3).max(30).required(),
+      lastName: Joi.string(),
       email: Joi.string().email().required(),
-      password: Joi.string().pattern(
-        new RegExp(new RegExp("^[a-zA-Z0-9]{3,30}$"))
-      ),
-      confirmPassword: Joi.ref("password"),
+      password: Joi.string().required(),
     });
     const { error } = schema.validate(req.body);
+
     if (error) {
       return next(error);
     }
@@ -30,15 +29,10 @@ const registerController = {
           CustomErrorHandler.alreadyExist("This email is already taken")
         );
       }
-    } catch (err) {
-      return next(err);
-    }
 
-    // hash password
+      // hash password
+      const hashedPwd = await bcrypt.hash(password, 10);
 
-    const hashedPwd = await bcrypt.hash(password, 10);
-
-    try {
       const payload = {
         firstName,
         lastName,
@@ -46,28 +40,31 @@ const registerController = {
         password: hashedPwd,
       };
 
-      // const instance = new User(payload);
-      // const user = await instance.save();
+      // const user = new User(payload);
+      // await user.save();
 
       // or using create method
 
       const user = await User.create(payload);
 
       // Token
-      const access_token = JwtService.sign({
-        _id: user._id,
-        email: user.email,
-      });
-      const refresh_token = JwtService.sign(
-        { _id: user._id, email: user.email },
-        "1y",
-        REFRESH_SECRET
-      );
+      // const access_token = JwtService.sign({
+      //   _id: user._id,
+      //   email: user.email,
+      // });
+      // const refresh_token = JwtService.sign(
+      //   { _id: user._id, email: user.email },
+      //   "1y",
+      //   JWT_REFRESH_SECRET
+      // );
 
       // database whitelist
-      await RefreshToken.create({ refresh_token });
+      // await RefreshToken.create({ refresh_token });
 
-      res.status(200).json({ access_token, refresh_token });
+      res.status(201).json({
+        success: true,
+        message: "User created Succesfully",
+      });
     } catch (err) {
       return next(err);
     }

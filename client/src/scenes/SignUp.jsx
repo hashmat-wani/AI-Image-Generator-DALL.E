@@ -1,4 +1,3 @@
-import * as React from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -8,21 +7,95 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { shades } from "../theme";
 import Oauth from "./Oauth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { IconButton, InputAdornment } from "@mui/material";
+import { useState } from "react";
+import { toaster } from "../utils";
+import { useToast } from "@chakra-ui/react";
+import axios from "axios";
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  const toast = useToast();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
+
+  const initialValues = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   };
+
+  const validationSchema = yup.object().shape({
+    firstName: yup.string().trim().min(3, "Too Short!").required("Required"),
+    email: yup.string().trim().email("Invalid email").required("Required"),
+    password: yup
+      .string()
+      .trim()
+      .required("Required")
+      .matches(
+        /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+        "Password must contain at least 8 characters, one uppercase, one number and one special case character"
+      ),
+    confirmPassword: yup
+      .string()
+      .required("Please confirm your password")
+      .oneOf([yup.ref("password"), null], "Passwords don't match."),
+  });
+
+  const handleFormSubmit = (values, { resetForm, setSubmitting }) => {
+    const { firstName, lastName, email, password } = values;
+    axios
+      .post("http://localhost:8080/api/v1/auth/register", {
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email.trim(),
+        password: password.trim(),
+      })
+
+      .then((data) => {
+        navigate("/signin");
+        resetForm();
+
+        toaster(
+          toast,
+          "Account Created",
+          "Your account created successfully",
+          "success"
+        );
+      })
+      .catch((err) => {
+        const { message } = err?.response?.data || err;
+        toaster(toast, "Failed", message, "error");
+        console.log(err?.response?.data?.message || err.message);
+      })
+      .finally(() => setSubmitting(false));
+  };
+
+  const formik = useFormik({
+    initialValues,
+    onSubmit: handleFormSubmit,
+    validationSchema,
+  });
+  const {
+    values,
+    errors,
+    handleSubmit,
+    isSubmitting,
+    touched,
+    handleBlur,
+    handleChange,
+  } = formik;
 
   return (
     <Box
-      // border={1}
       sx={{
         maxWidth: "360px",
         padding: "20px",
@@ -35,19 +108,18 @@ export default function SignUp() {
       <Typography color={shades.primary[400]} fontSize="28px" fontWeight="bold">
         Create your account
       </Typography>
-      <Box
-        // border={1}
-        component="form"
-        onSubmit={handleSubmit}
-        noValidate
-        sx={{ mt: 2 }}
-      >
+      <Box noValidate component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
         <Grid container spacing={1}>
           <Grid item xs={6}>
             <TextField
+              required
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.firstName}
+              error={!!touched.firstName && !!errors.firstName} //converting value to a boolean
+              helperText={touched.firstName && errors.firstName}
               autoComplete="given-name"
               name="firstName"
-              required
               fullWidth
               id="firstName"
               label="First Name"
@@ -56,7 +128,9 @@ export default function SignUp() {
           </Grid>
           <Grid item xs={6}>
             <TextField
-              required
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.lastName}
               fullWidth
               id="lastName"
               label="Last Name"
@@ -67,6 +141,11 @@ export default function SignUp() {
           <Grid item xs={12}>
             <TextField
               required
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.email}
+              error={!!touched.email && !!errors.email} //converting value to a boolean
+              helperText={touched.email && errors.email}
               fullWidth
               id="email"
               label="Email Address"
@@ -77,12 +156,59 @@ export default function SignUp() {
           <Grid item xs={12}>
             <TextField
               required
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.password}
+              error={!!touched.password && !!errors.password} //converting value to a boolean
+              helperText={touched.password && errors.password}
               fullWidth
               name="password"
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               autoComplete="new-password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword((show) => !show)}
+                      onMouseDown={(e) => e.preventDefault()}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              required
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.confirmPassword}
+              error={!!touched.confirmPassword && !!errors.confirmPassword} //converting value to a boolean
+              helperText={touched.confirmPassword && errors.confirmPassword}
+              fullWidth
+              name="confirmPassword"
+              label="Confirm Password"
+              type={showConfirmPassword ? "text" : "password"}
+              id="confirmPassword"
+              autoComplete="confirm-password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowConfirmPassword((show) => !show)}
+                      onMouseDown={(e) => e.preventDefault()}
+                      edge="end"
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
           </Grid>
           <Grid item xs={12}>
@@ -94,6 +220,7 @@ export default function SignUp() {
           </Grid>
         </Grid>
         <Button
+          disabled={isSubmitting}
           type="submit"
           fullWidth
           variant="contained"
@@ -102,7 +229,7 @@ export default function SignUp() {
             height: "53px",
           }}
         >
-          Sign up
+          {isSubmitting ? "loading" : "Sign up"}
         </Button>
         <Typography color={shades.primary[400]} textAlign="center">
           Already have an account?{" "}
@@ -117,7 +244,6 @@ export default function SignUp() {
           </Link>
         </Typography>
       </Box>
-
       <Oauth />
     </Box>
   );

@@ -1,13 +1,13 @@
 import CustomErrorHandler from "../services/CustomErrorHandler.js";
 import JwtService from "../services/JwtService.js";
 
-export const auth = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) {
+export const authenticate = async (req, res, next) => {
+  const token = req.headers?.authorization?.split(" ")[1];
+  if (!token) {
     return next(CustomErrorHandler.unAuthorised());
   }
 
-  const token = authHeader.split(" ")[1];
+  // implement blacklisting here ---------- pending
 
   try {
     const { _id, email } = await JwtService.verify(token);

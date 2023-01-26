@@ -3,16 +3,14 @@ import CustomErrorHandler from "../../services/CustomErrorHandler.js";
 import bcrypt from "bcrypt";
 import JwtService from "../../services/JwtService.js";
 import { RefreshToken, User } from "../../models/index.js";
-import { REFRESH_SECRET } from "../../config/index.js";
+import { JWT_REFRESH_SECRET } from "../../config/index.js";
 
 const loginController = {
   async login(req, res, next) {
     // validation
     const schema = Joi.object({
       email: Joi.string().email().required(),
-      password: Joi.string().pattern(
-        new RegExp(new RegExp("^[a-zA-Z0-9]{3,30}$"))
-      ),
+      password: Joi.string().required(),
     });
 
     const { error } = schema.validate(req.body);
@@ -47,14 +45,33 @@ const loginController = {
 
       const refresh_token = JwtService.sign(
         { _id: user._id, email: user.email },
-        "1y",
-        REFRESH_SECRET
+        "28d",
+        JWT_REFRESH_SECRET
       );
 
       //   database whitelist
-      await RefreshToken.create({ refresh_token });
+      // await RefreshToken.create({ refresh_token });
+      res.cookie("access_token", access_token, {
+        httpOnly: true,
+        sameSite: "None",
+        secure: true,
+      });
+      res.cookie("refresh_token", refresh_token, {
+        httpOnly: true,
+        sameSite: "None",
+        secure: true,
+      });
 
-      res.status(200).json({ access_token, refresh_token });
+      return res
+        .status(200)
+        .json({
+          success: true,
+          user: {
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          },
+        });
     } catch (err) {
       return next(err);
     }

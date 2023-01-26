@@ -15,7 +15,7 @@ const logoutController = {
 
     try {
       await RefreshToken.deleteOne({ refresh_token: req.body.refresh_token });
-      res.json({ message: "Logged Out" });
+      res.json({ sucess: true, message: "Logged Out" });
     } catch (err) {
       return next(err);
     }

@@ -7,7 +7,7 @@ import {
   registerController,
   userController,
 } from "../controllers/index.js";
-import { auth } from "../middlewares/index.js";
+import { authenticate } from "../middlewares/index.js";
 
 const router = express.Router();
 
@@ -40,11 +40,11 @@ router.post("/login", loginController.login);
 
 // LOGOUT
 
-router.post("/logout", auth, logoutController.logout);
+router.post("/logout", authenticate, logoutController.logout);
 
 // WHO AM I
 
-router.get("/me", auth, userController.me);
+router.get("/me", authenticate, userController.me);
 
 // REFRESH TOKEN
 
