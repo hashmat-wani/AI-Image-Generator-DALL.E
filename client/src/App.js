@@ -9,14 +9,12 @@ import SignIn from "./scenes/auth/SignIn";
 import SignUp from "./scenes/auth/SignUp";
 import { useEffect } from "react";
 import { verifyUser } from "./state/userSlice";
-import { DEV_API } from "./env.js";
 
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(verifyUser());
   }, []);
-  console.log(DEV_API);
 
   return (
     <div className="App">

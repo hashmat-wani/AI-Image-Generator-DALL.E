@@ -8,9 +8,7 @@ export const errorHandler = (err, req, res, next) => {
   let statusCode = 500;
   let error = {
     error: true,
-    message: err.message,
-    // message: "internal server error",
-    // ...(MODE === "dev" && { originalError: err.message }),
+    message: `${MODE === "dev" ? err.message : "Internal server error"}`,
   };
 
   // if Joi validation error
