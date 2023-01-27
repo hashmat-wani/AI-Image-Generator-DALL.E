@@ -3,6 +3,7 @@ import CustomErrorHandler from "../services/CustomErrorHandler.js";
 import JwtService from "../services/JwtService.js";
 
 export const authenticate = async (req, res, next) => {
+  console.log("coming");
   // const token = req.headers?.authorization?.split(" ")[1];
 
   try {
