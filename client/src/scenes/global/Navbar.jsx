@@ -1,4 +1,3 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
@@ -12,13 +11,25 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/logo.svg";
 import { FlexBox } from "../../components/common/FlexBox";
 import { shades } from "../../theme";
+import { useSelector, shallowEqual, useDispatch } from "react-redux";
+import { green } from "@mui/material/colors";
+import { useToast } from "@chakra-ui/react";
+import { logOut } from "../../state/userSlice";
+import { CircularProgress } from "@mui/material";
+import { useState } from "react";
+import { STATUS } from "../../utils";
 
 const pages = ["History", "Collections"];
-const settings = ["Profile", "Sign out"];
 
 function Navbar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const { user, status } = useSelector(
+    (state) => state.userReducer,
+    shallowEqual
+  );
+  const toast = useToast();
+  const dispatch = useDispatch();
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -32,7 +43,7 @@ function Navbar() {
   };
 
   const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+    status !== STATUS.LOADING && setAnchorElUser(null);
   };
 
   return (
@@ -44,7 +55,7 @@ function Navbar() {
       zIndex={100}
       backgroundColor="#fafafc"
     >
-      {/* logo */}
+      {/* desktop logo */}
       <Box sx={{ display: { xs: "none", md: "flex" }, mr: 2 }}>
         <Link to="/">
           <img width="100px" src={logo} alt="" />
@@ -99,11 +110,21 @@ function Navbar() {
           onClose={handleCloseNavMenu}
           sx={{
             display: { xs: "block", md: "none" },
+            "& ul": { padding: 0 },
           }}
         >
           {pages.map((page) => (
-            <MenuItem key={page} onClick={handleCloseNavMenu}>
-              <Typography textAlign="center">{page}</Typography>
+            <MenuItem
+              sx={{
+                p: "12px 24px",
+                borderBottom: `1px solid ${shades.secondary[300]}`,
+              }}
+              key={page}
+              onClick={handleCloseNavMenu}
+            >
+              <Typography fontSize="16px" fontWeight="bold" textAlign="center">
+                {page}
+              </Typography>
             </MenuItem>
           ))}
         </Menu>
@@ -118,13 +139,57 @@ function Navbar() {
 
       {/* user settings */}
       <Box sx={{ flexGrow: 0 }}>
-        <Tooltip title="Open settings">
-          <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-          </IconButton>
-        </Tooltip>
+        {user ? (
+          <Tooltip title="Open settings">
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              {user?.avatar ? (
+                <Avatar src={user.avatar} />
+              ) : (
+                <Avatar
+                  sx={{
+                    bgcolor: green[500],
+                  }}
+                >
+                  {user.firstName[0].toUpperCase()}
+                </Avatar>
+              )}
+            </IconButton>
+          </Tooltip>
+        ) : (
+          <FlexBox
+            sx={{
+              columnGap: "10px",
+              fontWeight: "bold",
+            }}
+          >
+            <Link to="/signin">
+              <Box cursor="pointer" fontSize="12px" padding="5px 10px">
+                SIGN IN
+              </Box>
+            </Link>
+            <Link to="/signup">
+              <Box
+                fontSize="12px"
+                padding="5px 10px"
+                borderRadius="25px"
+                color="#fff"
+                backgroundColor={shades.secondary[900]}
+              >
+                SIGN UP
+              </Box>
+            </Link>
+          </FlexBox>
+        )}
         <Menu
-          sx={{ mt: "40px" }}
+          sx={{
+            mt: "40px",
+            "& ul": {
+              padding: 0,
+            },
+            "> div": {
+              borderRadius: "10px",
+            },
+          }}
           id="menu-appbar"
           anchorEl={anchorElUser}
           anchorOrigin={{
@@ -139,11 +204,70 @@ function Navbar() {
           open={Boolean(anchorElUser)}
           onClose={handleCloseUserMenu}
         >
-          {settings.map((setting) => (
-            <MenuItem key={setting} onClick={handleCloseUserMenu}>
-              <Typography>{setting}</Typography>
+          {/* Email menu item */}
+          <MenuItem
+            sx={{
+              borderBottom: `1px solid ${shades.secondary[300]}`,
+              width: "220px",
+              padding: "8px 10px",
+            }}
+            onClick={handleCloseUserMenu}
+          >
+            <Box>
+              <Typography fontSize="13px">{`${user?.firstName} ${user?.lastName}`}</Typography>
+              <Typography
+                fontSize="11px"
+                color={shades.primary[300]}
+                // variant="small"
+              >
+                {user?.email}
+              </Typography>
+            </Box>
+          </MenuItem>
+
+          <Box sx={{ borderBottom: `1px solid ${shades.secondary[300]}` }}>
+            {[
+              { label: "Read the announcement", url: "" },
+              { label: "Join the DALL.E Discord", url: "" },
+              { label: "Visit the OpenAI API", url: "" },
+            ].map((node, idx) => (
+              <MenuItem key={idx} sx={{ p: "8px 10px", fontSize: "12px" }}>
+                {node.label}
+              </MenuItem>
+            ))}
+            <MenuItem
+              onClick={() => {
+                dispatch(logOut(toast));
+                handleCloseUserMenu();
+              }}
+              sx={{ p: "8px 10px", fontSize: "12px" }}
+            >
+              {status === STATUS.LOADING ? (
+                <CircularProgress size="15px" />
+              ) : (
+                "Sign out"
+              )}
             </MenuItem>
-          ))}
+          </Box>
+
+          <FlexBox justifyContent="start" columnGap="10px" p="10px">
+            {[
+              { label: "Content policy", url: "" },
+              { label: "Terms", url: "" },
+              { label: "About", url: "" },
+            ].map((node, idx) => (
+              <Typography
+                key={idx}
+                sx={{
+                  cursor: "pointer",
+                  fontSize: "11px",
+                  color: shades.primary[300],
+                }}
+              >
+                {node.label}
+              </Typography>
+            ))}
+          </FlexBox>
         </Menu>
       </Box>
     </FlexBox>

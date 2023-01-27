@@ -2,26 +2,24 @@ import Joi from "joi";
 import { User } from "../../models/index.js";
 import CustomErrorHandler from "../../services/CustomErrorHandler.js";
 import bcrypt from "bcrypt";
-// import JwtService from "../../services/JwtService.js";
-// import { JWT_REFRESH_SECRET } from "../../config/index.js";
 
 const registerController = {
   async register(req, res, next) {
+    const { firstName, lastName, email, password } = req.body;
+
     // validation
     const schema = Joi.object({
       firstName: Joi.string().min(3).max(30).required(),
-      lastName: Joi.string(),
       email: Joi.string().email().required(),
       password: Joi.string().required(),
     });
-    const { error } = schema.validate(req.body);
+    const { error } = schema.validate({ firstName, email, password });
 
     if (error) {
       return next(error);
     }
 
     // check if user already exists;
-    const { firstName, lastName, email, password } = req.body;
     try {
       const exist = await User.exists({ email });
       if (exist) {
@@ -35,7 +33,7 @@ const registerController = {
 
       const payload = {
         firstName,
-        lastName,
+        ...(lastName && { lastName }),
         email,
         password: hashedPwd,
       };
@@ -46,20 +44,6 @@ const registerController = {
       // or using create method
 
       const user = await User.create(payload);
-
-      // Token
-      // const access_token = JwtService.sign({
-      //   _id: user._id,
-      //   email: user.email,
-      // });
-      // const refresh_token = JwtService.sign(
-      //   { _id: user._id, email: user.email },
-      //   "1y",
-      //   JWT_REFRESH_SECRET
-      // );
-
-      // database whitelist
-      // await RefreshToken.create({ refresh_token });
 
       res.status(201).json({
         success: true,

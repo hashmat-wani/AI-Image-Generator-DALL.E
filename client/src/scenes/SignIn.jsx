@@ -11,15 +11,17 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useToast } from "@chakra-ui/react";
 import { useState } from "react";
-import { toaster } from "../utils";
-import axios from "axios";
+
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { IconButton, InputAdornment } from "@mui/material";
+import { CircularProgress, IconButton, InputAdornment } from "@mui/material";
+import { login } from "../state/userSlice";
+import { useDispatch } from "react-redux";
 
 export default function SignIn() {
   const toast = useToast();
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const initialValues = {
@@ -33,29 +35,10 @@ export default function SignIn() {
   });
 
   const handleFormSubmit = (values, { resetForm, setSubmitting }) => {
-    const { email, password } = values;
-    const instance = axios.create({
-      withCredentials: true,
-    });
-    instance
-      .post("http://localhost:8080/api/v1/auth/login", {
-        email: email.trim(),
-        password: password.trim(),
-      })
-
-      .then((data) => {
-        // navigate("/signin");
-        // resetForm();
-        console.log(data.data);
-
-        toaster(toast, "Success", "You've successfully signed in!", "success");
-      })
-      .catch((err) => {
-        const { message } = err?.response?.data || err;
-        toaster(toast, "Failed", message, "error");
-        console.log(err?.response?.data?.message || err.message);
-      })
-      .finally(() => setSubmitting(false));
+    setTimeout(
+      () => dispatch(login(values, resetForm, setSubmitting, toast, navigate)),
+      3000
+    );
   };
 
   const formik = useFormik({
@@ -111,7 +94,6 @@ export default function SignIn() {
           label="Email Address"
           name="email"
           autoComplete="email"
-          autoFocus
         />
 
         <TextField
@@ -148,17 +130,42 @@ export default function SignIn() {
           control={<Checkbox value="remember" color="primary" />}
           label="Remember me"
         />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
+
+        {/* signIn button */}
+        <Box
           sx={{
             my: 1,
+            position: "relative",
+            width: "100%",
             height: "53px",
           }}
         >
-          Sign In
-        </Button>
+          <Button
+            sx={{
+              height: "100%",
+            }}
+            fullWidth
+            variant="contained"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            Sign in
+          </Button>
+          {isSubmitting && (
+            <CircularProgress
+              size={24}
+              sx={{
+                color: "#000000",
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                marginTop: "-12px",
+                marginLeft: "-12px",
+              }}
+            />
+          )}
+        </Box>
+
         <Typography color={shades.primary[400]} textAlign="center">
           Don't have an account?{" "}
           <Link

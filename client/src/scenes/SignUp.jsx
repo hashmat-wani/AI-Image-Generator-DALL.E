@@ -13,7 +13,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { IconButton, InputAdornment } from "@mui/material";
+import { CircularProgress, IconButton, InputAdornment } from "@mui/material";
 import { useState } from "react";
 import { toaster } from "../utils";
 import { useToast } from "@chakra-ui/react";
@@ -74,7 +74,7 @@ export default function SignUp() {
       .catch((err) => {
         const { message } = err?.response?.data || err;
         toaster(toast, "Failed", message, "error");
-        console.log(err?.response?.data?.message || err.message);
+        // console.log(err?.response?.data?.message || err.message);
       })
       .finally(() => setSubmitting(false));
   };
@@ -123,7 +123,6 @@ export default function SignUp() {
               fullWidth
               id="firstName"
               label="First Name"
-              autoFocus
             />
           </Grid>
           <Grid item xs={6}>
@@ -219,18 +218,42 @@ export default function SignUp() {
             />
           </Grid>
         </Grid>
-        <Button
-          disabled={isSubmitting}
-          type="submit"
-          fullWidth
-          variant="contained"
+
+        {/* signUp button */}
+        <Box
           sx={{
             my: 1,
+            position: "relative",
+            width: "100%",
             height: "53px",
           }}
         >
-          {isSubmitting ? "loading" : "Sign up"}
-        </Button>
+          <Button
+            sx={{
+              height: "100%",
+            }}
+            fullWidth
+            variant="contained"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            Sign Up
+          </Button>
+          {isSubmitting && (
+            <CircularProgress
+              size={24}
+              sx={{
+                color: "#000000",
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                marginTop: "-12px",
+                marginLeft: "-12px",
+              }}
+            />
+          )}
+        </Box>
+
         <Typography color={shades.primary[400]} textAlign="center">
           Already have an account?{" "}
           <Link

@@ -2,18 +2,20 @@ import Navbar from "./scenes/global/Navbar";
 import Home from "./scenes/home/Home";
 import SearchResult from "./scenes/searchResult/SearchResult";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { shallowEqual, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import SingleImage from "./scenes/singleImage/SingleImage";
 import SingleImageDashboard from "./scenes/singleImage/SingleImageDashboard";
 import SignUp from "./scenes/SignUp";
 import SignIn from "./scenes/SignIn";
-import { toaster } from "./utils";
-import { useToast } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { verifyUser } from "./state/userSlice";
 
 function App() {
-  console.log(document.cookie);
-  const state = useSelector((state) => state.formReducer, shallowEqual);
-  console.log(state);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(verifyUser());
+  }, []);
+
   return (
     <div className="App">
       <BrowserRouter>

@@ -62,16 +62,14 @@ const loginController = {
         secure: true,
       });
 
-      return res
-        .status(200)
-        .json({
-          success: true,
-          user: {
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-          },
-        });
+      return res.status(200).json({
+        success: true,
+        user: {
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        },
+      });
     } catch (err) {
       return next(err);
     }

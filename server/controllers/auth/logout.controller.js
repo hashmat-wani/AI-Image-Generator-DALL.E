@@ -1,20 +1,15 @@
-import Joi from "joi";
-import { RefreshToken } from "../../models/index.js";
+import redis from "../../config/redis.js";
 
 const logoutController = {
   async logout(req, res, next) {
-    // validation
-    const schema = Joi.object({
-      refresh_token: Joi.string().required(),
-    });
-
-    const { error } = schema.validate(req.body);
-    if (error) {
-      return next(error);
-    }
-
     try {
-      await RefreshToken.deleteOne({ refresh_token: req.body.refresh_token });
+      const { access_token, refresh_token } = req.cookies;
+      await redis.rpush("blacklist", access_token);
+      if (refresh_token) {
+        await redis.rpush("blacklist", refresh_token);
+      }
+      res.clearCookie("access_token");
+      res.clearCookie("refresh_token");
       res.json({ sucess: true, message: "Logged Out" });
     } catch (err) {
       return next(err);

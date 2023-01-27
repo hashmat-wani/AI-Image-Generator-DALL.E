@@ -17,7 +17,6 @@ router.get("/", (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const { prompt } = req.body;
-    console.log(prompt);
     const aiResponse = await openai.createImage({
       prompt,
       n: 4,
@@ -28,7 +27,6 @@ router.post("/", async (req, res) => {
     const image = aiResponse.data.data;
     res.status(200).json({ photos: image });
   } catch (err) {
-    console.log(err);
     res.status(500).send(err?.response.data.error.message);
   }
 });
