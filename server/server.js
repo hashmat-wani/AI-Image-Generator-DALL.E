@@ -35,6 +35,7 @@ app.use("/api/v1/auth", authRoutes);
 app.get("/", async (req, res) => {
   res.send("Hello from Nobita");
 });
+// console.log(MODE === "prod");
 
 // console.log(await redis.lrange("blacklist", 0, -1));
 

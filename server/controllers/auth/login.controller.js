@@ -49,25 +49,27 @@ const loginController = {
         JWT_REFRESH_SECRET
       );
 
-      res.cookie("access_token", access_token, {
-        httpOnly: true,
-        sameSite: "None",
-        secure: true,
-      });
-      res.cookie("refresh_token", refresh_token, {
-        httpOnly: true,
-        sameSite: "None",
-        secure: true,
-      });
-
-      return res.status(200).json({
-        success: true,
-        user: {
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-        },
-      });
+      return res
+        .status(200)
+        .cookie("access_token", `Bearer ${access_token}`, {
+          httpOnly: true,
+          sameSite: "None",
+          secure: true,
+          // expires: new Date(Date.now() + 8 * 3600000), // cookie will be removed after 8 hours
+        })
+        .cookie("refresh_token", `Bearer ${refresh_token}`, {
+          httpOnly: true,
+          sameSite: "None",
+          secure: true,
+        })
+        .json({
+          success: true,
+          user: {
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          },
+        });
     } catch (err) {
       return next(err);
     }

@@ -52,17 +52,19 @@ router.get(
         JWT_REFRESH_SECRET
       );
 
-      res.cookie("access_token", access_token, {
-        httpOnly: true,
-        sameSite: "None",
-        secure: true,
-      });
-      res.cookie("refresh_token", refresh_token, {
-        httpOnly: true,
-        sameSite: "None",
-        secure: true,
-      });
-      res.redirect(`${MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API}`);
+      return res
+        .status(200)
+        .cookie("access_token", `Bearer ${access_token}`, {
+          httpOnly: true,
+          sameSite: "None",
+          secure: true,
+        })
+        .cookie("refresh_token", `Bearer ${refresh_token}`, {
+          httpOnly: true,
+          sameSite: "None",
+          secure: true,
+        })
+        .redirect(`${MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API}`);
     } catch (err) {
       return next(err);
     }

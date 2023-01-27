@@ -8,12 +8,18 @@ import SingleImageDashboard from "./scenes/singleImage/SingleImageDashboard";
 import SignIn from "./scenes/auth/SignIn";
 import SignUp from "./scenes/auth/SignUp";
 import { useEffect } from "react";
-import { verifyUser } from "./state/userSlice";
+import { clearUser, setUser, verifyUser } from "./state/userSlice";
 
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(verifyUser());
+    dispatch(verifyUser())
+      .then((data) => {
+        dispatch(setUser(data.data.user));
+      })
+      .catch((err) => {
+        dispatch(clearUser());
+      });
   }, []);
 
   return (

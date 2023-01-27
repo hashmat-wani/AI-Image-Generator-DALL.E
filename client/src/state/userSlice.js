@@ -45,12 +45,25 @@ export const login =
           password: password.trim(),
         }
       )
-      .then((data) => {
-        toaster(toast, "Success", "You've successfully signed in!", "success");
-        dispatch(setUser(data.data.user));
-        navigate("/");
-        resetForm();
-      })
+      .then(() =>
+        dispatch(verifyUser())
+          .then((data) => {
+            // if user is verified --- loggedin
+            dispatch(setUser(data.data.user));
+            toaster(
+              toast,
+              "Success",
+              "You've successfully signed in!",
+              "success"
+            );
+            navigate("/");
+            resetForm();
+          })
+          .catch(() => {
+            // if user is not verified still
+            toaster(toast, "Login failed", "Please try again", "info");
+          })
+      )
       .catch((err) => {
         const { message } = err?.response?.data || err;
         toaster(toast, "Failed", message, "error");
@@ -68,11 +81,20 @@ export const logOut = (toast) => (dispatch) => {
         withCredentials: true,
       }
     )
-    .then((data) => {
-      toaster(toast, "Success", "Logged Out", "success");
-      dispatch(setStatus(STATUS.IDLE));
-      dispatch(clearUser());
-    })
+    .then(() =>
+      dispatch(verifyUser())
+        .then(() => {
+          // if user is still there --- verified
+          dispatch(setStatus(STATUS.IDLE));
+          toaster(toast, "Logout failed", "Please try again", "info");
+        })
+        .catch(() => {
+          // if user is not verified now
+          dispatch(clearUser());
+          dispatch(setStatus(STATUS.IDLE));
+          toaster(toast, "Success", "Logged Out", "success");
+        })
+    )
     .catch((err) => {
       dispatch(setStatus(STATUS.ERROR));
       const { message } = err?.response?.data || err;
@@ -88,15 +110,10 @@ export const loginWithGoogle = () => (dispatch) => {
 };
 
 export const verifyUser = () => (dispatch) => {
-  axios
-    .get(
-      `${MODE === "dev" ? SERVER_DEV_API : SERVER_PROD_API}/api/v1/auth/me`,
-      {
-        withCredentials: true,
-      }
-    )
-    .then((data) => {
-      dispatch(setUser(data.data.user));
-    })
-    .catch();
+  return axios.get(
+    `${MODE === "dev" ? SERVER_DEV_API : SERVER_PROD_API}/api/v1/auth/me`,
+    {
+      withCredentials: true,
+    }
+  );
 };

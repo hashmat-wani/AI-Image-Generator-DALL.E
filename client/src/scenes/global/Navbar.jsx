@@ -15,7 +15,7 @@ import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import { green } from "@mui/material/colors";
 import { useToast } from "@chakra-ui/react";
 import { logOut } from "../../state/userSlice";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Icon } from "@mui/material";
 import { useState } from "react";
 import { STATUS } from "../../utils";
 
@@ -243,7 +243,9 @@ function Navbar() {
               sx={{ p: "8px 10px", fontSize: "12px" }}
             >
               {status === STATUS.LOADING ? (
-                <CircularProgress size="15px" />
+                <IconButton sx={{ disabled: true }}>
+                  <CircularProgress size="15px" />
+                </IconButton>
               ) : (
                 "Sign out"
               )}
