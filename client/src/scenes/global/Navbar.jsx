@@ -15,7 +15,7 @@ import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import { green } from "@mui/material/colors";
 import { useToast } from "@chakra-ui/react";
 import { logOut } from "../../state/userSlice";
-import { CircularProgress, Icon } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { useState } from "react";
 import { STATUS } from "../../utils";
 
@@ -225,6 +225,7 @@ function Navbar() {
             </Box>
           </MenuItem>
 
+          {/* links */}
           <Box sx={{ borderBottom: `1px solid ${shades.secondary[300]}` }}>
             {[
               { label: "Read the announcement", url: "" },
@@ -235,23 +236,31 @@ function Navbar() {
                 {node.label}
               </MenuItem>
             ))}
-            <MenuItem
-              onClick={() => {
-                dispatch(logOut(toast));
-                handleCloseUserMenu();
-              }}
-              sx={{ p: "8px 10px", fontSize: "12px" }}
-            >
-              {status === STATUS.LOADING ? (
-                <IconButton sx={{ disabled: true }}>
-                  <CircularProgress size="15px" />
-                </IconButton>
-              ) : (
-                "Sign out"
-              )}
-            </MenuItem>
+            {status === STATUS.LOADING ? (
+              <MenuItem
+                sx={{
+                  p: "8px 10px",
+                }}
+              >
+                <CircularProgress size="15px" />
+              </MenuItem>
+            ) : (
+              <MenuItem
+                onClick={() => {
+                  dispatch(logOut(toast));
+                  handleCloseUserMenu();
+                }}
+                sx={{
+                  p: "8px 10px",
+                  fontSize: "12px",
+                }}
+              >
+                Sign out
+              </MenuItem>
+            )}
           </Box>
 
+          {/* footer menu items */}
           <FlexBox justifyContent="start" columnGap="10px" p="10px">
             {[
               { label: "Content policy", url: "" },
