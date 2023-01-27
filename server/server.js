@@ -12,7 +12,6 @@ import {
 } from "./config/index.js";
 import { dallERoutes, authRoutes, postRoutes } from "./routes/index.js";
 import cookieParser from "cookie-parser";
-// import redis from "./config/redis.js";
 
 const app = express();
 
@@ -35,9 +34,6 @@ app.use("/api/v1/auth", authRoutes);
 app.get("/", async (req, res) => {
   res.send("Hello from Nobita");
 });
-// console.log(MODE === "prod");
-
-// console.log(await redis.lrange("blacklist", 0, -1));
 
 app.use(errorHandler);
 
