@@ -2,7 +2,7 @@ import Joi from "joi";
 import CustomErrorHandler from "../../services/CustomErrorHandler.js";
 import bcrypt from "bcrypt";
 import JwtService from "../../services/JwtService.js";
-import { RefreshToken, User } from "../../models/index.js";
+import { User } from "../../models/index.js";
 import { JWT_REFRESH_SECRET } from "../../config/index.js";
 
 const loginController = {
@@ -49,8 +49,6 @@ const loginController = {
         JWT_REFRESH_SECRET
       );
 
-      //   database whitelist
-      // await RefreshToken.create({ refresh_token });
       res.cookie("access_token", access_token, {
         httpOnly: true,
         sameSite: "None",

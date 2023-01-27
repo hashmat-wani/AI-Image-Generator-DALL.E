@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { STATUS, toaster } from "../utils";
 import axios from "axios";
+import { MODE, SERVER_DEV_API, SERVER_PROD_API } from "../env";
 
 const initialState = {
   user: null,
@@ -35,10 +36,15 @@ export const login =
       withCredentials: true,
     });
     instance
-      .post("http://localhost:8080/api/v1/auth/login", {
-        email: email.trim(),
-        password: password.trim(),
-      })
+      .post(
+        `${
+          MODE === "dev" ? SERVER_DEV_API : SERVER_PROD_API
+        }/api/v1/auth/login`,
+        {
+          email: email.trim(),
+          password: password.trim(),
+        }
+      )
       .then((data) => {
         toaster(toast, "Success", "You've successfully signed in!", "success");
         dispatch(setUser(data.data.user));
@@ -56,7 +62,7 @@ export const logOut = (toast) => (dispatch) => {
   dispatch(setStatus(STATUS.LOADING));
   axios
     .post(
-      "http://localhost:8080/api/v1/auth/logout",
+      `${MODE === "dev" ? SERVER_DEV_API : SERVER_PROD_API}/api/v1/auth/logout`,
       {},
       {
         withCredentials: true,
@@ -75,14 +81,20 @@ export const logOut = (toast) => (dispatch) => {
 };
 
 export const loginWithGoogle = () => (dispatch) => {
-  window.open("http://localhost:8080/api/v1/auth/google", "_self");
+  window.open(
+    `${MODE === "dev" ? SERVER_DEV_API : SERVER_PROD_API}/api/v1/auth/google`,
+    "_self"
+  );
 };
 
 export const verifyUser = () => (dispatch) => {
   axios
-    .get("http://localhost:8080/api/v1/auth/me", {
-      withCredentials: true,
-    })
+    .get(
+      `${MODE === "dev" ? SERVER_DEV_API : SERVER_PROD_API}/api/v1/auth/me`,
+      {
+        withCredentials: true,
+      }
+    )
     .then((data) => {
       dispatch(setUser(data.data.user));
     })

@@ -1,8 +1,8 @@
 import { Box, Typography, useMediaQuery } from "@mui/material";
 import React from "react";
-import { FlexBox } from "../../components/common/FlexBox";
+import { FlexBox } from "../../components/FlexBox";
 import { shades } from "../../theme";
-import Input from "./Input";
+import Input from "../../components/Input";
 import Posts from "./Posts";
 import { useDispatch } from "react-redux";
 import { getRandomPrompt } from "../../utils/getRandomPrompt";

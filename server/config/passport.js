@@ -1,7 +1,13 @@
 import { Strategy } from "passport-google-oauth20";
 import * as dotenv from "dotenv";
 import passport from "passport";
-import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "./index.js";
+import {
+  DEV_API,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  MODE,
+  PROD_API,
+} from "./index.js";
 import { User } from "../models/index.js";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcrypt";
@@ -13,7 +19,9 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:8080/api/v1/auth/google/callback",
+      callbackURL: `${
+        MODE === "dev" ? DEV_API : PROD_API
+      }/api/v1/auth/google/callback`,
     },
     async function (accessToken, refreshToken, profile, cb) {
       const {

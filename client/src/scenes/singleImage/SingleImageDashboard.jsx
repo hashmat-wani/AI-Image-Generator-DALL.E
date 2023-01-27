@@ -2,7 +2,7 @@ import { Box, styled, Typography, useMediaQuery } from "@mui/material";
 import React from "react";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { FlexBox } from "../../components/common/FlexBox";
+import { FlexBox } from "../../components/FlexBox";
 import { shades } from "../../theme";
 import { shallowEqual, useSelector } from "react-redux";
 import { downloadImage } from "../../utils";

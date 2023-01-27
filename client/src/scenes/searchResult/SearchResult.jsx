@@ -2,11 +2,11 @@ import { Box, styled, Typography, useMediaQuery } from "@mui/material";
 
 import React from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { FlexBox } from "../../components/common/FlexBox";
+import { FlexBox } from "../../components/FlexBox";
 import { updateForm } from "../../state/formSlice";
 import { shades } from "../../theme";
 import { getRandomPrompt } from "../../utils";
-import Input from "../home/Input";
+import Input from "../../components/Input";
 import { Link } from "react-router-dom";
 
 const SearchResult = () => {

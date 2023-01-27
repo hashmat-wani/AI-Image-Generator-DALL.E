@@ -9,7 +9,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.svg";
-import { FlexBox } from "../../components/common/FlexBox";
+import { FlexBox } from "../../components/FlexBox";
 import { shades } from "../../theme";
 import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import { green } from "@mui/material/colors";

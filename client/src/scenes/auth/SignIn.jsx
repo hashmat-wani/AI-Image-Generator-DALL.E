@@ -4,7 +4,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { shades } from "../theme";
+import { shades } from "../../theme";
 import { Link, useNavigate } from "react-router-dom";
 import Oauth from "./Oauth";
 import { useFormik } from "formik";
@@ -15,7 +15,7 @@ import { useState } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { CircularProgress, IconButton, InputAdornment } from "@mui/material";
-import { login } from "../state/userSlice";
+import { login } from "../../state/userSlice";
 import { useDispatch } from "react-redux";
 
 export default function SignIn() {

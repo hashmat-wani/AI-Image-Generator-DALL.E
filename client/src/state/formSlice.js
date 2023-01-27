@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { STATUS } from "../utils/enums";
 import { v4 as uuidv4 } from "uuid";
+import { MODE, SERVER_DEV_API, SERVER_PROD_API } from "../env";
 
 export const formSlice = createSlice({
   name: "form",
@@ -49,7 +50,7 @@ export default formSlice.reducer;
 
 export const generateImage = (prompt) => (dispatch) => {
   dispatch(setStatus(STATUS.LOADING));
-  fetch("http://localhost:8080/api/v1/dalle", {
+  fetch(`${MODE === "dev" ? SERVER_DEV_API : SERVER_PROD_API}/api/v1/dalle`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

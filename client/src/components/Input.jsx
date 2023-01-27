@@ -5,11 +5,11 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import React from "react";
-import { shades } from "../../theme";
-import { FlexBox } from "../../components/common/FlexBox";
-import { getRandomPrompt } from "../../utils/getRandomPrompt";
+import { shades } from "../theme";
+import { FlexBox } from "./FlexBox";
+import { getRandomPrompt } from "../utils/getRandomPrompt";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { generateImage, updateForm } from "../../state/formSlice";
+import { generateImage, updateForm } from "../state/formSlice";
 import { useNavigate } from "react-router-dom";
 
 const Input = () => {

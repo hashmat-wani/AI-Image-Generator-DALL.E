@@ -1,11 +1,11 @@
 import { Divider, Typography } from "@mui/material";
 import React from "react";
-import { FlexBox } from "../components/common/FlexBox";
-import googleLogo from "../assets/googleLogo.png";
-import fbLogo from "../assets/fbLogo.png";
-import { shades } from "../theme";
+import { FlexBox } from "../../components/FlexBox";
+import googleLogo from "../../assets/googleLogo.png";
+import fbLogo from "../../assets/fbLogo.png";
+import { shades } from "../../theme";
 import { useDispatch } from "react-redux";
-import { loginWithGoogle } from "../state/userSlice";
+import { loginWithGoogle } from "../../state/userSlice";
 
 const oauth = ["Continue with Google", "Continue with Facebook"];
 
@@ -36,7 +36,7 @@ const Oauth = () => {
             borderRadius: "4px",
           }}
         >
-          <img width="25px" src={!idx ? googleLogo : fbLogo} />
+          <img alt="logo" width="25px" src={!idx ? googleLogo : fbLogo} />
           <Typography fontSize="15px" color={shades.primary[400]}>
             {el}
           </Typography>

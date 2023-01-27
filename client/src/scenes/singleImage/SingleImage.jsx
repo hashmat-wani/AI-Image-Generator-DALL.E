@@ -2,7 +2,7 @@ import React from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { shallowEqual, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { FlexBox } from "../../components/common/FlexBox";
+import { FlexBox } from "../../components/FlexBox";
 import { Box, IconButton, styled, useMediaQuery } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";

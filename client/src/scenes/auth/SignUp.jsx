@@ -5,7 +5,7 @@ import Checkbox from "@mui/material/Checkbox";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { shades } from "../theme";
+import { shades } from "../../theme";
 import Oauth from "./Oauth";
 import { Link, useNavigate } from "react-router-dom";
 import Visibility from "@mui/icons-material/Visibility";
@@ -15,7 +15,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { CircularProgress, IconButton, InputAdornment } from "@mui/material";
 import { useState } from "react";
-import { toaster } from "../utils";
+import { toaster } from "../../utils";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 

@@ -2,19 +2,21 @@ import Navbar from "./scenes/global/Navbar";
 import Home from "./scenes/home/Home";
 import SearchResult from "./scenes/searchResult/SearchResult";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import SingleImage from "./scenes/singleImage/SingleImage";
 import SingleImageDashboard from "./scenes/singleImage/SingleImageDashboard";
-import SignUp from "./scenes/SignUp";
-import SignIn from "./scenes/SignIn";
+import SignIn from "./scenes/auth/SignIn";
+import SignUp from "./scenes/auth/SignUp";
 import { useEffect } from "react";
 import { verifyUser } from "./state/userSlice";
+import { DEV_API } from "./env.js";
 
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(verifyUser());
   }, []);
+  console.log(DEV_API);
 
   return (
     <div className="App">

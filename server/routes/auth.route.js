@@ -1,6 +1,11 @@
 import express from "express";
 import passport from "../config/passport.js";
-import { JWT_REFRESH_SECRET } from "../config/index.js";
+import {
+  CLIENT_DEV_API,
+  CLIENT_PROD_API,
+  JWT_REFRESH_SECRET,
+  MODE,
+} from "../config/index.js";
 import {
   loginController,
   logoutController,
@@ -57,7 +62,7 @@ router.get(
         sameSite: "None",
         secure: true,
       });
-      res.redirect("http://localhost:3000");
+      res.redirect(`${MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API}`);
     } catch (err) {
       return next(err);
     }

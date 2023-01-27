@@ -1,8 +1,7 @@
-import { DEBUG_MODE } from "../config/index.js";
+import { MODE } from "../config/index.js";
 import CustomErrorHandler from "../services/CustomErrorHandler.js";
 import pkg from "joi";
 const { ValidationError } = pkg;
-// import { ValidationError } from "joi";
 
 export const errorHandler = (err, req, res, next) => {
   // default error
@@ -10,7 +9,7 @@ export const errorHandler = (err, req, res, next) => {
   let error = {
     error: true,
     message: "internal server error",
-    ...(DEBUG_MODE === "true" && { originalError: err.message }),
+    ...(MODE === "dev" && { originalError: err.message }),
   };
 
   // if Joi validation error
