@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
     const image = aiResponse.data.data;
     res.status(200).json({ photos: image });
   } catch (err) {
-    res.status(500).send(err?.response.data.error.message);
+    res.status(500).send(err?.response?.data?.error?.message);
   }
 });
 

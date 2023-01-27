@@ -50,6 +50,9 @@ export default formSlice.reducer;
 
 export const generateImage = (prompt) => (dispatch) => {
   dispatch(setStatus(STATUS.LOADING));
+  console.log(
+    `${MODE === "dev" ? SERVER_DEV_API : SERVER_PROD_API}/api/v1/dalle`
+  );
   fetch(`${MODE === "dev" ? SERVER_DEV_API : SERVER_PROD_API}/api/v1/dalle`, {
     method: "POST",
     headers: {
