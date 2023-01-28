@@ -24,7 +24,7 @@ const logoutController = {
         .clearCookie("dall-e-user-avatar", {
           sameSite: "None",
           secure: true,
-          path: "https://dall-e-nobita.vercel.app",
+          httpOnly: false,
         })
         .json({ sucess: true, message: "Logged Out" });
     } catch (err) {

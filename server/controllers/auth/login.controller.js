@@ -128,7 +128,7 @@ const loginController = {
         res.cookie("dall-e-user-avatar", avatar, {
           sameSite: "None",
           secure: true,
-          path: "https://dall-e-nobita.vercel.app",
+          httpOnly: false,
         });
       }
 
