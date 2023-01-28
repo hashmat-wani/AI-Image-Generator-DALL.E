@@ -1,7 +1,6 @@
 import passport from "passport";
 import { Strategy as FacebookStrategy } from "passport-facebook";
 import { loginController } from "../../controllers/index.js";
-// const FacebookStrategy = require("passport-facebook");
 
 import {
   DEV_API,

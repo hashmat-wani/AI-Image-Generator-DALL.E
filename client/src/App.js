@@ -22,8 +22,8 @@ function App() {
         dispatch(clearUser());
       });
   }, []);
-  console.log(decodeURIComponent(document.cookie));
-
+  console.log("document", decodeURIComponent(document.cookie));
+  console.log("window", decodeURIComponent(window.cookie));
   console.log("abc" + getCookie("dall-e-user-avatar") + "efg");
   return (
     <div className="App">

@@ -110,6 +110,7 @@ const loginController = {
   async oAuthLoginSuccess(req, res, next) {
     try {
       const { user, avatar } = req.user;
+      // console.log(avatar);
 
       // generate tokens
       const access_token = JwtService.sign({
@@ -123,11 +124,11 @@ const loginController = {
         JWT_REFRESH_SECRET
       );
 
-      console.log(avatar);
       if (avatar) {
         res.cookie("dall-e-user-avatar", avatar, {
           sameSite: "None",
           secure: true,
+          path: "https://dall-e-nobita.vercel.app",
         });
       }
 
