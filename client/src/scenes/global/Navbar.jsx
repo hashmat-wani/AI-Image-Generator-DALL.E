@@ -17,7 +17,7 @@ import { useToast } from "@chakra-ui/react";
 import { logOut } from "../../state/userSlice";
 import { CircularProgress } from "@mui/material";
 import { useState } from "react";
-import { STATUS } from "../../utils";
+import { getCookie, STATUS } from "../../utils";
 
 const pages = ["History", "Collections"];
 
@@ -26,6 +26,7 @@ function Navbar() {
     (state) => state.userReducer,
     shallowEqual
   );
+  console.log(user);
   const toast = useToast();
   const dispatch = useDispatch();
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -139,10 +140,10 @@ function Navbar() {
 
       {/* user settings */}
       <Box sx={{ flexGrow: 0 }}>
-        {user ? (
+        {user.email ? (
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              {user?.avatar ? (
+              {user.avatar ? (
                 <Avatar src={user.avatar} />
               ) : (
                 <Avatar

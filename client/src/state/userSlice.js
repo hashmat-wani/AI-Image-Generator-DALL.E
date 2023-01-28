@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { STATUS, toaster } from "../utils";
+import { getCookie, STATUS, toaster } from "../utils";
 import axios from "axios";
 import { MODE, SERVER_DEV_API, SERVER_PROD_API } from "../env";
 
 const initialState = {
-  user: null,
+  user: { avatar: getCookie("dall-e-user-avatar") || null },
   status: STATUS.IDLE,
 };
 
@@ -14,7 +14,7 @@ const userSlice = createSlice({
   reducers: {
     setUser: (state, action) => ({
       ...state,
-      user: action.payload,
+      user: { ...state.user, ...action.payload },
     }),
 
     clearUser: () => initialState,
@@ -29,6 +29,34 @@ const userSlice = createSlice({
 export const { setUser, clearUser, setStatus } = userSlice.actions;
 export default userSlice.reducer;
 
+export const register =
+  (values, resetForm, setSubmitting, toast, navigate) => () => {
+    const { firstName, lastName, email, password } = values;
+    axios
+      .post("http://localhost:8080/api/v1/auth/register", {
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email.trim().toLowerCase(),
+        password: password.trim(),
+      })
+
+      .then(() => {
+        navigate("/signin");
+        resetForm();
+        toaster(
+          toast,
+          "Account Created",
+          "Your account created successfully",
+          "success"
+        );
+      })
+      .catch((err) => {
+        const { message } = err?.response?.data || err;
+        toaster(toast, "Failed", message, "error");
+      })
+      .finally(() => setSubmitting(false));
+  };
+
 export const login =
   (values, resetForm, setSubmitting, toast, navigate) => (dispatch) => {
     const { email, password } = values;
@@ -41,7 +69,7 @@ export const login =
           MODE === "dev" ? SERVER_DEV_API : SERVER_PROD_API
         }/api/v1/auth/login`,
         {
-          email: email.trim(),
+          email: email.trim().toLowerCase(),
           password: password.trim(),
         }
       )
@@ -102,9 +130,15 @@ export const logOut = (toast) => (dispatch) => {
     });
 };
 
-export const loginWithGoogle = () => (dispatch) => {
+export const loginWithGoogle = () => () => {
   window.open(
     `${MODE === "dev" ? SERVER_DEV_API : SERVER_PROD_API}/api/v1/auth/google`,
+    "_self"
+  );
+};
+export const loginWithFacebook = () => () => {
+  window.open(
+    `${MODE === "dev" ? SERVER_DEV_API : SERVER_PROD_API}/api/v1/auth/facebook`,
     "_self"
   );
 };

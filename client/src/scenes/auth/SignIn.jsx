@@ -35,10 +35,7 @@ export default function SignIn() {
   });
 
   const handleFormSubmit = (values, { resetForm, setSubmitting }) => {
-    setTimeout(
-      () => dispatch(login(values, resetForm, setSubmitting, toast, navigate)),
-      3000
-    );
+    dispatch(login(values, resetForm, setSubmitting, toast, navigate));
   };
 
   const formik = useFormik({
@@ -59,9 +56,8 @@ export default function SignIn() {
 
   return (
     <Box
-      // border={1}
       sx={{
-        maxWidth: "360px",
+        maxWidth: "400px",
         padding: "20px",
         margin: "30px auto auto",
         display: "flex",
@@ -86,7 +82,7 @@ export default function SignIn() {
           error={!!touched.email && !!errors.email} //converting value to a boolean
           helperText={touched.email && errors.email}
           sx={{
-            margin: "5px 0",
+            margin: "8px 0",
           }}
           required
           fullWidth
@@ -103,7 +99,7 @@ export default function SignIn() {
           error={!!touched.password && !!errors.password} //converting value to a boolean
           helperText={touched.password && errors.password}
           sx={{
-            margin: "5px 0",
+            margin: "8px 0",
           }}
           required
           fullWidth

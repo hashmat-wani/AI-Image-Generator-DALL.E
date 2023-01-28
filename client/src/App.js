@@ -9,6 +9,7 @@ import SignIn from "./scenes/auth/SignIn";
 import SignUp from "./scenes/auth/SignUp";
 import { useEffect } from "react";
 import { clearUser, setUser, verifyUser } from "./state/userSlice";
+import { getCookie } from "./utils";
 
 function App() {
   const dispatch = useDispatch();
@@ -21,7 +22,9 @@ function App() {
         dispatch(clearUser());
       });
   }, []);
+  console.log(decodeURIComponent(document.cookie));
 
+  console.log("abc" + getCookie("dall-e-user-avatar") + "efg");
   return (
     <div className="App">
       <BrowserRouter>

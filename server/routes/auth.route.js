@@ -1,5 +1,6 @@
 import express from "express";
-import passport from "../config/passport.js";
+import googlePassport from "../config/passport/google.js";
+import facebookPassport from "../config/passport/facebook.js";
 import {
   CLIENT_DEV_API,
   CLIENT_PROD_API,
@@ -18,58 +19,6 @@ import JwtService from "../services/JwtService.js";
 import CustomErrorHandler from "../services/CustomErrorHandler.js";
 
 const router = express.Router();
-
-// GOOGLE OAUTH
-
-router.get("/login/failed", (req, res) => {
-  return next(CustomErrorHandler.unAuthorised());
-});
-
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
-
-router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    failureRedirect: "/login/failed",
-    session: false,
-  }),
-  function (req, res) {
-    try {
-      const { user } = req.user;
-
-      // generate tokens
-      const access_token = JwtService.sign({
-        _id: user._id,
-        email: user.email,
-      });
-
-      const refresh_token = JwtService.sign(
-        { _id: user._id, email: user.email },
-        "28d",
-        JWT_REFRESH_SECRET
-      );
-
-      return res
-        .status(200)
-        .cookie("access_token", `Bearer ${access_token}`, {
-          httpOnly: true,
-          sameSite: "None",
-          secure: true,
-        })
-        .cookie("refresh_token", `Bearer ${refresh_token}`, {
-          httpOnly: true,
-          sameSite: "None",
-          secure: true,
-        })
-        .redirect(`${MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API}`);
-    } catch (err) {
-      return next(err);
-    }
-  }
-);
 
 // REGISTER
 
@@ -90,5 +39,43 @@ router.get("/me", authenticate, userController.me);
 // REFRESH TOKEN
 
 router.post("/refreshtoken", refreshTokenController.refresh);
+
+// GOOGLE OAUTH
+
+router.get("/login/failed", (req, res) => {
+  return next(CustomErrorHandler.unAuthorised());
+});
+
+router.get(
+  "/google",
+  googlePassport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/google/callback",
+  googlePassport.authenticate("google", {
+    failureRedirect: "/login/failed",
+    session: false,
+  }),
+  loginController.oAuthLoginSuccess
+);
+
+// Facebook oauth
+
+router.get(
+  "/facebook",
+  facebookPassport.authenticate("facebook", {
+    scope: ["public_profile", "email"],
+  })
+);
+
+router.get(
+  "/facebook/callback",
+  facebookPassport.authenticate("facebook", {
+    failureRedirect: "/login/failed",
+    session: false,
+  }),
+  loginController.oAuthLoginSuccess
+);
 
 export default router;

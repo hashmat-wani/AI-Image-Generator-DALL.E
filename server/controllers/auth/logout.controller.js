@@ -21,6 +21,10 @@ const logoutController = {
           sameSite: "None",
           secure: true,
         })
+        .clearCookie("dall-e-user-avatar", {
+          sameSite: "None",
+          secure: true,
+        })
         .json({ sucess: true, message: "Logged Out" });
     } catch (err) {
       return next(err);

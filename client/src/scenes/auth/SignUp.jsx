@@ -15,12 +15,13 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { CircularProgress, IconButton, InputAdornment } from "@mui/material";
 import { useState } from "react";
-import { toaster } from "../../utils";
 import { useToast } from "@chakra-ui/react";
-import axios from "axios";
+import { useDispatch } from "react-redux";
+import { register } from "../../state/userSlice";
 
 export default function SignUp() {
   const toast = useToast();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
@@ -51,32 +52,7 @@ export default function SignUp() {
   });
 
   const handleFormSubmit = (values, { resetForm, setSubmitting }) => {
-    const { firstName, lastName, email, password } = values;
-    axios
-      .post("http://localhost:8080/api/v1/auth/register", {
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        email: email.trim(),
-        password: password.trim(),
-      })
-
-      .then((data) => {
-        navigate("/signin");
-        resetForm();
-
-        toaster(
-          toast,
-          "Account Created",
-          "Your account created successfully",
-          "success"
-        );
-      })
-      .catch((err) => {
-        const { message } = err?.response?.data || err;
-        toaster(toast, "Failed", message, "error");
-        // console.log(err?.response?.data?.message || err.message);
-      })
-      .finally(() => setSubmitting(false));
+    dispatch(register(values, resetForm, setSubmitting, toast, navigate));
   };
 
   const formik = useFormik({
@@ -97,7 +73,7 @@ export default function SignUp() {
   return (
     <Box
       sx={{
-        maxWidth: "360px",
+        maxWidth: "400px",
         padding: "20px",
         margin: "30px auto auto",
         display: "flex",
@@ -109,7 +85,7 @@ export default function SignUp() {
         Create your account
       </Typography>
       <Box noValidate component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
-        <Grid container spacing={1}>
+        <Grid container spacing={1.9}>
           <Grid item xs={6}>
             <TextField
               required
@@ -212,7 +188,7 @@ export default function SignUp() {
           </Grid>
           <Grid item xs={12}>
             <FormControlLabel
-              sx={{ marginY: 1 }}
+              sx={{ marginBottom: 1 }}
               control={<Checkbox value="allowExtraEmails" color="primary" />}
               label="I want to receive inspiration, marketing promotions and updates via email."
             />

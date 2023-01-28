@@ -3,7 +3,14 @@ import CustomErrorHandler from "../../services/CustomErrorHandler.js";
 import bcrypt from "bcrypt";
 import JwtService from "../../services/JwtService.js";
 import { User } from "../../models/index.js";
-import { JWT_REFRESH_SECRET } from "../../config/index.js";
+import { v4 as uuidv4 } from "uuid";
+
+import {
+  CLIENT_DEV_API,
+  CLIENT_PROD_API,
+  JWT_REFRESH_SECRET,
+  MODE,
+} from "../../config/index.js";
 
 const loginController = {
   async login(req, res, next) {
@@ -20,6 +27,7 @@ const loginController = {
     }
 
     const { email, password } = req.body;
+
     try {
       const user = await User.findOne({ email });
       // if user is present
@@ -70,6 +78,72 @@ const loginController = {
             lastName: user.lastName,
           },
         });
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  async oAuthLogin(firstName, lastName, email, cb, avatar = false) {
+    try {
+      let user = await User.findOne({ email });
+
+      if (!user) {
+        const password = await bcrypt.hash(uuidv4(), 10);
+        user = await User.create({
+          firstName,
+          lastName,
+          email,
+          password,
+          // avatar,
+        });
+      }
+      return cb(null, {
+        success: true,
+        user,
+        avatar,
+      });
+    } catch (err) {
+      return cb(err, null);
+    }
+  },
+
+  async oAuthLoginSuccess(req, res, next) {
+    try {
+      const { user, avatar } = req.user;
+
+      // generate tokens
+      const access_token = JwtService.sign({
+        _id: user._id,
+        email: user.email,
+      });
+
+      const refresh_token = JwtService.sign(
+        { _id: user._id, email: user.email },
+        "28d",
+        JWT_REFRESH_SECRET
+      );
+
+      console.log(avatar);
+      if (avatar) {
+        res.cookie("dall-e-user-avatar", avatar, {
+          sameSite: "None",
+          secure: true,
+        });
+      }
+
+      return res
+        .status(200)
+        .cookie("access_token", `Bearer ${access_token}`, {
+          httpOnly: true,
+          sameSite: "None",
+          secure: true,
+        })
+        .cookie("refresh_token", `Bearer ${refresh_token}`, {
+          httpOnly: true,
+          sameSite: "None",
+          secure: true,
+        })
+        .redirect(`${MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API}`);
     } catch (err) {
       return next(err);
     }

@@ -5,7 +5,7 @@ import googleLogo from "../../assets/googleLogo.png";
 import fbLogo from "../../assets/fbLogo.png";
 import { shades } from "../../theme";
 import { useDispatch } from "react-redux";
-import { loginWithGoogle } from "../../state/userSlice";
+import { loginWithFacebook, loginWithGoogle } from "../../state/userSlice";
 
 const oauth = ["Continue with Google", "Continue with Facebook"];
 
@@ -24,7 +24,9 @@ const Oauth = () => {
       </Divider>
       {oauth.map((el, idx) => (
         <FlexBox
-          onClick={() => dispatch(loginWithGoogle())}
+          onClick={() =>
+            dispatch(!idx ? loginWithGoogle() : loginWithFacebook())
+          }
           key={idx}
           my="4px"
           width="100%"
