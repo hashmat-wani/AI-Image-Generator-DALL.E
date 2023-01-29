@@ -4,9 +4,12 @@
   box-sizing: border-box;
   font-family: "Rubik", sans-serif;
   font-size: 14px;
-  background: #fafafc;
 }
 body {
+  background: #fafafc;
   margin: 0;
   padding: 0;
+}
+.App {
+  background: #fafafc;
 }
