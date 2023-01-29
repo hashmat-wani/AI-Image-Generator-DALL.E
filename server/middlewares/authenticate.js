@@ -12,9 +12,12 @@ export const authenticate = async (req, res, next) => {
     if (!access_token || blacklist.includes(access_token)) {
       return next(CustomErrorHandler.unAuthorised());
     }
-
-    const { _id, email } = await JwtService.verify(access_token);
-    req.user = { _id, email, access_token };
+    try {
+      const { _id, email } = await JwtService.verify(access_token);
+      req.user = { _id, email, access_token };
+    } catch (err) {
+      return next(err);
+    }
 
     return next();
   } catch (err) {

@@ -12,6 +12,7 @@ import {
 } from "./config/index.js";
 import { dallERoutes, authRoutes, postRoutes } from "./routes/index.js";
 import cookieParser from "cookie-parser";
+import redis from "./config/redis.js";
 
 const app = express();
 
@@ -32,9 +33,12 @@ app.use("/api/v1/dalle", dallERoutes);
 app.use("/api/v1/auth", authRoutes);
 
 app.get("/", async (req, res) => {
-  res.send("Hello from Nobita");
+  res.send("Hello from DALL.E");
 });
 
+// console.log(await redis.llen("blacklist"));
+
+// Error handler
 app.use(errorHandler);
 
 connectDB(process.env.MONGODB_URL)

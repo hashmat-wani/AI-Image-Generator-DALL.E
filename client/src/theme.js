@@ -37,7 +37,7 @@ export const theme = createTheme({
   },
 
   typography: {
-    fontFamily: ["ColfaxAI", "Helvetica", "sans-serif"].join(","),
+    fontFamily: ["Rubik", "sans-serif"].join(","),
     fontSize: 14,
     small: {
       fontSize: 12,

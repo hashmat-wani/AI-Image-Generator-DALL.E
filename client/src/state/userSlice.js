@@ -151,3 +151,15 @@ export const verifyUser = () => (dispatch) => {
     }
   );
 };
+
+export const refreshToken = () => (dispatch) => {
+  return axios.post(
+    `${
+      MODE === "dev" ? SERVER_DEV_API : SERVER_PROD_API
+    }/api/v1/auth/refreshtoken`,
+    {},
+    {
+      withCredentials: true,
+    }
+  );
+};

@@ -8,8 +8,13 @@ import SingleImageDashboard from "./scenes/singleImage/SingleImageDashboard";
 import SignIn from "./scenes/auth/SignIn";
 import SignUp from "./scenes/auth/SignUp";
 import { useEffect } from "react";
-import { clearUser, setUser, verifyUser } from "./state/userSlice";
-import { getCookie } from "./utils";
+import {
+  clearUser,
+  refreshToken,
+  setUser,
+  verifyUser,
+} from "./state/userSlice";
+import Policy from "./scenes/Policy";
 
 function App() {
   const dispatch = useDispatch();
@@ -18,13 +23,22 @@ function App() {
       .then((data) => {
         dispatch(setUser(data.data.user));
       })
-      .catch((err) => {
+      .catch(async (err) => {
+        const { message } = err.response?.data || err;
         dispatch(clearUser());
+        // if jwt access_token is expired generate new access_token with refreshtoken
+        if (message === "jwt expired") {
+          dispatch(refreshToken())
+            .then(() => dispatch(verifyUser()))
+            .then((data) => {
+              dispatch(setUser(data.data.user));
+            })
+            .catch((err) => {
+              console.log(err?.response?.data?.message);
+            });
+        }
       });
   }, []);
-  console.log("document", decodeURIComponent(document.cookie));
-  console.log("window", decodeURIComponent(window.cookie));
-  console.log("abc" + getCookie("dall-e-user-avatar") + "efg");
   return (
     <div className="App">
       <BrowserRouter>
@@ -37,6 +51,7 @@ function App() {
           </Route>
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/policies/content-policy" element={<Policy />} />
         </Routes>
       </BrowserRouter>
     </div>
