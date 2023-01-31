@@ -1,4 +1,3 @@
-import Joi from "joi";
 import { JWT_REFRESH_SECRET } from "../../config/index.js";
 import { User } from "../../models/index.js";
 import CustomErrorHandler from "../../services/CustomErrorHandler.js";
@@ -8,6 +7,7 @@ const refreshTokenController = {
   async refresh(req, res, next) {
     try {
       const refresh_token = req.cookies?.refresh_token?.split(" ")[1];
+      console.log("reftok", refresh_token);
 
       if (!refresh_token) {
         return next(CustomErrorHandler.unAuthorised("Invalid refresh token!"));

@@ -8,7 +8,10 @@ export const authenticate = async (req, res, next) => {
   try {
     const access_token = req.cookies?.access_token?.split(" ")[1];
     const blacklist = await redis.lrange("blacklist", 0, -1);
+    // const access_token =
+    //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2Q0ZmJiMTczNGU2Y2Y4ODNjZDJkN2IiLCJlbWFpbCI6Imhhc2htYXR3NTU1QGdtYWlsLmNvbSIsImlhdCI6MTY3NTA2ODU3NiwiZXhwIjoxNjc1NjczMzc2fQ.Y7_BbdxHQmKQ14xTBtlhn2VmVcuusW8bvUXX41awf3E";
 
+    // console.log(access_token);
     if (!access_token || blacklist.includes(access_token)) {
       return next(CustomErrorHandler.unAuthorised());
     }

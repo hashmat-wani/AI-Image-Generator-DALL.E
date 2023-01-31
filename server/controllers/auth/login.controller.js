@@ -83,7 +83,7 @@ const loginController = {
     }
   },
 
-  async oAuthLogin(firstName, lastName, email, cb, avatar = false) {
+  async oAuthLogin(firstName, lastName, email, cb, avatar = null) {
     try {
       let user = await User.findOne({ email });
 
@@ -94,13 +94,12 @@ const loginController = {
           lastName,
           email,
           password,
-          // avatar,
+          avatar,
         });
       }
       return cb(null, {
         success: true,
         user,
-        avatar,
       });
     } catch (err) {
       return cb(err, null);
@@ -109,8 +108,7 @@ const loginController = {
 
   async oAuthLoginSuccess(req, res, next) {
     try {
-      const { user, avatar } = req.user;
-      // console.log(avatar);
+      const { user } = req.user;
 
       // generate tokens
       const access_token = JwtService.sign({
@@ -124,13 +122,13 @@ const loginController = {
         JWT_REFRESH_SECRET
       );
 
-      if (avatar) {
-        res.cookie("dall-e-user-avatar", avatar, {
-          sameSite: "None",
-          secure: true,
-          httpOnly: false,
-        });
-      }
+      // if (avatar) {
+      //   res.cookie("dall-e-user-avatar", avatar, {
+      //     sameSite: "None",
+      //     secure: true,
+      //     httpOnly: false,
+      //   });
+      // }
 
       return res
         .status(200)

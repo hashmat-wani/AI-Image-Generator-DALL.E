@@ -5,7 +5,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { FlexBox } from "../../components/FlexBox";
 import { updateForm } from "../../state/formSlice";
 import { shades } from "../../theme";
-import { getRandomPrompt } from "../../utils";
+import { getRandomPrompt, STATUS } from "../../utils";
 import Input from "../../components/Input";
 import { Link } from "react-router-dom";
 
@@ -14,10 +14,11 @@ const SearchResult = () => {
 
   const dispatch = useDispatch();
 
-  const { photos, prompt, status } = useSelector(
+  const { images, prompt, status } = useSelector(
     (state) => state.formReducer,
     shallowEqual
   );
+  console.log(images);
 
   const handleSurpriseMe = () => {
     const randomPrompt = getRandomPrompt();
@@ -49,8 +50,9 @@ const SearchResult = () => {
       </FlexBox>
       <Input />
       {/* Photo preview */}
-      {status === "loading" && "Loading..."}
-      {status === "idle" && (
+      {status === STATUS.LOADING && "Loading..."}
+      {status === STATUS.ERROR && "Error..."}
+      {status === STATUS.IDLE && (
         <Box
           mt="50px"
           gap="20px"
@@ -60,11 +62,13 @@ const SearchResult = () => {
             md: "repeat(4, 1fr)",
           }}
         >
-          {photos.map((photo) => (
-            <Link to={`/search/single/${photo.id}`} key={photo.id}>
-              <Img src={photo.photo} alt={prompt} />
-            </Link>
-          ))}
+          {images.length === 0
+            ? "no images"
+            : images.map((node) => (
+                <Link to={`/search/single/${node.id}`} key={node.id}>
+                  <Img src={node.image} alt={prompt} />
+                </Link>
+              ))}
         </Box>
       )}
     </Box>

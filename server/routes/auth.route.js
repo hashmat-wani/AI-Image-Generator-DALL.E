@@ -38,13 +38,9 @@ router.get("/me", authenticate, userController.me);
 
 // REFRESH TOKEN
 
-router.post("/refreshtoken", refreshTokenController.refresh);
+router.get("/refreshtoken", refreshTokenController.refresh);
 
 // GOOGLE OAUTH
-
-router.get("/login/failed", (req, res) => {
-  return next(CustomErrorHandler.unAuthorised());
-});
 
 router.get(
   "/google",
@@ -77,5 +73,10 @@ router.get(
   }),
   loginController.oAuthLoginSuccess
 );
+
+// Login failed
+router.get("/login/failed", (req, res) => {
+  return next(CustomErrorHandler.unAuthorised());
+});
 
 export default router;

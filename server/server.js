@@ -10,13 +10,22 @@ import {
   MODE,
   PROD_API,
 } from "./config/index.js";
-import { dallERoutes, authRoutes, postRoutes } from "./routes/index.js";
+import {
+  dallERoutes,
+  authRoutes,
+  postsRoutes,
+  userRoutes,
+} from "./routes/index.js";
 import cookieParser from "cookie-parser";
+import path from "path";
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import redis from "./config/redis.js";
-
 const app = express();
 
 const PORT = APP_PORT || 3000;
+global.appRoot = path.resolve(__dirname);
 
 app.use(cookieParser());
 const corsOptions = {
@@ -26,17 +35,20 @@ const corsOptions = {
   methods: "GET,POST,PUT,DELETE",
 };
 app.use(cors(corsOptions));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json({ limit: "50mb" }));
-
-app.use("/api/v1/post", postRoutes);
-app.use("/api/v1/dalle", dallERoutes);
+app.use("/uploads", express.static("uploads"));
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/dalle", dallERoutes);
+app.use("/api/v1/posts", postsRoutes);
+app.use("/api/v1/user", userRoutes);
 
 app.get("/", async (req, res) => {
   res.send("Hello from DALL.E");
 });
 
 // console.log(await redis.llen("blacklist"));
+// console.log(path.resolve(__dirname, "/abc"));
 
 // Error handler
 app.use(errorHandler);

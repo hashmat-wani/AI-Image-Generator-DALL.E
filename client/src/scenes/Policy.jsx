@@ -3,7 +3,7 @@ import React from "react";
 
 const Policy = () => {
   return (
-    <Box color="#191927" maxWidth="800px" margin="0 auto" padding="64px 20px">
+    <Box color="#191927" maxWidth="780px" margin="0 auto" padding="64px 20px">
       <Text sx={{ fontSize: "46px" }}>Content policy</Text>
       <Typography color="#19192780" sx={{ fontSize: "15px", pt: "10px" }}>
         Updated January 29, 2023
@@ -138,21 +138,12 @@ const Policy = () => {
       </ul>
     </Box>
   );
-  // Don’t mislead your audience about AI involvement.
-  // When sharing your work, we encourage you to proactively disclose AI involvement in your work.
-  // You may remove the DALL·E signature if you wish, but you may not mislead others about the nature of the work. For example, you may not tell people that the work was entirely human generated or that the work is an unaltered photograph of a real event.
-  // Respect the rights of others.
-  // Do not upload images of people without their consent.
-  // Do not upload images to which you do not hold appropriate usage rights.
-  // Do not create images of public figures.
-  // Please report any suspected violations of these rules to our team through our help center.
-  // We will investigate and take action accordingly, up to and including terminating the violating account.
 };
 
 export default Policy;
 
 const Text = styled(Typography)({
-  fontSize: "20px",
+  fontSize: "18px",
   fontFamily: "'Noto Serif JP', serif",
 });
 const TextBold = styled("span")({

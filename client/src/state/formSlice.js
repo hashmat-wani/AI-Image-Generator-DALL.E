@@ -7,31 +7,31 @@ export const formSlice = createSlice({
   name: "form",
   initialState: {
     prompt: "",
-    photos: [
-      {
-        id: 1,
-        index: 0,
-        photo:
-          "https://cdn.openai.com/labs/images/An%20armchair%20in%20the%20shape%20of%20an%20avocado.webp?v=1",
-      },
-      {
-        id: 2,
-        index: 1,
-        photo:
-          "https://cdn.openai.com/labs/images/An%20armchair%20in%20the%20shape%20of%20an%20avocado.webp?v=1",
-      },
-      {
-        id: 3,
-        index: 2,
-        photo:
-          "https://cdn.openai.com/labs/images/An%20armchair%20in%20the%20shape%20of%20an%20avocado.webp?v=1",
-      },
-      {
-        id: 4,
-        index: 3,
-        photo:
-          "https://cdn.openai.com/labs/images/An%20armchair%20in%20the%20shape%20of%20an%20avocado.webp?v=1",
-      },
+    images: [
+      // {
+      //   id: 1,
+      //   index: 0,
+      //   image:
+      //     "https://cdn.openai.com/labs/images/An%20armchair%20in%20the%20shape%20of%20an%20avocado.webp?v=1",
+      // },
+      // {
+      //   id: 2,
+      //   index: 1,
+      //   image:
+      //     "https://cdn.openai.com/labs/images/An%20armchair%20in%20the%20shape%20of%20an%20avocado.webp?v=1",
+      // },
+      // {
+      //   id: 3,
+      //   index: 2,
+      //   image:
+      //     "https://cdn.openai.com/labs/images/An%20armchair%20in%20the%20shape%20of%20an%20avocado.webp?v=1",
+      // },
+      // {
+      //   id: 4,
+      //   index: 3,
+      //   image:
+      //     "https://cdn.openai.com/labs/images/An%20armchair%20in%20the%20shape%20of%20an%20avocado.webp?v=1",
+      // },
     ],
     status: STATUS.IDLE,
   },
@@ -48,11 +48,9 @@ export const formSlice = createSlice({
 export const { updateForm, setStatus } = formSlice.actions;
 export default formSlice.reducer;
 
-export const generateImage = (prompt) => (dispatch) => {
+export const generatePosts = (prompt) => (dispatch) => {
   dispatch(setStatus(STATUS.LOADING));
-  console.log(
-    `${MODE === "dev" ? SERVER_DEV_API : SERVER_PROD_API}/api/v1/dalle`
-  );
+
   fetch(`${MODE === "dev" ? SERVER_DEV_API : SERVER_PROD_API}/api/v1/dalle`, {
     method: "POST",
     headers: {
@@ -65,10 +63,10 @@ export const generateImage = (prompt) => (dispatch) => {
       dispatch(setStatus(STATUS.IDLE));
       dispatch(
         updateForm({
-          photos: data.photos.map((photo, index) => ({
+          images: data.images.map((photo, index) => ({
             id: uuidv4(),
             index,
-            photo: `data:image/jpeg;base64,${photo.b64_json}`,
+            image: `data:image/jpeg;base64,${photo.b64_json}`,
           })),
         })
       );

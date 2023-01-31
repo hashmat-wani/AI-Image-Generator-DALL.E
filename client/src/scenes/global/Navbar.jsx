@@ -17,7 +17,7 @@ import { useToast } from "@chakra-ui/react";
 import { logOut } from "../../state/userSlice";
 import { CircularProgress } from "@mui/material";
 import { useState } from "react";
-import { getCookie, STATUS } from "../../utils";
+import { resolvePath, STATUS } from "../../utils";
 
 const pages = ["History", "Collections"];
 
@@ -26,7 +26,7 @@ function Navbar() {
     (state) => state.userReducer,
     shallowEqual
   );
-  console.log(user);
+
   const toast = useToast();
   const dispatch = useDispatch();
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -140,11 +140,11 @@ function Navbar() {
 
       {/* user settings */}
       <Box sx={{ flexGrow: 0 }}>
-        {user.email ? (
+        {user ? (
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              {user.avatar ? (
-                <Avatar src={user.avatar} />
+              {user?.avatar ? (
+                <Avatar src={resolvePath(user?.avatar)} />
               ) : (
                 <Avatar
                   sx={{
@@ -214,27 +214,37 @@ function Navbar() {
             }}
             onClick={handleCloseUserMenu}
           >
-            <Box>
-              <Typography fontSize="13px">{`${user?.firstName} ${user?.lastName}`}</Typography>
-              <Typography
-                fontSize="11px"
-                color={shades.primary[300]}
-                // variant="small"
-              >
+            <Link to="/account">
+              <Typography fontWeight="bold" fontSize="13px">
+                {user?.firstName} {user?.lastName}
+              </Typography>
+              <Typography color={shades.primary[300]} variant="small">
                 {user?.email}
               </Typography>
-            </Box>
+            </Link>
           </MenuItem>
 
           {/* links */}
           <Box sx={{ borderBottom: `1px solid ${shades.secondary[300]}` }}>
             {[
-              { label: "Read the announcement", url: "" },
-              { label: "Join the DALL.E Discord", url: "" },
-              { label: "Visit the OpenAI API", url: "" },
+              {
+                label: "Read the announcement",
+                url: "https://openai.com/dall-e-2/",
+              },
+              {
+                label: "Join the DALL.E Discord",
+                url: "https://discord.com/invite/openai",
+              },
+              { label: "Visit the OpenAI API", url: "https://openai.com/api/" },
             ].map((node, idx) => (
-              <MenuItem key={idx} sx={{ p: "8px 10px", fontSize: "12px" }}>
-                {node.label}
+              <MenuItem key={idx} sx={{ p: "8px 10px" }}>
+                <a
+                  style={{ fontSize: "13px" }}
+                  href={node.url}
+                  target="__blank"
+                >
+                  {node.label}
+                </a>
               </MenuItem>
             ))}
             {status === STATUS.LOADING ? (
@@ -253,7 +263,7 @@ function Navbar() {
                 }}
                 sx={{
                   p: "8px 10px",
-                  fontSize: "12px",
+                  fontSize: "13px",
                 }}
               >
                 Sign out
@@ -264,20 +274,21 @@ function Navbar() {
           {/* footer menu items */}
           <FlexBox justifyContent="start" columnGap="10px" p="10px">
             {[
-              { label: "Content policy", url: "" },
-              { label: "Terms", url: "" },
-              { label: "About", url: "" },
+              { label: "Content policy", url: "policies/content-policy" },
+              { label: "Terms", url: "/terms" },
+              { label: "About", url: "/about" },
             ].map((node, idx) => (
-              <Typography
-                key={idx}
-                sx={{
-                  cursor: "pointer",
-                  fontSize: "11px",
-                  color: shades.primary[300],
-                }}
-              >
-                {node.label}
-              </Typography>
+              <Link key={idx} to={node.url} target="__blank">
+                <Typography
+                  sx={{
+                    cursor: "pointer",
+                    fontSize: "12px",
+                    color: shades.primary[300],
+                  }}
+                >
+                  {node.label}
+                </Typography>
+              </Link>
             ))}
           </FlexBox>
         </Menu>

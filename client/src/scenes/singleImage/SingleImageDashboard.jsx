@@ -4,17 +4,22 @@ import { Outlet, useNavigate, useParams } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { FlexBox } from "../../components/FlexBox";
 import { shades } from "../../theme";
-import { shallowEqual, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { downloadImage } from "../../utils";
+import { createPost } from "../../state/postsSlice";
 
 const SingleImageDashboard = () => {
   const isMobile = useMediaQuery("(max-width:767px)");
   const navigate = useNavigate();
-  const { photos } = useSelector((state) => state.formReducer, shallowEqual);
+  const dispatch = useDispatch();
+  const { images, prompt } = useSelector(
+    (state) => state.formReducer,
+    shallowEqual
+  );
 
   const { id } = useParams();
 
-  let { photo } = photos.find((photo) => photo.id == id);
+  let { image } = images.find((node) => node.id == id);
 
   return (
     <Box
@@ -47,8 +52,15 @@ const SingleImageDashboard = () => {
         {/* Share/download desktop version */}
         {!isMobile && (
           <FlexBox columnGap="10px">
-            <Btn onClick={() => downloadImage(id, photo)}>Download</Btn>
-            <Btn>Share</Btn>
+            <Btn onClick={() => downloadImage(id, image)}>Download</Btn>
+            <Btn
+              onClick={() => {
+                console.log("wo");
+                dispatch(createPost(image, prompt));
+              }}
+            >
+              Share
+            </Btn>
           </FlexBox>
         )}
       </FlexBox>
@@ -66,11 +78,19 @@ const SingleImageDashboard = () => {
             p="20px"
             textAlign="center"
             flex={1}
-            onClick={() => downloadImage(id, photo)}
+            onClick={() => downloadImage(id, image)}
           >
             Download
           </Btn>
-          <Btn mobile={isMobile.toString()} textAlign="center" flex={1}>
+          <Btn
+            onClick={() => {
+              console.log("wo");
+              dispatch(createPost(image, prompt));
+            }}
+            mobile={isMobile.toString()}
+            textAlign="center"
+            flex={1}
+          >
             Share
           </Btn>
         </FlexBox>

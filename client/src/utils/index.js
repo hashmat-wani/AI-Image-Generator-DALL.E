@@ -4,3 +4,4 @@ export { STATUS } from "./enums";
 export { getItem, setItem, removeItem } from "./localstorage";
 export { toaster } from "./toast";
 export { getCookie } from "./getCookie";
+export { resolvePath } from "./resolvePath";

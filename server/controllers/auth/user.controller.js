@@ -16,6 +16,27 @@ const userController = {
       return next(err);
     }
   },
+
+  async updateAvatar(req, res, next) {
+    const { _id: userId } = req.user;
+    const { path: avatar } = req.file;
+    try {
+      const user = await User.findByIdAndUpdate(userId, { avatar });
+      return res.status(204).json({ success: true, data: user.avatar });
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  async removeAvatar(req, res, next) {
+    try {
+      const { _id: userId } = req.user;
+      const user = await User.findByIdAndUpdate(userId, { avatar: null });
+      res.status(204).json({ success: true, data: user.avatar });
+    } catch (err) {
+      return next(err);
+    }
+  },
 };
 
 export default userController;

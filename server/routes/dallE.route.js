@@ -1,6 +1,7 @@
 import express from "express";
 import { Configuration, OpenAIApi } from "openai";
 import { OPENAI_API_KEY } from "../config/index.js";
+import CustomErrorHandler from "../services/CustomErrorHandler.js";
 
 const router = express.Router();
 
@@ -24,10 +25,11 @@ router.post("/", async (req, res) => {
       response_format: "b64_json",
     });
 
-    const image = aiResponse.data.data;
-    res.status(200).json({ photos: image });
+    const images = aiResponse.data.data;
+    res.status(200).json({ images });
   } catch (err) {
-    res.status(500).send(err?.response?.data?.error?.message);
+    const { message } = err?.response?.data?.error || err;
+    return next(CustomErrorHandler.serverError(message));
   }
 });
 

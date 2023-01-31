@@ -2,10 +2,10 @@ import { Box } from "@mui/material";
 
 import React from "react";
 
-const Card = ({ post }) => {
+const Card = ({ image }) => {
   return (
     <Box>
-      <img width="100%" height="100%" src={post} alt="" />
+      <img width="100%" height="100%" src={image} alt="" />
     </Box>
   );
 };

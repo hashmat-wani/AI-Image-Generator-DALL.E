@@ -9,7 +9,7 @@ import { shades } from "../theme";
 import { FlexBox } from "./FlexBox";
 import { getRandomPrompt } from "../utils/getRandomPrompt";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { generateImage, updateForm } from "../state/formSlice";
+import { generatePosts, updateForm } from "../state/formSlice";
 import { useNavigate } from "react-router-dom";
 
 const Input = () => {
@@ -45,7 +45,7 @@ const Input = () => {
 
   const handleGenerate = () => {
     navigate("/search");
-    dispatch(generateImage(prompt));
+    dispatch(generatePosts(prompt));
   };
 
   return (

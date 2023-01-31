@@ -11,13 +11,13 @@ import { shades } from "../../theme";
 const SingleImage = () => {
   const isMobile = useMediaQuery("(max-width:767px)");
   const navigate = useNavigate();
-  const { photos, prompt } = useSelector(
+  const { images, prompt } = useSelector(
     (state) => state.formReducer,
     shallowEqual
   );
   const { id } = useParams();
 
-  let { photo, index } = photos.find((photo) => photo.id == id);
+  let { image, index } = images.find((node) => node.id == id);
 
   return (
     <FlexBox position="relative" justifyContent="space-between">
@@ -28,13 +28,13 @@ const SingleImage = () => {
         mobile={isMobile.toString()}
         disabled={index == 0}
         variant="prev"
-        onClick={() => navigate(`/search/single/${photos[--index].id}`)}
+        onClick={() => navigate(`/search/single/${images[--index].id}`)}
       >
         <ChevronLeftIcon />
       </SwipeBtn>
       {/* Image */}
       <Box width={{ xs: "100%", md: "416px" }}>
-        <img src={photo} alt={prompt} width="100%" />
+        <img src={image} alt={prompt} width="100%" />
       </Box>
       {/* right swipe */}
       <SwipeBtn
@@ -43,7 +43,7 @@ const SingleImage = () => {
         mobile={isMobile.toString()}
         variant="next"
         disabled={index == 3}
-        onClick={() => navigate(`/search/single/${photos[++index].id}`)}
+        onClick={() => navigate(`/search/single/${images[++index].id}`)}
       >
         <ChevronRightIcon />
       </SwipeBtn>
