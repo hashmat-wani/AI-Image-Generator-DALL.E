@@ -116,10 +116,10 @@ export const logOut = (toast) => (dispatch) => {
       return dispatch(verifyUser(popup));
     })
     .catch((err) => {
-      dispatch(setStatus(STATUS.ERROR));
       const { message } = err?.response?.data || err;
       toaster(toast, "Failed", message, "error");
-    });
+    })
+    .finally(() => dispatch(setStatus(STATUS.IDLE)));
 };
 
 export const loginWithGoogle = () => () => {
@@ -152,7 +152,6 @@ export const verifyUser = (popup) => (dispatch) => {
     })
     .catch(async (err) => {
       const message = err?.response?.data?.message || err?.message;
-      console.log(message);
       dispatch(clearUser());
       if (popup) {
         const { title, desc, type } = popup.onError;
@@ -161,21 +160,65 @@ export const verifyUser = (popup) => (dispatch) => {
     });
 };
 
-export const refreshToken = () => (dispatch) => {
+export const refreshToken = () => () => {
   return instance.get("/api/v1/auth/refreshtoken", { withCredentials: true });
 };
 
-export const updateUserAvatar = (avatar) => (dispatch) => {
+export const updateUserAvatar = (toast, handleClose, avatar) => (dispatch) => {
+  dispatch(setStatus(STATUS.LOADING));
   const formData = new FormData();
   formData.append("avatar", avatar);
-  dispatch(setStatus(STATUS.LOADING));
-  privateInstance.post("/api/v1/user/updateavatar", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  privateInstance
+    .patch("/api/v1/user/updateavatar", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((data) => {
+      const { message, avatar } = data?.data;
+      dispatch(setUser({ avatar }));
+      toaster(toast, "Success", message, "success");
+      handleClose();
+    })
+    .catch((err) => {
+      const { message } = err?.response?.data || err;
+      toaster(toast, "Failed", message, "error");
+    })
+    .finally(() => dispatch(setStatus(STATUS.IDLE)));
 };
 
-export const removeUserAvatar = () => () => {
-  privateInstance.post("/api/v1/user/removeavatar", {});
+export const removeUserAvatar = (toast, handleClose) => (dispatch) => {
+  dispatch(setStatus(STATUS.LOADING));
+  privateInstance
+    .patch("/api/v1/user/removeavatar", {})
+    .then((data) => {
+      const { message, avatar } = data?.data;
+      dispatch(setUser({ avatar }));
+      toaster(toast, "Success", message, "success");
+      handleClose();
+    })
+    .catch((err) => {
+      const { message } = err?.response?.data || err;
+      toaster(toast, "Failed", message, "error");
+    })
+    .finally(() => dispatch(setStatus(STATUS.IDLE)));
 };
+
+export const changePassword =
+  (values, setSubmitting, toast, handleClose) => (dispatch) => {
+    const { oldPassword, newPassword } = values;
+    privateInstance
+      .patch("/api/v1/user/changepassword", {
+        oldPassword: oldPassword.trim(),
+        newPassword: newPassword.trim(),
+      })
+      .then((data) => {
+        toaster(toast, "Success", data.data.message, "success");
+        handleClose();
+      })
+      .catch((err) => {
+        const { message } = err?.response?.data || err;
+        toaster(toast, "Failed", message, "error");
+      })
+      .finally(() => setSubmitting(false));
+  };

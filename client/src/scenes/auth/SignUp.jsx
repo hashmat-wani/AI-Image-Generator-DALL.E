@@ -47,7 +47,7 @@ export default function SignUp() {
       ),
     confirmPassword: yup
       .string()
-      .required("Please confirm your password")
+      .required("Required")
       .oneOf([yup.ref("password"), null], "Passwords don't match."),
   });
 

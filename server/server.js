@@ -32,7 +32,7 @@ const corsOptions = {
   origin: `${MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API}`,
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
-  methods: "GET,POST,PUT,DELETE",
+  methods: "GET,POST,PUT,DELETE,PATCH",
 };
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: false }));

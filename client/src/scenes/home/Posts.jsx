@@ -25,7 +25,7 @@ const Posts = () => {
     (state) => state.postsReducer,
     shallowEqual
   );
-  // console.log(posts);
+  console.log(status);
   const isSmallScreen = useMediaQuery("(max-width:499px)");
 
   return (

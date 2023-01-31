@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { MODE, SERVER_DEV_API, SERVER_PROD_API } from "../env";
-import { privateInstance } from "../utils/apiInstances";
+import { instance, privateInstance } from "../utils/apiInstances";
 import { STATUS } from "../utils/enums";
 
 export const postsSlice = createSlice({
@@ -12,6 +11,7 @@ export const postsSlice = createSlice({
     },
 
     setStatus: (state, action) => {
+      console.log(action);
       return { ...state, status: action.payload };
     },
   },
@@ -21,27 +21,25 @@ export const { setPosts, setStatus } = postsSlice.actions;
 export default postsSlice.reducer;
 
 export const createPost = (image, prompt) => (dispatch) => {
-  console.log("working");
-  // dispatch(setStatus(STATUS.LOADING));
-  privateInstance.post(
-    `${MODE === "dev" ? SERVER_DEV_API : SERVER_PROD_API}/api/v1/posts`,
-    {
+  dispatch(setStatus(STATUS.LOADING));
+  privateInstance
+    .post("/api/v1/posts", {
       image,
       prompt,
-    }
-  );
+    })
+    .then(() => {})
+    .finally(() => setTimeout(() => dispatch(setStatus(STATUS.IDLE)), 5000));
 };
 
 export const fetchPosts = () => (dispatch) => {
   dispatch(setStatus(STATUS.LOADING));
-  fetch(`${MODE === "dev" ? SERVER_DEV_API : SERVER_PROD_API}/api/v1/posts`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  })
-    .then((res) => res.json())
+  instance
+    .get("/api/v1/posts")
     .then((data) => {
       dispatch(setStatus(STATUS.IDLE));
-      dispatch(setPosts(data.posts.reverse()));
+      dispatch(setPosts(data.data.posts.reverse()));
     })
-    .catch((err) => dispatch(setStatus(STATUS.ERROR)));
+    .catch((err) => {
+      dispatch(setStatus(STATUS.ERROR));
+    });
 };

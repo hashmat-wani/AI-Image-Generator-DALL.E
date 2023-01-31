@@ -8,18 +8,14 @@ import SingleImageDashboard from "./scenes/singleImage/SingleImageDashboard";
 import SignIn from "./scenes/auth/SignIn";
 import SignUp from "./scenes/auth/SignUp";
 import { useEffect } from "react";
-import {
-  clearUser,
-  refreshToken,
-  setUser,
-  verifyUser,
-} from "./state/userSlice";
+import { verifyUser } from "./state/userSlice";
 import Policy from "./scenes/Policy";
 import { fetchPosts } from "./state/postsSlice";
 import About from "./scenes/About";
 import Terms from "./scenes/Terms";
 import Profile from "./scenes/profile/Profile";
 import PrivateRoute from "./components/PrivateRoute";
+import NotFound from "./scenes/home/NotFound";
 
 function App() {
   const dispatch = useDispatch();
@@ -35,7 +31,7 @@ function App() {
   );
   const { user } = userReducer;
   const { prompt, images } = formReducer;
-  console.log(user, prompt, images);
+  // console.log(user, prompt, images);
   return (
     <div className="App">
       <BrowserRouter>
@@ -83,6 +79,7 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>

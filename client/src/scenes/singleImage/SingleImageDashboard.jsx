@@ -1,21 +1,40 @@
-import { Box, styled, Typography, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  styled,
+  Typography,
+  useMediaQuery,
+  Button,
+} from "@mui/material";
 import React from "react";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { FlexBox } from "../../components/FlexBox";
 import { shades } from "../../theme";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { downloadImage } from "../../utils";
+import { downloadImage, STATUS } from "../../utils";
 import { createPost } from "../../state/postsSlice";
 
 const SingleImageDashboard = () => {
   const isMobile = useMediaQuery("(max-width:767px)");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { images, prompt } = useSelector(
-    (state) => state.formReducer,
+  const { formReducer, postsReducer } = useSelector(
+    (state) => state,
     shallowEqual
   );
+  const { images, prompt } = formReducer;
+  const { status } = postsReducer;
+  const shareBtnlabel =
+    "Once you've created the image you want, you can share it with others in the community";
+
+  const handleShare = () => {
+    dispatch(createPost(image, prompt));
+  };
+
+  const handleDownload = () => {
+    downloadImage(id, image);
+  };
 
   const { id } = useParams();
 
@@ -52,15 +71,25 @@ const SingleImageDashboard = () => {
         {/* Share/download desktop version */}
         {!isMobile && (
           <FlexBox columnGap="10px">
-            <Btn onClick={() => downloadImage(id, image)}>Download</Btn>
-            <Btn
-              onClick={() => {
-                console.log("wo");
-                dispatch(createPost(image, prompt));
-              }}
-            >
-              Share
-            </Btn>
+            <Btn onClick={handleDownload}>Download</Btn>
+            <Box title={shareBtnlabel} position="relative">
+              <Btn disabled={status === STATUS.LOADING} onClick={handleShare}>
+                Share
+              </Btn>
+              {status === STATUS.LOADING && (
+                <CircularProgress
+                  size={18}
+                  sx={{
+                    position: "absolute",
+                    color: "#1d2226",
+                    left: "50%",
+                    top: "50%",
+                    mt: "-11px",
+                    ml: "-9px",
+                  }}
+                />
+              )}
+            </Box>
           </FlexBox>
         )}
       </FlexBox>
@@ -73,26 +102,38 @@ const SingleImageDashboard = () => {
       )}
       {isMobile && (
         <FlexBox pt="30px" mt="auto" columnGap="10px">
-          <Btn
-            mobile={isMobile.toString()}
-            p="20px"
-            textAlign="center"
-            flex={1}
-            onClick={() => downloadImage(id, image)}
-          >
-            Download
-          </Btn>
-          <Btn
-            onClick={() => {
-              console.log("wo");
-              dispatch(createPost(image, prompt));
-            }}
-            mobile={isMobile.toString()}
-            textAlign="center"
-            flex={1}
-          >
-            Share
-          </Btn>
+          <Box flex={1}>
+            <Btn
+              fullWidth
+              mobile={isMobile.toString()}
+              onClick={handleDownload}
+            >
+              Download
+            </Btn>
+          </Box>
+          <Box flex={1} title={shareBtnlabel} position="relative">
+            <Btn
+              fullWidth
+              mobile={isMobile.toString()}
+              disabled={status === STATUS.LOADING}
+              onClick={handleShare}
+            >
+              Share
+            </Btn>
+            {status === STATUS.LOADING && (
+              <CircularProgress
+                size={18}
+                sx={{
+                  position: "absolute",
+                  color: "#1d2226",
+                  left: "50%",
+                  top: "50%",
+                  mt: "-10px",
+                  ml: "-9px",
+                }}
+              />
+            )}
+          </Box>
         </FlexBox>
       )}
     </Box>
@@ -101,10 +142,9 @@ const SingleImageDashboard = () => {
 
 export default SingleImageDashboard;
 
-const Btn = styled(Box)(({ mobile }) => ({
+const Btn = styled(Button)(({ mobile }) => ({
   fontWeight: "bold",
   transition: "0.2s",
-  cursor: "pointer",
   padding: `${mobile === "true" ? "20px" : "10px"}`,
   background: `${shades.secondary[300]}`,
   borderRadius: "5px",

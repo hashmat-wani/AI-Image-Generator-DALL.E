@@ -20,12 +20,14 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage,
 });
-router.post(
+router.patch(
   "/updateavatar",
   authenticate,
   upload.single("avatar"),
   userController.updateAvatar
 );
-router.post("/removeavatar", authenticate, userController.removeAvatar);
+router.patch("/removeavatar", authenticate, userController.removeAvatar);
+
+router.patch("/changepassword", authenticate, userController.changePassword);
 
 export default router;
