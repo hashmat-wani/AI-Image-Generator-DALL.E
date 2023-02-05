@@ -32,13 +32,13 @@ const SingleImageDashboard = () => {
     dispatch(createPost(image, prompt));
   };
 
-  const handleDownload = () => {
-    downloadImage(id, image);
-  };
-
   const { id } = useParams();
 
   let { image } = images.find((node) => node.id == id);
+
+  const handleDownload = () => {
+    downloadImage(id, image);
+  };
 
   return (
     <Box
@@ -136,7 +136,6 @@ const SingleImageDashboard = () => {
           </Box>
         </FlexBox>
       )}
-   
     </Box>
   );
 };

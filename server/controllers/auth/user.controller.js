@@ -47,8 +47,7 @@ const userController = {
     try {
       const { _id: userId } = req.user;
       let user = await User.findById(userId);
-      console.log("userAvatar: ", user.avatar);
-      console.log(`${appRoot}/${user.avatar}`);
+
       fs.unlinkSync(`${appRoot}/${user.avatar}`, (err) => {
         return next(err);
       });

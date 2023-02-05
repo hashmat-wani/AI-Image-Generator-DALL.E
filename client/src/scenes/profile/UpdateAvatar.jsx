@@ -29,7 +29,6 @@ export default function UpdateAvatar({
   const [preview, setPreview] = useState(user.avatar);
 
   const handleClose = (e, avatar = user.avatar) => {
-    console.log(avatar);
     setAvatar(avatar);
     setPreview(avatar);
     setOpenAvatarDialog(false);
@@ -165,6 +164,9 @@ export default function UpdateAvatar({
                   disabled={status === STATUS.LOADING}
                   sx={{
                     ":disabled": { background: "lightgray", color: "#fff" },
+                    ":hover": {
+                      background: `${avatar ? "#0682ff" : "#df0404"}`,
+                    },
                     color: "#fff",
                     padding: "10px 20px",
                     borderRadius: "20px",

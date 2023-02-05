@@ -1,34 +1,26 @@
 import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import {
-  Box,
-  Typography,
-  Button,
-  CircularProgress,
-  DialogContent,
-  IconButton,
-  InputAdornment,
-  TextField,
-} from "@mui/material";
-import { useState } from "react";
+import { Box, Typography, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Visibility from "@mui/icons-material/Visibility";
-import { changePassword } from "../../state/userSlice";
 import { useNavigate } from "react-router-dom";
 import { shades } from "../../theme";
+import { downloadImage } from "../../utils";
+import { generatePosts } from "../../state/formSlice";
 
 export default function PostPreviewModal({
   openPost,
   setOpenPost,
   openPostData,
 }) {
-  console.log(openPostData);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleClose = () => {
-    // resetForm();
     setOpenPost(false);
+  };
+
+  const handleGenerate = (prompt) => {
+    navigate("/search");
+    dispatch(generatePosts(prompt));
   };
 
   return (
@@ -36,8 +28,8 @@ export default function PostPreviewModal({
       <Dialog
         sx={{
           ".MuiDialog-container .MuiPaper-root": {
-            minHeight: "610px",
-            width: "370px",
+            maxHeight: "650px",
+            width: "400px",
             margin: "10px",
             minWidth: "320px",
             borderRadius: "15px",
@@ -52,7 +44,7 @@ export default function PostPreviewModal({
             src={openPostData.image}
             alt="preview"
           />
-          <Box p="20px 30px">
+          <Box p="20px 30px 30px">
             <Typography textAlign="center" fontSize="15px">
               {openPostData.prompt}
             </Typography>
@@ -64,6 +56,7 @@ export default function PostPreviewModal({
                 padding: "10px",
               }}
               fullWidth
+              onClick={() => handleGenerate(openPostData.prompt)}
             >
               Try this example
             </Button>
@@ -73,6 +66,9 @@ export default function PostPreviewModal({
                 padding: "10px",
               }}
               fullWidth
+              onClick={() =>
+                downloadImage(openPostData._id, openPostData.image)
+              }
             >
               Download
             </Button>

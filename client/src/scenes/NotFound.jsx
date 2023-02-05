@@ -19,18 +19,17 @@ const NotFound = () => {
     >
       {/* some dummy image */}
       <Grid mobile={isMobile.toString()}>
-        {posts.slice(4, 10).map((post, idx) => (
+        {posts.slice(1, 6).map((post, idx) => (
           <Box
             sx={{
               ":hover > div": {
-                display: "-webkit-box",
+                display: { sm: "block" },
               },
             }}
             key={idx}
             position="relative"
           >
             <Box
-              // display: ;
               sx={{
                 display: "none",
                 backgroundColor: "#fafafcf2",
@@ -43,10 +42,10 @@ const NotFound = () => {
               }}
             >
               <Box
-                style={{
+                sx={{
                   display: "-webkit-box",
                   WebkitBoxOrient: "vertical",
-                  WebkitLineClamp: 6,
+                  WebkitLineClamp: 5,
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                 }}

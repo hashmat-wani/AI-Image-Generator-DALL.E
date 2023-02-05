@@ -53,7 +53,8 @@ export const register = (values, resetForm, setSubmitting, navigate) => () => {
 };
 
 export const login =
-  (values, resetForm, setSubmitting, navigate) => (dispatch) => {
+  (values, setSubmitting, navigate, to = "/") =>
+  (dispatch) => {
     const { email, password } = values;
 
     instance
@@ -67,7 +68,6 @@ export const login =
       )
       .then(() => {
         const popup = {
-          from: "login",
           onSuccess: {
             message: "Login successful!",
             type: "success",
@@ -77,7 +77,7 @@ export const login =
             type: "info",
           },
         };
-        return dispatch(verifyUser(popup));
+        return dispatch(verifyUser(popup, navigate, "login", to));
       })
       .catch((err) => {
         const { message } = err?.response?.data || err;
@@ -124,7 +124,7 @@ export const loginWithFacebook = () => () => {
   );
 };
 
-export const verifyUser = (popup) => (dispatch) => {
+export const verifyUser = (popup, navigate, from, to) => (dispatch) => {
   privateInstance
     .get("/api/v1/auth/me")
     .then((data) => {
@@ -132,14 +132,13 @@ export const verifyUser = (popup) => (dispatch) => {
       if (popup) {
         const { message, type } = popup.onSuccess;
         toast[type](message);
-        if (popup.from === "login") {
-          // navigate("/");
-          // resetForm();
-        }
+      }
+      if (from === "login") {
+        setTimeout(() => navigate(to, { replace: true }), 0);
       }
     })
     .catch(async (err) => {
-      const message = err?.response?.data?.message || err?.message;
+      // const message = err?.response?.data?.message || err?.message;
       dispatch(clearUser());
       if (popup) {
         const { message, type } = popup.onError;

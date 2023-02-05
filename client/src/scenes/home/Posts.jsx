@@ -34,7 +34,7 @@ const RenderCards = ({ data, title, setSearchText }) => {
           sx={{
             display: "grid",
             gridAutoFlow: "row dense",
-            gap: "4px",
+            gap: "5px",
             gridTemplateColumns: {
               xs: "repeat(2, 1fr)",
               sm: "repeat(3, 1fr)",

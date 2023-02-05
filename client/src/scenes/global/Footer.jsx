@@ -2,13 +2,14 @@ import React from "react";
 import logo from "../../assets/whiteLogo.svg";
 import freecodecampLogo from "../../assets/freecodecampLogo.png";
 
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import FacebookTwoToneIcon from "@mui/icons-material/FacebookTwoTone";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import { FlexBox } from "../../components/FlexBox";
 import { Link, useLocation } from "react-router-dom";
+import { shades } from "../../theme";
 
 const quickLinks = [
   { title: "About", url: "/about" },
@@ -18,9 +19,9 @@ const quickLinks = [
 
 const Footer = () => {
   const { pathname } = useLocation();
-  if (pathname === "/account") return null;
+  if (["/account", "/signin", "/signup"].includes(pathname)) return null;
   return (
-    <Box p="30px 5%" backgroundColor="#000000" color="white">
+    <Box p="30px 5% 20px" backgroundColor={shades.secondary[900]} color="white">
       {/* header logo*/}
       <Box>
         <img width="130px" style={{ color: "red" }} src={logo} alt="" />
@@ -77,7 +78,7 @@ const Footer = () => {
           <Typography mb="10px" fontWeight="bold">
             About
           </Typography>
-          <Typography>
+          <Typography fontSize="13px">
             DALL·E is an AI system developed by OpenAI that can create original,
             realistic images and art from a short text description. It can make
             realistic and context-aware edits, including inserting, removing, or
@@ -90,48 +91,66 @@ const Footer = () => {
         </Box>
       </Box>
       {/* footer social links*/}
-      <FlexBox gap={4} justifyContent="flex-end">
-        <a
-          href="https://github.com/hashmat-noorani"
-          title="github"
-          target="_blank"
-        >
-          <GitHubIcon />
-        </a>
-        <a
-          href="https://www.linkedin.com/in/hashmat-noorani/"
-          title="Linkedin"
-          target="_blank"
-        >
-          <LinkedInIcon />
-        </a>
-        <a
-          href="https://www.facebook.com/hwx.75"
-          title="facebook"
-          target="_blank"
-        >
-          <FacebookTwoToneIcon />
-        </a>
-        <a
-          href="https://twitter.com/hashmatwani_x"
-          title="Twitter"
-          target="_blank"
-        >
-          <TwitterIcon />
-        </a>
-        <a
-          href="https://www.freecodecamp.org/HashmatNoorani"
-          title="freeCodeCamp"
-          target="_blank"
-        >
-          <img
-            style={{ marginTop: "-5px" }}
-            width="20px"
-            src={freecodecampLogo}
-            alt=""
-          />
-        </a>
-      </FlexBox>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column-reverse", md: "row" },
+          alignItems: "center",
+          justifyContent: { xs: "center", md: "space-between" },
+          gap: "10px",
+        }}
+      >
+        <Typography fontSize="16px" fontFamily="'Noto Serif JP', serif">
+          hashtech © 2017–2023
+        </Typography>
+        <FlexBox gap={4} justifyContent="flex-end">
+          <a
+            rel="noreferrer"
+            href="https://github.com/hashmat-noorani"
+            title="github"
+            target="_blank"
+          >
+            <GitHubIcon />
+          </a>
+          <a
+            rel="noreferrer"
+            href="https://www.linkedin.com/in/hashmat-noorani/"
+            title="Linkedin"
+            target="_blank"
+          >
+            <LinkedInIcon />
+          </a>
+          <a
+            rel="noreferrer"
+            href="https://www.facebook.com/hwx.75"
+            title="facebook"
+            target="_blank"
+          >
+            <FacebookTwoToneIcon />
+          </a>
+          <a
+            rel="noreferrer"
+            href="https://twitter.com/hashmatwani_x"
+            title="Twitter"
+            target="_blank"
+          >
+            <TwitterIcon />
+          </a>
+          <a
+            rel="noreferrer"
+            href="https://www.freecodecamp.org/HashmatNoorani"
+            title="freeCodeCamp"
+            target="_blank"
+          >
+            <img
+              style={{ marginTop: "-5px" }}
+              width="20px"
+              src={freecodecampLogo}
+              alt=""
+            />
+          </a>
+        </FlexBox>
+      </Box>
     </Box>
   );
 };

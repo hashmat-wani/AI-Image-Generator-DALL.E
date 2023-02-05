@@ -7,7 +7,6 @@ const refreshTokenController = {
   async refresh(req, res, next) {
     try {
       const refresh_token = req.cookies?.refresh_token?.split(" ")[1];
-      console.log("reftok", refresh_token);
 
       if (!refresh_token) {
         return next(CustomErrorHandler.unAuthorised("Invalid refresh token!"));
@@ -21,6 +20,17 @@ const refreshTokenController = {
         );
         userId = _id;
       } catch (err) {
+        res
+          .clearCookie("access_token", {
+            httpOnly: true,
+            sameSite: "None",
+            secure: true,
+          })
+          .clearCookie("refresh_token", {
+            httpOnly: true,
+            sameSite: "None",
+            secure: true,
+          });
         return next(err);
       }
 

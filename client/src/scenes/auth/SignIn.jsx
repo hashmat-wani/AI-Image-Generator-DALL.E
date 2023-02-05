@@ -5,7 +5,7 @@ import Checkbox from "@mui/material/Checkbox";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { shades } from "../../theme";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Oauth from "./Oauth";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -22,6 +22,8 @@ export default function SignIn() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { state } = useLocation();
+
   const initialValues = {
     email: "",
     password: "",
@@ -32,8 +34,8 @@ export default function SignIn() {
     password: yup.string().trim().required("Required"),
   });
 
-  const handleFormSubmit = (values, { resetForm, setSubmitting }) => {
-    dispatch(login(values, resetForm, setSubmitting, navigate));
+  const handleFormSubmit = (values, { setSubmitting }) => {
+    dispatch(login(values, setSubmitting, navigate, state?.from));
   };
 
   const formik = useFormik({

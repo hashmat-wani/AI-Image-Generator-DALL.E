@@ -53,7 +53,7 @@ const loginController = {
 
       const refresh_token = JwtService.sign(
         { _id: user._id, email: user.email },
-        "28d",
+        "1d",
         JWT_REFRESH_SECRET
       );
 
@@ -118,7 +118,7 @@ const loginController = {
 
       const refresh_token = JwtService.sign(
         { _id: user._id, email: user.email },
-        "28d",
+        "1d",
         JWT_REFRESH_SECRET
       );
 

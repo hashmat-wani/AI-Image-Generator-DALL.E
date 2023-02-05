@@ -37,7 +37,6 @@ const postController = {
         .sort({ _id: -1 })
         .skip(skip)
         .limit(size);
-      console.log(posts);
       const totalPages = Math.ceil((await Post.find().countDocuments()) / size);
       return res.status(200).json({ success: true, posts, totalPages });
     } catch (err) {

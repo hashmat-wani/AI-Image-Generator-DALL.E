@@ -38,7 +38,6 @@ function App() {
   );
   const { user } = userReducer;
   const { prompt, images } = formReducer;
-  // console.log(user, prompt, images);
   return (
     <div className="App">
       <BrowserRouter>

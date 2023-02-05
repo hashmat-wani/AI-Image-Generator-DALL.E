@@ -2,6 +2,7 @@ import { store } from "../state/store";
 import axios from "axios";
 import { MODE, SERVER_DEV_API, SERVER_PROD_API } from "../env";
 import { refreshToken } from "../state/userSlice";
+import { toast } from "react-toastify";
 
 const baseURL = MODE === "dev" ? SERVER_DEV_API : SERVER_PROD_API;
 export const instance = axios.create({
@@ -22,7 +23,10 @@ privateInstance.interceptors.response.use(
       return store
         .dispatch(refreshToken())
         .then(() => axios(error.config)) //calling same api back here
-        .catch((err) => Promise.reject(err));
+        .catch((err) => {
+          toast.info("Your session has timed out. Please login again.");
+          return Promise.reject(err);
+        });
     } else {
       return Promise.reject(error);
     }

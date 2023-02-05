@@ -23,21 +23,6 @@ const Input = () => {
     dispatch(updateForm({ prompt: randomPrompt }));
   };
 
-  // sharing image
-  // const handleSubmit = (e) => {
-  //   if (prompt && photo) {
-  //     setLoading(true);
-  //     fetch("http://localhost:8080/api/v1/post", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ prompt, photo }),
-  //     })
-  //       .then((res) => res.json())
-  //       .catch((err) => alert(err))
-  //       .finally(() => setLoading(false));
-  //   }
-  // };
-
   const { prompt, status } = useSelector(
     (state) => state.formReducer,
     shallowEqual
@@ -55,6 +40,7 @@ const Input = () => {
       borderRadius="8px"
       flexDirection={{ xs: "column", md: "row" }}
       justifyContent="space-between"
+      
     >
       <TextField
         onChange={(e) => dispatch(updateForm({ prompt: e.target.value }))}

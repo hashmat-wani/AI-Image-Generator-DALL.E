@@ -54,10 +54,11 @@ const Home = () => {
 
       {/* Input field */}
       <Box
-        sx={{ zIndex: 500 }}
+        sx={{ zIndex: 100 }}
         margin={{ xs: "0 0 70px", md: "0 10px 70px" }}
         position={`${!isMobile && "sticky"}`}
-        top={70}
+        top="70px"
+        bottom={0}
       >
         <Input />
       </Box>

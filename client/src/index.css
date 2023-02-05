@@ -13,3 +13,7 @@ body {
 .App {
   background: #fafafc;
 }
+a {
+  text-decoration: none;
+  color: inherit;
+}

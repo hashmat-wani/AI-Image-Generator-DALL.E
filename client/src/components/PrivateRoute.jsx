@@ -1,10 +1,11 @@
 import React from "react";
 import { shallowEqual, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 const PrivateRoute = ({ children }) => {
   const { user } = useSelector((state) => state.userReducer, shallowEqual);
-  return user ? children : <Navigate to="/signin" />;
+  const { pathname } = useLocation();
+  return user ? children : <Navigate to="/signin" state={{ from: pathname }} />;
 };
 
 export default PrivateRoute;

@@ -27,7 +27,6 @@ export const postsSlice = createSlice({
     },
 
     setStatus: (state, action) => {
-      console.log(action);
       return { ...state, status: action.payload };
     },
   },
@@ -45,11 +44,14 @@ export const createPost = (image, prompt) => (dispatch) => {
     })
     .then(() => {
       toast.success("Shared successfully!");
+      dispatch(fetchPosts());
     })
     .catch(() => {
       toast.error("Something went wrong. Try again..!");
     })
-    .finally(dispatch(setStatus(STATUS.IDLE)));
+    .finally(() => {
+      dispatch(setStatus(STATUS.IDLE));
+    });
 };
 
 export const fetchPosts =
@@ -65,7 +67,6 @@ export const fetchPosts =
       .then((data) => {
         dispatch(setStatus(STATUS.IDLE));
         dispatch(setPosts(data.data));
-        console.log(data.data);
       })
       .catch((err) => {
         dispatch(setStatus(STATUS.ERROR));

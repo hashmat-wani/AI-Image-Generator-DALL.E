@@ -51,7 +51,7 @@ function Navbar() {
       p={{ xs: "10px 10px 10px 0", md: "10px 15px" }}
       position="sticky"
       top={0}
-      zIndex={100}
+      zIndex={200}
       backgroundColor="#fafafc"
     >
       {/* desktop logo */}

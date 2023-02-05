@@ -50,25 +50,22 @@ export default formSlice.reducer;
 
 export const generatePosts = (prompt) => (dispatch) => {
   dispatch(setStatus(STATUS.LOADING));
-  setTimeout(
-    () =>
-      instance
-        .post("/api/v1/dalle", { prompt })
-        .then((data) => {
-          dispatch(setStatus(STATUS.IDLE));
-          dispatch(
-            updateForm({
-              images: data.data.images.map((photo, index) => ({
-                id: uuidv4(),
-                index,
-                image: `data:image/jpeg;base64,${photo.b64_json}`,
-              })),
-            })
-          );
+  instance
+    .post("/api/v1/dalle", { prompt })
+    .then((data) => {
+      dispatch(setStatus(STATUS.IDLE));
+      dispatch(
+        updateForm({
+          prompt,
+          images: data.data.images.map((photo, index) => ({
+            id: uuidv4(),
+            index,
+            image: `data:image/jpeg;base64,${photo.b64_json}`,
+          })),
         })
-        .catch((err) => {
-          dispatch(setStatus(STATUS.ERROR));
-        }),
-    10000
-  );
+      );
+    })
+    .catch((err) => {
+      dispatch(setStatus(STATUS.ERROR));
+    });
 };
