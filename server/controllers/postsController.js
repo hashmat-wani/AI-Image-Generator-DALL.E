@@ -1,4 +1,4 @@
-import Joi from "Joi";
+import Joi from "joi";
 import Post from "../models/post.model.js";
 
 const postController = {
