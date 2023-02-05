@@ -15,12 +15,10 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { CircularProgress, IconButton, InputAdornment } from "@mui/material";
 import { useState } from "react";
-import { useToast } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { register } from "../../state/userSlice";
 
 export default function SignUp() {
-  const toast = useToast();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -52,7 +50,7 @@ export default function SignUp() {
   });
 
   const handleFormSubmit = (values, { resetForm, setSubmitting }) => {
-    dispatch(register(values, resetForm, setSubmitting, toast, navigate));
+    dispatch(register(values, resetForm, setSubmitting, navigate));
   };
 
   const formik = useFormik({

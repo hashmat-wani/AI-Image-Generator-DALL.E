@@ -47,8 +47,7 @@ app.get("/", async (req, res) => {
   res.send("Hello from DALL.E");
 });
 
-// console.log(await redis.llen("blacklist"));
-// console.log(path.resolve(__dirname, "/abc"));
+console.log(await redis.llen("blacklist"));
 
 // Error handler
 app.use(errorHandler);

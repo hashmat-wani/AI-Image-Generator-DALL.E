@@ -7,6 +7,7 @@ import Posts from "./Posts";
 import { useDispatch } from "react-redux";
 import { getRandomPrompt } from "../../utils/getRandomPrompt";
 import { updateForm } from "../../state/formSlice";
+import PaginationBtns from "./PaginationBtns";
 
 const Home = () => {
   const isMobile = useMediaQuery("(max-width:767px)");
@@ -53,7 +54,8 @@ const Home = () => {
 
       {/* Input field */}
       <Box
-        padding={{ xs: "0 0 70px", md: "0 10px 70px" }}
+        sx={{ zIndex: 500 }}
+        margin={{ xs: "0 0 70px", md: "0 10px 70px" }}
         position={`${!isMobile && "sticky"}`}
         top={70}
       >
@@ -61,6 +63,7 @@ const Home = () => {
       </Box>
 
       <Posts />
+      <PaginationBtns />
     </Box>
   );
 };

@@ -2,6 +2,7 @@ import Joi from "joi";
 import { User } from "../../models/index.js";
 import CustomErrorHandler from "../../services/CustomErrorHandler.js";
 import bcrypt from "bcrypt";
+import fs from "fs";
 
 const userController = {
   async me(req, res, next) {
@@ -23,11 +24,15 @@ const userController = {
     try {
       const { _id: userId } = req.user;
       const { path: avatar } = req.file;
-      const user = await User.findByIdAndUpdate(
-        userId,
-        { avatar },
-        { new: true }
-      );
+      let user = await User.findById(userId);
+
+      // remove current avatar from folder
+      if (user.avatar)
+        fs.unlinkSync(`${appRoot}/${user.avatar}`, (err) => {
+          return next(err);
+        });
+
+      user = await User.findByIdAndUpdate(userId, { avatar }, { new: true });
       return res.status(201).json({
         success: true,
         avatar: user.avatar,
@@ -41,12 +46,19 @@ const userController = {
   async removeAvatar(req, res, next) {
     try {
       const { _id: userId } = req.user;
-      const user = await User.findByIdAndUpdate(
+      let user = await User.findById(userId);
+      console.log("userAvatar: ", user.avatar);
+      console.log(`${appRoot}/${user.avatar}`);
+      fs.unlinkSync(`${appRoot}/${user.avatar}`, (err) => {
+        return next(err);
+      });
+      user = await User.findByIdAndUpdate(
         userId,
         { avatar: null },
         { new: true }
       );
-      res.status(201).json({
+
+      return res.status(201).json({
         success: true,
         avatar: user.avatar,
         message: "Avatar removed!",

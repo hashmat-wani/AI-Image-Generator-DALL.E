@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import React from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { shades } from "../../theme";
+import { shades } from "../theme";
 
 const NotFound = () => {
   const { posts } = useSelector((state) => state.postsReducer, shallowEqual);
@@ -56,13 +56,13 @@ const NotFound = () => {
                 </Typography>
               </Box>
             </Box>
-            <img src={post.image} alt="demoimages" />
+            <img style={{ width: "100%" }} src={post.image} alt="demoimages" />
           </Box>
         ))}
       </Grid>
 
       {/* Details */}
-      <Box my="20px" textAlign="center">
+      <Box mt="20px" mb="40px" textAlign="center">
         <Typography fontSize="20px">Page not found</Typography>
         <Typography my={2} fontSize="15px" color={shades.primary[300]}>
           We couldn't find the page you were looking for.
@@ -90,6 +90,6 @@ const Grid = styled(Box)(({ mobile }) => ({
   display: "grid",
   gap: "15px",
   gridTemplateColumns: `${
-    mobile === "true" ? "repeat(2,1fr)" : "repeat(3,1fr)"
+    mobile === "true" ? "repeat(2, 1fr)" : "repeat(3, 1fr)"
   }`,
 }));

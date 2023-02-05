@@ -13,7 +13,6 @@ import { FlexBox } from "../../components/FlexBox";
 import { shades } from "../../theme";
 import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import { green } from "@mui/material/colors";
-import { useToast } from "@chakra-ui/react";
 import { logOut } from "../../state/userSlice";
 import { CircularProgress } from "@mui/material";
 import { useState } from "react";
@@ -27,7 +26,6 @@ function Navbar() {
     shallowEqual
   );
 
-  const toast = useToast();
   const dispatch = useDispatch();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -258,7 +256,7 @@ function Navbar() {
             ) : (
               <MenuItem
                 onClick={() => {
-                  dispatch(logOut(toast));
+                  dispatch(logOut());
                   handleCloseUserMenu();
                 }}
                 sx={{

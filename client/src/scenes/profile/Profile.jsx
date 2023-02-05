@@ -46,7 +46,7 @@ const Profile = () => {
                   width: "170px",
                   height: "170px",
                   borderRadius: "50%",
-                  objectFit: "contain",
+                  objectFit: "cover",
                 }}
                 src={resolvePath(user.avatar)}
                 alt="avatar"
@@ -90,7 +90,7 @@ const Profile = () => {
               Change password
             </Button>
           </Box>
-          <Link style={{ marginTop: "auto" }} to="/terms">
+          <Link style={{ marginTop: "auto" }} to="/terms" target="_blank">
             <Typography color={shades.primary[300]}>Terms</Typography>
           </Link>
         </Box>

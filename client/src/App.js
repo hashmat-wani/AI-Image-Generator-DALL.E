@@ -15,15 +15,22 @@ import About from "./scenes/About";
 import Terms from "./scenes/Terms";
 import Profile from "./scenes/profile/Profile";
 import PrivateRoute from "./components/PrivateRoute";
-import NotFound from "./scenes/home/NotFound";
+import NotFound from "./scenes/NotFound";
+import Footer from "./scenes/global/Footer";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const dispatch = useDispatch();
+  const { currPage } = useSelector((state) => state.postsReducer, shallowEqual);
 
   useEffect(() => {
     dispatch(verifyUser());
-    dispatch(fetchPosts());
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchPosts(currPage));
+  }, [currPage]);
 
   const { userReducer, formReducer } = useSelector(
     (state) => state,
@@ -81,7 +88,20 @@ function App() {
           />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
+      <ToastContainer
+        position="top-center"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }

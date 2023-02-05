@@ -3,11 +3,13 @@ import { Box, styled, Typography, useMediaQuery } from "@mui/material";
 import React from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { FlexBox } from "../../components/FlexBox";
-import { updateForm } from "../../state/formSlice";
+import { generatePosts, updateForm } from "../../state/formSlice";
 import { shades } from "../../theme";
 import { getRandomPrompt, STATUS } from "../../utils";
 import Input from "../../components/Input";
 import { Link } from "react-router-dom";
+import DisplayAlert from "../../components/DisplayAlert";
+import Loading from "../../components/Loading";
 
 const SearchResult = () => {
   const isMobile = useMediaQuery("(max-width:767px)");
@@ -18,7 +20,6 @@ const SearchResult = () => {
     (state) => state.formReducer,
     shallowEqual
   );
-  console.log(images);
 
   const handleSurpriseMe = () => {
     const randomPrompt = getRandomPrompt();
@@ -50,9 +51,29 @@ const SearchResult = () => {
       </FlexBox>
       <Input />
       {/* Photo preview */}
-      {status === STATUS.LOADING && "Loading..."}
-      {status === STATUS.ERROR && "Error..."}
-      {status === STATUS.IDLE && (
+
+      {status === STATUS.LOADING && <Loading />}
+      {status === STATUS.ERROR && (
+        <DisplayAlert
+          type="error"
+          title="Error"
+          message="Something went wrong"
+          action="Reload"
+          cb={() => dispatch(generatePosts(prompt))}
+        />
+      )}
+
+      {images.length === 0 && status === STATUS.IDLE && (
+        <DisplayAlert
+          type="info"
+          title="No images found"
+          message="Please search first"
+          action="Surprise me"
+          cb={handleSurpriseMe}
+        />
+      )}
+
+      {images.length !== 0 && status === STATUS.IDLE && (
         <Box
           mt="50px"
           gap="20px"
@@ -62,13 +83,11 @@ const SearchResult = () => {
             md: "repeat(4, 1fr)",
           }}
         >
-          {images.length === 0
-            ? "no images"
-            : images.map((node) => (
-                <Link to={`/search/single/${node.id}`} key={node.id}>
-                  <Img src={node.image} alt={prompt} />
-                </Link>
-              ))}
+          {images.map((node) => (
+            <Link to={`/search/single/${node.id}`} key={node.id}>
+              <Img src={node.image} alt={prompt} />
+            </Link>
+          ))}
         </Box>
       )}
     </Box>

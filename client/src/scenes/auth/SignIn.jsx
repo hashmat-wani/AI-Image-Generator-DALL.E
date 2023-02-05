@@ -9,7 +9,6 @@ import { Link, useNavigate } from "react-router-dom";
 import Oauth from "./Oauth";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { useToast } from "@chakra-ui/react";
 import { useState } from "react";
 
 import Visibility from "@mui/icons-material/Visibility";
@@ -19,7 +18,6 @@ import { login } from "../../state/userSlice";
 import { useDispatch } from "react-redux";
 
 export default function SignIn() {
-  const toast = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -35,7 +33,7 @@ export default function SignIn() {
   });
 
   const handleFormSubmit = (values, { resetForm, setSubmitting }) => {
-    dispatch(login(values, resetForm, setSubmitting, toast, navigate));
+    dispatch(login(values, resetForm, setSubmitting, navigate));
   };
 
   const formik = useFormik({

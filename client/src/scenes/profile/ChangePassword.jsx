@@ -17,13 +17,11 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
 import { changePassword } from "../../state/userSlice";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@chakra-ui/react";
 
 export default function ChangePassword({ openPwdDialog, setOpenPwdDialog }) {
   const [showNewPwd, setShowNewPwd] = useState(false);
   const [showConfirmNewPwd, setShowConfirmNewPwd] = useState(false);
   const dispatch = useDispatch();
-  const toast = useToast();
 
   const initialValues = {
     oldPassword: "",
@@ -48,7 +46,7 @@ export default function ChangePassword({ openPwdDialog, setOpenPwdDialog }) {
   });
 
   const handleFormSubmit = (values, { resetForm, setSubmitting }) => {
-    dispatch(changePassword(values, setSubmitting, toast, handleClose));
+    dispatch(changePassword(values, setSubmitting, handleClose));
   };
 
   const formik = useFormik({

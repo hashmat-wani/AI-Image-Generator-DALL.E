@@ -5,28 +5,87 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { shades } from "../../theme";
 import Card from "./Card";
 import SearchIcon from "@mui/icons-material/Search";
-import { shallowEqual, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { STATUS } from "../../utils";
+import Loading from "../../components/Loading";
+import DisplayAlert from "../../components/DisplayAlert";
+import { fetchPosts } from "../../state/postsSlice";
+import PostPreviewModal from "./PostPreviewModal";
 
-const RenderCards = ({ data, title }) => {
+const RenderCards = ({ data, title, setSearchText }) => {
+  const [openPost, setOpenPost] = useState(false);
+  const [openPostData, setOpenPostData] = useState(null);
+
+  const isSmallScreen = useMediaQuery("(max-width:499px)");
+
   if (data?.length > 0)
-    return data.map((post, idx) => <Card key={idx} {...post} />);
+    return (
+      <>
+        {/* Post preview Modal */}
+        {openPostData && (
+          <PostPreviewModal {...{ openPost, setOpenPost, openPostData }} />
+        )}
 
-  return <Typography textTransform="upercase">{title}</Typography>;
+        <Box
+          sx={{
+            display: "grid",
+            gridAutoFlow: "row dense",
+            gap: "4px",
+            gridTemplateColumns: {
+              xs: "repeat(2, 1fr)",
+              sm: "repeat(3, 1fr)",
+              md: "repeat(4, 1fr)",
+              lg: "repeat(5, 1fr)",
+              ">:nth-of-type(10n+1)": {
+                gridColumn: `${isSmallScreen ? "auto/span 1" : "auto/span 2"}`,
+                gridRow: `${isSmallScreen ? "auto/span 1" : "auto/span 2"}`,
+              },
+            },
+          }}
+        >
+          {data.map((post, idx) => (
+            <Card key={idx} {...{ ...post, setOpenPost, setOpenPostData }} />
+          ))}
+        </Box>
+      </>
+    );
+
+  return (
+    <DisplayAlert
+      type="info"
+      title="Oops..."
+      message={title}
+      action={setSearchText ? "See all posts" : null}
+      cb={setSearchText ? () => setSearchText("") : null}
+    />
+  );
 };
 
 const Posts = () => {
   const [searchText, setSearchText] = useState("");
+  const [searchPosts, setSearchPosts] = useState(null);
+  const intervalId = useRef(null);
+  const dispatch = useDispatch();
   const { posts, status } = useSelector(
     (state) => state.postsReducer,
     shallowEqual
   );
-  console.log(status);
-  const isSmallScreen = useMediaQuery("(max-width:499px)");
+  const handleChange = (e) => {
+    setSearchText(e.target.value);
+    clearTimeout(intervalId.current);
+
+    intervalId.current = setTimeout(() => {
+      const searchResult = posts.filter((post) =>
+        // post.name.toLowerCase().includes(e.target.value.toLocaleLowerCase()) ||
+        post.prompt.toLowerCase().includes(e.target.value.toLocaleLowerCase())
+      );
+      setSearchPosts(searchResult);
+    }, 500);
+  };
 
   return (
     <Box>
@@ -44,7 +103,7 @@ const Posts = () => {
       {/* Search */}
       <Box m="25px 0 10px" borderRadius="8px">
         <TextField
-          onChange={(e) => setSearchText(e.target.value)}
+          onChange={handleChange}
           value={searchText}
           variant="standard"
           placeholder="Search..."
@@ -64,9 +123,15 @@ const Posts = () => {
       {/* Posts */}
       <Box>
         {status === STATUS.LOADING ? (
-          "Loading..."
+          <Loading />
         ) : status === STATUS.ERROR ? (
-          "Error..."
+          <DisplayAlert
+            type="error"
+            title="Error"
+            message="Something went wrong"
+            action="Reload"
+            cb={() => dispatch(fetchPosts())}
+          />
         ) : (
           <>
             {searchText && (
@@ -76,31 +141,15 @@ const Posts = () => {
               </Typography>
             )}
 
-            <Box
-              sx={{
-                display: "grid",
-                gridAutoFlow: "row dense",
-                gap: "4px",
-                gridTemplateColumns: {
-                  xs: "repeat(2, 1fr)",
-                  sm: "repeat(3, 1fr)",
-                  md: "repeat(4, 1fr)",
-                  lg: "repeat(5, 1fr)",
-                  ">:nth-of-type(10n+1)": {
-                    gridColumn: `${
-                      isSmallScreen ? "auto/span 1" : "auto/span 2"
-                    }`,
-                    gridRow: `${isSmallScreen ? "auto/span 1" : "auto/span 2"}`,
-                  },
-                },
-              }}
-            >
-              {searchText ? (
-                <RenderCards data={posts} title="No search results found" />
-              ) : (
-                <RenderCards data={posts} title="No posts found" />
-              )}
-            </Box>
+            {searchText ? (
+              <RenderCards
+                setSearchText={setSearchText}
+                data={searchPosts}
+                title="No search results found"
+              />
+            ) : (
+              <RenderCards data={posts} title="No posts found" />
+            )}
           </>
         )}
       </Box>

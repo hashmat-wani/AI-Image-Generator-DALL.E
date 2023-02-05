@@ -15,7 +15,7 @@ router.get("/", (req, res) => {
   res.send("Hello from DALL.E");
 });
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   try {
     const { prompt } = req.body;
     const aiResponse = await openai.createImage({

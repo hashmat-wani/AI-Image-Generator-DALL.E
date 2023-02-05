@@ -16,7 +16,6 @@ import { green } from "@mui/material/colors";
 import { removeUserAvatar, updateUserAvatar } from "../../state/userSlice";
 import { useDispatch } from "react-redux";
 import { resolvePath, STATUS } from "../../utils";
-import { useToast } from "@chakra-ui/react";
 
 export default function UpdateAvatar({
   user,
@@ -25,24 +24,24 @@ export default function UpdateAvatar({
   setOpenAvatarDialog,
 }) {
   const avatarRef = useRef(null);
-  const toast = useToast();
-
-  const handleClose = () => {
-    setAvatar(user.avatar);
-    setPreview(user.avatar);
-    setOpenAvatarDialog(false);
-  };
 
   const [avatar, setAvatar] = useState(user.avatar);
   const [preview, setPreview] = useState(user.avatar);
+
+  const handleClose = (e, avatar = user.avatar) => {
+    console.log(avatar);
+    setAvatar(avatar);
+    setPreview(avatar);
+    setOpenAvatarDialog(false);
+  };
 
   const dispatch = useDispatch();
 
   const handleSubmit = () => {
     dispatch(
       avatar
-        ? updateUserAvatar(toast, handleClose, avatar)
-        : removeUserAvatar(toast, handleClose)
+        ? updateUserAvatar(handleClose, avatar)
+        : removeUserAvatar(handleClose)
     );
   };
 

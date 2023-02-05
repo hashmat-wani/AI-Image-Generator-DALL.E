@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { STATUS, toaster } from "../utils";
+import { STATUS } from "../utils";
 import { MODE, SERVER_DEV_API, SERVER_PROD_API } from "../env";
 import { instance, privateInstance } from "../utils/apiInstances";
+import { toast } from "react-toastify";
 
 const initialState = {
   user: null,
@@ -29,36 +30,30 @@ const userSlice = createSlice({
 export const { setUser, clearUser, setStatus } = userSlice.actions;
 export default userSlice.reducer;
 
-export const register =
-  (values, resetForm, setSubmitting, toast, navigate) => () => {
-    const { firstName, lastName, email, password } = values;
-    instance
-      .post("/api/v1/auth/register", {
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        email: email.trim().toLowerCase(),
-        password: password.trim(),
-      })
+export const register = (values, resetForm, setSubmitting, navigate) => () => {
+  const { firstName, lastName, email, password } = values;
+  instance
+    .post("/api/v1/auth/register", {
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      email: email.trim().toLowerCase(),
+      password: password.trim(),
+    })
 
-      .then(() => {
-        navigate("/signin");
-        resetForm();
-        toaster(
-          toast,
-          "Account Created",
-          "Your account created successfully",
-          "success"
-        );
-      })
-      .catch((err) => {
-        const { message } = err?.response?.data || err;
-        toaster(toast, "Failed", message, "error");
-      })
-      .finally(() => setSubmitting(false));
-  };
+    .then(() => {
+      navigate("/signin");
+      resetForm();
+      toast.success("Account created successfully!");
+    })
+    .catch((err) => {
+      const { message } = err?.response?.data || err;
+      toast.error(message);
+    })
+    .finally(() => setSubmitting(false));
+};
 
 export const login =
-  (values, resetForm, setSubmitting, toast, navigate) => (dispatch) => {
+  (values, resetForm, setSubmitting, navigate) => (dispatch) => {
     const { email, password } = values;
 
     instance
@@ -73,15 +68,12 @@ export const login =
       .then(() => {
         const popup = {
           from: "login",
-          toast,
           onSuccess: {
-            title: "Success",
-            desc: "Login successful!",
+            message: "Login successful!",
             type: "success",
           },
           onError: {
-            title: "Something went wrong",
-            desc: "Please try again!",
+            message: "Something went wrong. Please try again..!",
             type: "info",
           },
         };
@@ -89,27 +81,24 @@ export const login =
       })
       .catch((err) => {
         const { message } = err?.response?.data || err;
-        toaster(toast, "Failed", message, "error");
+        toast.error(message);
       })
       .finally(() => setSubmitting(false));
   };
 
-export const logOut = (toast) => (dispatch) => {
+export const logOut = () => (dispatch) => {
   dispatch(setStatus(STATUS.LOADING));
   privateInstance
     .post("/api/v1/auth/logout")
     .then(() => {
       const popup = {
         from: "logout",
-        toast,
         onSuccess: {
-          title: "Something went wrong",
-          desc: "Please try again!",
+          title: "Something went wrong. Please try again..!",
           type: "info",
         },
         onError: {
-          title: "Success",
-          desc: "Logout Successfull!",
+          message: "Logout Successfull!",
           type: "success",
         },
       };
@@ -117,7 +106,7 @@ export const logOut = (toast) => (dispatch) => {
     })
     .catch((err) => {
       const { message } = err?.response?.data || err;
-      toaster(toast, "Failed", message, "error");
+      toast.error(message);
     })
     .finally(() => dispatch(setStatus(STATUS.IDLE)));
 };
@@ -141,10 +130,9 @@ export const verifyUser = (popup) => (dispatch) => {
     .then((data) => {
       dispatch(setUser(data.data?.user));
       if (popup) {
-        const { title, desc, type } = popup.onSuccess;
-        const { from, toast } = popup;
-        toaster(toast, title, desc, type);
-        if (from === "login") {
+        const { message, type } = popup.onSuccess;
+        toast[type](message);
+        if (popup.from === "login") {
           // navigate("/");
           // resetForm();
         }
@@ -154,8 +142,8 @@ export const verifyUser = (popup) => (dispatch) => {
       const message = err?.response?.data?.message || err?.message;
       dispatch(clearUser());
       if (popup) {
-        const { title, desc, type } = popup.onError;
-        toaster(popup.toast, title, desc, type);
+        const { message, type } = popup.onError;
+        toast[type](message);
       }
     });
 };
@@ -164,7 +152,7 @@ export const refreshToken = () => () => {
   return instance.get("/api/v1/auth/refreshtoken", { withCredentials: true });
 };
 
-export const updateUserAvatar = (toast, handleClose, avatar) => (dispatch) => {
+export const updateUserAvatar = (handleClose, avatar) => (dispatch) => {
   dispatch(setStatus(STATUS.LOADING));
   const formData = new FormData();
   formData.append("avatar", avatar);
@@ -177,48 +165,47 @@ export const updateUserAvatar = (toast, handleClose, avatar) => (dispatch) => {
     .then((data) => {
       const { message, avatar } = data?.data;
       dispatch(setUser({ avatar }));
-      toaster(toast, "Success", message, "success");
-      handleClose();
+      toast.success(message);
+      handleClose(undefined, avatar);
     })
     .catch((err) => {
       const { message } = err?.response?.data || err;
-      toaster(toast, "Failed", message, "error");
+      toast.error(message);
     })
     .finally(() => dispatch(setStatus(STATUS.IDLE)));
 };
 
-export const removeUserAvatar = (toast, handleClose) => (dispatch) => {
+export const removeUserAvatar = (handleClose) => (dispatch) => {
   dispatch(setStatus(STATUS.LOADING));
   privateInstance
-    .patch("/api/v1/user/removeavatar", {})
+    .post("/api/v1/user/removeavatar", {})
     .then((data) => {
       const { message, avatar } = data?.data;
       dispatch(setUser({ avatar }));
-      toaster(toast, "Success", message, "success");
-      handleClose();
+      toast.success(message);
+      handleClose(undefined, avatar);
     })
     .catch((err) => {
       const { message } = err?.response?.data || err;
-      toaster(toast, "Failed", message, "error");
+      toast.error(message);
     })
     .finally(() => dispatch(setStatus(STATUS.IDLE)));
 };
 
-export const changePassword =
-  (values, setSubmitting, toast, handleClose) => (dispatch) => {
-    const { oldPassword, newPassword } = values;
-    privateInstance
-      .patch("/api/v1/user/changepassword", {
-        oldPassword: oldPassword.trim(),
-        newPassword: newPassword.trim(),
-      })
-      .then((data) => {
-        toaster(toast, "Success", data.data.message, "success");
-        handleClose();
-      })
-      .catch((err) => {
-        const { message } = err?.response?.data || err;
-        toaster(toast, "Failed", message, "error");
-      })
-      .finally(() => setSubmitting(false));
-  };
+export const changePassword = (values, setSubmitting, handleClose) => () => {
+  const { oldPassword, newPassword } = values;
+  privateInstance
+    .patch("/api/v1/user/changepassword", {
+      oldPassword: oldPassword.trim(),
+      newPassword: newPassword.trim(),
+    })
+    .then((data) => {
+      toast.success(data.data?.message);
+      handleClose();
+    })
+    .catch((err) => {
+      const { message } = err?.response?.data || err;
+      toast.error(message);
+    })
+    .finally(() => setSubmitting(false));
+};

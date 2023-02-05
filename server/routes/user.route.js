@@ -26,7 +26,7 @@ router.patch(
   upload.single("avatar"),
   userController.updateAvatar
 );
-router.patch("/removeavatar", authenticate, userController.removeAvatar);
+router.post("/removeavatar", authenticate, userController.removeAvatar);
 
 router.patch("/changepassword", authenticate, userController.changePassword);
 
