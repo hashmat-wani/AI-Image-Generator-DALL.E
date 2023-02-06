@@ -7,7 +7,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.svg";
 import { FlexBox } from "../../components/FlexBox";
 import { shades } from "../../theme";
@@ -27,6 +27,8 @@ function Navbar() {
   );
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -256,7 +258,7 @@ function Navbar() {
             ) : (
               <MenuItem
                 onClick={() => {
-                  dispatch(logOut());
+                  dispatch(logOut(navigate));
                   handleCloseUserMenu();
                 }}
                 sx={{

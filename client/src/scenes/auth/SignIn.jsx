@@ -27,6 +27,7 @@ export default function SignIn() {
   const initialValues = {
     email: "",
     password: "",
+    isPersistent: false,
   };
 
   const validationSchema = yup.object().shape({
@@ -123,8 +124,16 @@ export default function SignIn() {
           }}
         />
         <FormControlLabel
-          control={<Checkbox value="remember" color="primary" />}
-          label="Remember me"
+          control={
+            <Checkbox
+              name="isPersistent"
+              value={values.isPersistent}
+              color="primary"
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+          }
+          label="Keep me signed in."
         />
 
         {/* signIn button */}

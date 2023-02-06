@@ -22,6 +22,7 @@ export default function ChangePassword({ openPwdDialog, setOpenPwdDialog }) {
   const [showNewPwd, setShowNewPwd] = useState(false);
   const [showConfirmNewPwd, setShowConfirmNewPwd] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const initialValues = {
     oldPassword: "",
@@ -46,7 +47,7 @@ export default function ChangePassword({ openPwdDialog, setOpenPwdDialog }) {
   });
 
   const handleFormSubmit = (values, { resetForm, setSubmitting }) => {
-    dispatch(changePassword(values, setSubmitting, handleClose));
+    dispatch(changePassword(values, setSubmitting, handleClose, navigate));
   };
 
   const formik = useFormik({

@@ -14,19 +14,19 @@ import {
 
 const loginController = {
   async login(req, res, next) {
+    const { email, password, isPersistent } = req.body;
+
     // validation
     const schema = Joi.object({
       email: Joi.string().email().required(),
       password: Joi.string().required(),
     });
 
-    const { error } = schema.validate(req.body);
+    const { error } = schema.validate({ email, password });
 
     if (error) {
       return next(error);
     }
-
-    const { email, password } = req.body;
 
     try {
       const user = await User.findOne({ email });
@@ -43,6 +43,23 @@ const loginController = {
         return next(
           CustomErrorHandler.invalidCredentials("Invalid email or password!")
         );
+      }
+
+      // if user have not selected remember me
+      if (!isPersistent) {
+        req.session.user = {
+          _id: user._id,
+          email: user.email,
+        };
+
+        return res.json({
+          success: true,
+          user: {
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          },
+        });
       }
 
       //   generate token
@@ -121,14 +138,6 @@ const loginController = {
         "1d",
         JWT_REFRESH_SECRET
       );
-
-      // if (avatar) {
-      //   res.cookie("dall-e-user-avatar", avatar, {
-      //     sameSite: "None",
-      //     secure: true,
-      //     httpOnly: false,
-      //   });
-      // }
 
       return res
         .status(200)

@@ -19,4 +19,5 @@ export const {
   REDIS_PORT,
   REDIS_HOST,
   REDIS_PASSWORD,
+  COOKIE_SESSION_SECRET,
 } = process.env;

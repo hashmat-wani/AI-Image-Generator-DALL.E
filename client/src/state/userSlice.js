@@ -55,7 +55,7 @@ export const register = (values, resetForm, setSubmitting, navigate) => () => {
 export const login =
   (values, setSubmitting, navigate, to = "/") =>
   (dispatch) => {
-    const { email, password } = values;
+    const { email, password, isPersistent } = values;
 
     instance
       .post(
@@ -63,6 +63,7 @@ export const login =
         {
           email: email.trim().toLowerCase(),
           password: password.trim(),
+          isPersistent,
         },
         { withCredentials: true }
       )
@@ -77,7 +78,8 @@ export const login =
             type: "info",
           },
         };
-        return dispatch(verifyUser(popup, navigate, "login", to));
+        const redirect = { navigate, to };
+        return dispatch(verifyUser(popup, redirect));
       })
       .catch((err) => {
         const { message } = err?.response?.data || err;
@@ -86,30 +88,38 @@ export const login =
       .finally(() => setSubmitting(false));
   };
 
-export const logOut = () => (dispatch) => {
-  dispatch(setStatus(STATUS.LOADING));
-  privateInstance
-    .post("/api/v1/auth/logout")
-    .then(() => {
-      const popup = {
-        from: "logout",
-        onSuccess: {
-          title: "Something went wrong. Please try again..!",
-          type: "info",
-        },
-        onError: {
-          message: "Logout Successfull!",
-          type: "success",
-        },
-      };
-      return dispatch(verifyUser(popup));
-    })
-    .catch((err) => {
-      const { message } = err?.response?.data || err;
-      toast.error(message);
-    })
-    .finally(() => dispatch(setStatus(STATUS.IDLE)));
-};
+export const logOut =
+  (navigate, popupMsg = true) =>
+  (dispatch) => {
+    dispatch(setStatus(STATUS.LOADING));
+    privateInstance
+      .post("/api/v1/auth/logout")
+      .then(() => {
+        const popup = popupMsg
+          ? {
+              onSuccess: {
+                title: "Something went wrong. Please try again..!",
+                type: "info",
+              },
+              onError: {
+                message: "Logout Successfull!",
+                type: "success",
+              },
+            }
+          : null;
+
+        const redirect = {
+          navigate,
+          to: "/signin",
+        };
+        return dispatch(verifyUser(popup, redirect));
+      })
+      .catch((err) => {
+        const { message } = err?.response?.data || err;
+        toast.error(message);
+      })
+      .finally(() => dispatch(setStatus(STATUS.IDLE)));
+  };
 
 export const loginWithGoogle = () => () => {
   window.open(
@@ -124,7 +134,7 @@ export const loginWithFacebook = () => () => {
   );
 };
 
-export const verifyUser = (popup, navigate, from, to) => (dispatch) => {
+export const verifyUser = (popup, redirect) => (dispatch) => {
   privateInstance
     .get("/api/v1/auth/me")
     .then((data) => {
@@ -133,7 +143,8 @@ export const verifyUser = (popup, navigate, from, to) => (dispatch) => {
         const { message, type } = popup.onSuccess;
         toast[type](message);
       }
-      if (from === "login") {
+      if (redirect) {
+        const { navigate, to } = redirect;
         setTimeout(() => navigate(to, { replace: true }), 0);
       }
     })
@@ -191,20 +202,22 @@ export const removeUserAvatar = (handleClose) => (dispatch) => {
     .finally(() => dispatch(setStatus(STATUS.IDLE)));
 };
 
-export const changePassword = (values, setSubmitting, handleClose) => () => {
-  const { oldPassword, newPassword } = values;
-  privateInstance
-    .patch("/api/v1/user/changepassword", {
-      oldPassword: oldPassword.trim(),
-      newPassword: newPassword.trim(),
-    })
-    .then((data) => {
-      toast.success(data.data?.message);
-      handleClose();
-    })
-    .catch((err) => {
-      const { message } = err?.response?.data || err;
-      toast.error(message);
-    })
-    .finally(() => setSubmitting(false));
-};
+export const changePassword =
+  (values, setSubmitting, handleClose, navigate) => (dispatch) => {
+    const { oldPassword, newPassword } = values;
+    privateInstance
+      .patch("/api/v1/user/changepassword", {
+        oldPassword: oldPassword.trim(),
+        newPassword: newPassword.trim(),
+      })
+      .then((data) => {
+        toast.success(data.data?.message);
+        handleClose();
+        dispatch(logOut(navigate, false));
+      })
+      .catch((err) => {
+        const { message } = err?.response?.data || err;
+        toast.error(message);
+      })
+      .finally(() => setSubmitting(false));
+  };

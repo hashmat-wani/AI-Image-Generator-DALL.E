@@ -3,8 +3,13 @@ import CustomErrorHandler from "../services/CustomErrorHandler.js";
 import JwtService from "../services/JwtService.js";
 
 export const authenticate = async (req, res, next) => {
-  
   try {
+    // if user has not selected remember me option
+    if (req.session.user) {
+      req.user = req.session.user;
+      return next();
+    }
+
     const access_token = req.cookies?.access_token?.split(" ")[1];
     const blacklist = await redis.lrange("blacklist", 0, -1);
 

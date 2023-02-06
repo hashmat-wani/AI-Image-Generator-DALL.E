@@ -3,6 +3,12 @@ import redis from "../../config/redis.js";
 const logoutController = {
   async logout(req, res, next) {
     try {
+      // if user is loggedin with session id
+      if (req.session.user) {
+        req.session = null;
+        return res.json({ sucess: true, message: "Logged Out" });
+      }
+
       await redis.rpush("blacklist", req.user.access_token);
       const refresh_token = req?.cookies?.refresh_token?.split(" ")[1];
       if (refresh_token) {
@@ -20,11 +26,6 @@ const logoutController = {
           httpOnly: true,
           sameSite: "None",
           secure: true,
-        })
-        .clearCookie("dall-e-user-avatar", {
-          sameSite: "None",
-          secure: true,
-          httpOnly: false,
         })
         .json({ sucess: true, message: "Logged Out" });
     } catch (err) {

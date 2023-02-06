@@ -1,5 +1,6 @@
 import Joi from "joi";
 import Post from "../models/post.model.js";
+import User from "../models/user.model.js";
 
 const postController = {
   async createPost(req, res, next) {
@@ -18,6 +19,12 @@ const postController = {
     }
 
     try {
+      const user = await User.findById(user);
+
+      if (!user) {
+        return next(CustomErrorHandler.notFound());
+      }
+
       const post = await Post.create({ image, prompt, user });
       res
         .status(201)

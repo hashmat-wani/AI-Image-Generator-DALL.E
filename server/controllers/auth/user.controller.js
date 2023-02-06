@@ -93,9 +93,10 @@ const userController = {
       const hashedPassword = await bcrypt.hash(newPassword, 10);
       await User.findByIdAndUpdate(userId, { password: hashedPassword });
 
-      return res
-        .status(201)
-        .json({ success: true, message: "Password changed successfully" });
+      return res.status(201).json({
+        success: true,
+        message: "Password changed successfully. Please login again..!",
+      });
     } catch (err) {}
   },
 };
