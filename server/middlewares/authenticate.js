@@ -4,18 +4,13 @@ import JwtService from "../services/JwtService.js";
 
 export const authenticate = async (req, res, next) => {
   try {
-    // if user has not selected remember me option
-    if (req.session.user) {
-      req.user = req.session.user;
-      return next();
-    }
-
     const access_token = req.cookies?.access_token?.split(" ")[1];
     const blacklist = await redis.lrange("blacklist", 0, -1);
 
     if (!access_token || blacklist.includes(access_token)) {
       return next(CustomErrorHandler.unAuthorised());
     }
+
     try {
       const { _id, email } = await JwtService.verify(access_token);
       req.user = { _id, email, access_token };

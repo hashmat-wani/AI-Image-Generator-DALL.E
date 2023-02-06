@@ -10,12 +10,18 @@ import Oauth from "./Oauth";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useState } from "react";
-
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { CircularProgress, IconButton, InputAdornment } from "@mui/material";
+import {
+  CircularProgress,
+  IconButton,
+  InputAdornment,
+  Popover,
+} from "@mui/material";
 import { login } from "../../state/userSlice";
 import { useDispatch } from "react-redux";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -55,6 +61,18 @@ export default function SignIn() {
     handleChange,
   } = formik;
 
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+
   return (
     <Box
       sx={{
@@ -69,13 +87,7 @@ export default function SignIn() {
       <Typography color={shades.primary[400]} fontSize="28px" fontWeight="bold">
         Welcome back
       </Typography>
-      <Box
-        // border={1}
-        component="form"
-        onSubmit={handleSubmit}
-        noValidate
-        sx={{ mt: 2 }}
-      >
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 2 }}>
         <TextField
           onBlur={handleBlur}
           onChange={handleChange}
@@ -136,7 +148,49 @@ export default function SignIn() {
           label="Keep me signed in."
         />
 
-        {/* signIn button */}
+        <Button
+          sx={{
+            color: "#4a70c0",
+            fontSize: "13px",
+            textTransform: "none",
+            fontWeight: 400,
+            padding: 0,
+            ml: "-10px",
+            mt: "3px",
+          }}
+          onClick={handleClick}
+        >
+          Details
+          <ArrowDropDownIcon sx={{ mt: "-3px", color: shades.primary[400] }} />
+        </Button>
+
+        {/* popover  */}
+        <Popover
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+          transformOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+        >
+          <Box width="300px" p="15px">
+            <Typography
+              variant="small"
+              sx={{
+                whiteSpace: "pre-wrap",
+                color: shades.primary[400],
+              }}
+            >
+              {`Choosing "Keep me signed in" reduces the number of times you're asked to Sign-In on this device.\nTo keep your account secure, use this option only on your personal devices.`}
+            </Typography>
+          </Box>
+        </Popover>
+
         <Box
           sx={{
             my: 1,

@@ -48,6 +48,7 @@ const refreshTokenController = {
           sameSite: "None",
           httpOnly: true,
           secure: true,
+          maxAge: 2 * 24 * 60 * 60 * 1000, // days,hours,mins,secs,milisecs.. total-> 2 days
         })
         .json({ success: true, message: "New accesstoken generated" });
     } catch (err) {

@@ -6,7 +6,6 @@ import {
   APP_PORT,
   CLIENT_DEV_API,
   CLIENT_PROD_API,
-  COOKIE_SESSION_SECRET,
   DEV_API,
   MODE,
   PROD_API,
@@ -18,7 +17,6 @@ import {
   userRoutes,
 } from "./routes/index.js";
 import cookieParser from "cookie-parser";
-import cookieSession from "cookie-session";
 import path from "path";
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
@@ -30,15 +28,6 @@ const PORT = APP_PORT || 3000;
 global.appRoot = path.resolve(__dirname);
 
 app.use(cookieParser());
-app.use(
-  cookieSession({
-    name: "dall_e_session",
-    secret: COOKIE_SESSION_SECRET,
-    httpOnly: true,
-    // sameSite: "None",
-    secure: MODE === "prod",
-  })
-);
 
 const corsOptions = {
   origin: `${MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API}`,

@@ -45,23 +45,6 @@ const loginController = {
         );
       }
 
-      // if user have not selected remember me
-      if (!isPersistent) {
-        req.session.user = {
-          _id: user._id,
-          email: user.email,
-        };
-
-        return res.json({
-          success: true,
-          user: {
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-          },
-        });
-      }
-
       //   generate token
       const access_token = JwtService.sign({
         _id: user._id,
@@ -80,12 +63,15 @@ const loginController = {
           httpOnly: true,
           sameSite: "None",
           secure: true,
-          // expires: new Date(Date.now() + 8 * 3600000), // cookie will be removed after 8 hours
+          maxAge: isPersistent ? 2 * 24 * 60 * 60 * 1000 : null,
+          // days,hours,mins,secs,milisecs.. total-> 2 days
         })
         .cookie("refresh_token", `Bearer ${refresh_token}`, {
           httpOnly: true,
           sameSite: "None",
           secure: true,
+          maxAge: isPersistent ? 2 * 24 * 60 * 60 * 1000 : null,
+          // days,hours,mins,secs,milisecs.. total-> 2 days
         })
         .json({
           success: true,
@@ -145,11 +131,15 @@ const loginController = {
           httpOnly: true,
           sameSite: "None",
           secure: true,
+          maxAge: 2 * 24 * 60 * 60 * 1000,
+          // days,hours,mins,secs,milisecs.. total-> 2 days
         })
         .cookie("refresh_token", `Bearer ${refresh_token}`, {
           httpOnly: true,
           sameSite: "None",
           secure: true,
+          maxAge: 2 * 24 * 60 * 60 * 1000,
+          // days,hours,mins,secs,milisecs.. total-> 2 days
         })
         .redirect(`${MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API}`);
     } catch (err) {
