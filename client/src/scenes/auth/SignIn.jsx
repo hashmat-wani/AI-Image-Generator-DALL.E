@@ -156,12 +156,11 @@ export default function SignIn() {
             fontWeight: 400,
             padding: 0,
             ml: "-8px",
-            mt: "1px",
           }}
           onClick={handleClick}
         >
           Details
-          <ArrowDropDownIcon sx={{ mt: "-2px", color: shades.primary[400] }} />
+          <ArrowDropDownIcon sx={{ mt: "-1px", color: shades.primary[400] }} />
         </Button>
 
         {/* popover  */}
