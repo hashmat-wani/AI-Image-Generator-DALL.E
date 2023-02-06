@@ -74,7 +74,7 @@ const SingleImageDashboard = () => {
             <Btn onClick={handleDownload}>Download</Btn>
             <Box title={shareBtnlabel} position="relative">
               <Btn disabled={status === STATUS.LOADING} onClick={handleShare}>
-                Share
+                Share with community
               </Btn>
               {status === STATUS.LOADING && (
                 <CircularProgress
