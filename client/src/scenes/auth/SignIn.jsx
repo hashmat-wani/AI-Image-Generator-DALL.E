@@ -21,7 +21,6 @@ import {
 } from "@mui/material";
 import { login } from "../../state/userSlice";
 import { useDispatch } from "react-redux";
-import CloseIcon from "@mui/icons-material/Close";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);

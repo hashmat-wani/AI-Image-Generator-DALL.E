@@ -19,4 +19,6 @@ export const {
   REDIS_PORT,
   REDIS_HOST,
   REDIS_PASSWORD,
+  NODEMAILER_PASS,
+  NODEMAILER_EMAIL,
 } = process.env;

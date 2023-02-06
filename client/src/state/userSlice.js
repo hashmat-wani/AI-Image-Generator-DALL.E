@@ -40,10 +40,10 @@ export const register = (values, resetForm, setSubmitting, navigate) => () => {
       password: password.trim(),
     })
 
-    .then(() => {
+    .then((data) => {
       navigate("/signin");
       resetForm();
-      toast.success("Account created successfully!");
+      toast.success(data.data.message);
     })
     .catch((err) => {
       const { message } = err?.response?.data || err;
@@ -221,3 +221,34 @@ export const changePassword =
       })
       .finally(() => setSubmitting(false));
   };
+
+export const verifyEmail = (payload, setSubmitting, navigate) => () => {
+  console.log(payload);
+  instance
+    .post("/api/v1/mail/verifyotp", payload)
+    .then((data) => {
+      console.log(data);
+      toast.success(data.data.message);
+    })
+    .catch((err) => {
+      const { message } = err?.response?.data;
+      console.log(err);
+      toast.error(message);
+    })
+    .finally(() => setSubmitting(false));
+};
+
+export const sendEmail = () => (dispatch) => {
+  dispatch(setStatus(STATUS.LOADING));
+  privateInstance
+    .get("/api/v1/mail/sendotp")
+    .then((data) => {
+      toast.success(data.data?.message);
+    })
+    .catch((err) => {
+      const { message } = err?.response?.data;
+      console.log(err);
+      toast.error(message);
+    })
+    .finally(() => dispatch(setStatus(STATUS.IDLE)));
+};

@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
-import nodemailer from "nodemailer";
 import {
   APP_PORT,
   CLIENT_DEV_API,
@@ -16,6 +15,7 @@ import {
   authRoutes,
   postsRoutes,
   userRoutes,
+  mailRoutes,
 } from "./routes/index.js";
 import cookieParser from "cookie-parser";
 import path from "path";
@@ -23,7 +23,6 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import redis from "./config/redis.js";
-import { sendMailController } from "./controllers/sendMailController.js";
 const app = express();
 
 const PORT = APP_PORT || 3000;
@@ -45,12 +44,11 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/dalle", dallERoutes);
 app.use("/api/v1/posts", postsRoutes);
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/mail", mailRoutes);
 
 app.get("/", async (req, res) => {
   res.send("Hello from DALL.E");
 });
-
-app.get("/mail", sendMailController.sendMail);
 
 // console.log(await redis.llen("blacklist"));
 

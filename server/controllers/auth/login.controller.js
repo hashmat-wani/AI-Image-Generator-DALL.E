@@ -98,6 +98,7 @@ const loginController = {
           email,
           password,
           avatar,
+          verified: true,
         });
       }
       return cb(null, {

@@ -37,6 +37,7 @@ const registerController = {
         email,
         password: hashedPwd,
         avatar: null,
+        verified: false,
       };
 
       // const user = new User(payload);
@@ -44,11 +45,10 @@ const registerController = {
 
       // or using create method
 
-      const user = await User.create(payload);
-
+      await User.create(payload);
       res.status(201).json({
         success: true,
-        message: "User created Succesfully",
+        message: "Account created Succesfully..!",
       });
     } catch (err) {
       return next(err);

@@ -19,6 +19,45 @@ import NotFound from "./scenes/NotFound";
 import Footer from "./scenes/global/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import VerifyEmail from "./scenes/auth/VerifyEmail";
+
+// const Test = () => {
+//   return (
+//     <div style={{ textAlign: "center" }}>
+//       <div
+//         style={{
+//           background: "#0a66c2",
+//           padding: "30px",
+//           // textAlign: "center",
+//           color: "white",
+//         }}
+//       >
+//         <h1>Thankyou for choosing DALL.E</h1>
+//         <p>Verify Your E-mail Address</p>
+//       </div>
+//       <h1>Hi,</h1>
+//       <p>You're almost ready to start enjoying DALL.E.</p>
+//       <p>
+//         Simply confirm that hashmatw555@gmail.com is your e-mail address by
+//         using this code:
+//       </p>
+//       <div style={{ padding: "20px" }}>
+//         <h1>2367</h1>
+//         <p>This code will expire in 1 hour</p>
+//         <p>Thanks</p>
+//       </div>
+//       <div style={{ background: "lightgray", padding: "30px" }}>
+//         <h1>Get in touch</h1>
+//         <p>
+//           <a href="tel:7006600835">7006600835</a>
+//         </p>
+//         <p>
+//           <a href="mailto:hashmatwani@icloud.com">hashmatwani@icloud.com</a>
+//         </p>
+//       </div>
+//     </div>
+//   );
+// };
 
 function App() {
   const dispatch = useDispatch();
@@ -85,6 +124,8 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route path="/verifyemail" element={<VerifyEmail />} />
+          {/* <Route path="/test" element={<Test />} /> */}
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
