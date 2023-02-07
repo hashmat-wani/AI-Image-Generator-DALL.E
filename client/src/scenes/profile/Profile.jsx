@@ -21,7 +21,6 @@ const Profile = () => {
     <>
       {user && (
         <Box
-          border={1}
           sx={{
             maxWidth: "400px",
             padding: "20px",
@@ -40,7 +39,7 @@ const Profile = () => {
           <ChangePassword {...{ openPwdDialog, setOpenPwdDialog }} />
 
           {/* AVATAR */}
-          <Box border={1} padding="20px" position="relative">
+          <Box padding="20px" position="relative">
             {user.avatar ? (
               <img
                 style={{
