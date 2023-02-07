@@ -69,7 +69,6 @@ const UserAlphaticAvatar = ({ user, setEmailVerificationAlert }) => {
         </Avatar>
       ) : (
         <Chip
-          // size="large"
           sx={{ cursor: "pointer" }}
           avatar={
             <Avatar
@@ -290,7 +289,7 @@ function Navbar({ setEmailVerificationAlert }) {
           <MenuItem
             sx={{
               borderBottom: `1px solid ${shades.secondary[300]}`,
-              width: "230px",
+              minWidth: "230px",
               padding: "8px 10px",
             }}
             onClick={handleCloseUserMenu}
@@ -319,6 +318,7 @@ function Navbar({ setEmailVerificationAlert }) {
                       bgcolor: user?.verified ? "#40a0ed" : "#ff7300",
                     },
                     ml: "40px",
+                    mr: "25px",
                   }}
                 />
               </FlexBox>
