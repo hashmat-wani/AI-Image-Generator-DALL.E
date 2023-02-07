@@ -152,8 +152,6 @@ const VerifyEmail = () => {
           Resend
         </Button>
       </Typography>
-
-      {/* <Link to="/signup">Verify later</Link> */}
     </Stack>
   );
 };

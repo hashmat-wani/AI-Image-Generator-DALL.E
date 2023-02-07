@@ -14,13 +14,100 @@ import { shades } from "../../theme";
 import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import { green } from "@mui/material/colors";
 import { logOut } from "../../state/userSlice";
-import { CircularProgress } from "@mui/material";
+import { Badge, Chip, CircularProgress } from "@mui/material";
 import { useState } from "react";
 import { resolvePath, STATUS } from "../../utils";
 
 const pages = ["History", "Collections"];
 
-function Navbar() {
+const UserAvatar = ({ user, setEmailVerificationAlert }) => {
+  return (
+    <>
+      {user?.verified ? (
+        <Avatar src={resolvePath(user?.avatar)} />
+      ) : (
+        <Chip
+          sx={{ cursor: "pointer" }}
+          avatar={<Avatar src={resolvePath(user?.avatar)} />}
+          label={
+            <Badge
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                setEmailVerificationAlert(true);
+              }}
+              badgeContent="Verify"
+              sx={{
+                "& .MuiBadge-badge": {
+                  color: "#ef7b1b",
+                  fontSize: "11px",
+                },
+                mt: "-1px",
+                ml: "16px",
+                mr: "10px",
+              }}
+            />
+          }
+          variant="outlined"
+        />
+      )}
+    </>
+  );
+};
+
+const UserAlphaticAvatar = ({ user, setEmailVerificationAlert }) => {
+  return (
+    <>
+      {user?.verified ? (
+        <Avatar
+          sx={{
+            bgcolor: green[500],
+            color: "#fff !important",
+          }}
+        >
+          {user.firstName[0].toUpperCase()}
+        </Avatar>
+      ) : (
+        <Chip
+          // size="large"
+          sx={{ cursor: "pointer" }}
+          avatar={
+            <Avatar
+              sx={{
+                bgcolor: green[500],
+                color: "#fff !important",
+              }}
+            >
+              {user.firstName[0].toUpperCase()}
+            </Avatar>
+          }
+          label={
+            <Badge
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                setEmailVerificationAlert(true);
+              }}
+              badgeContent="Verify"
+              sx={{
+                "& .MuiBadge-badge": {
+                  color: "#ef7b1b",
+                  fontSize: "11px",
+                },
+                mt: "-1px",
+                ml: "16px",
+                mr: "10px",
+              }}
+            />
+          }
+          variant="outlined"
+        />
+      )}
+    </>
+  );
+};
+
+function Navbar({ setEmailVerificationAlert }) {
   const { user, status } = useSelector(
     (state) => state.userReducer,
     shallowEqual
@@ -144,15 +231,9 @@ function Navbar() {
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
               {user?.avatar ? (
-                <Avatar src={resolvePath(user?.avatar)} />
+                <UserAvatar {...{ user, setEmailVerificationAlert }} />
               ) : (
-                <Avatar
-                  sx={{
-                    bgcolor: green[500],
-                  }}
-                >
-                  {user.firstName[0].toUpperCase()}
-                </Avatar>
+                <UserAlphaticAvatar {...{ user, setEmailVerificationAlert }} />
               )}
             </IconButton>
           </Tooltip>
@@ -209,18 +290,38 @@ function Navbar() {
           <MenuItem
             sx={{
               borderBottom: `1px solid ${shades.secondary[300]}`,
-              width: "220px",
+              width: "230px",
               padding: "8px 10px",
             }}
             onClick={handleCloseUserMenu}
           >
             <Link to="/account">
-              <Typography fontWeight="bold" fontSize="13px">
-                {user?.firstName} {user?.lastName}
-              </Typography>
-              <Typography color={shades.primary[300]} variant="small">
-                {user?.email}
-              </Typography>
+              <FlexBox justifyContent="space-between">
+                <Box>
+                  <Typography fontWeight="bold" fontSize="13px">
+                    {user?.firstName} {user?.lastName}
+                  </Typography>
+                  <Typography color={shades.primary[300]} variant="small">
+                    {user?.email}
+                  </Typography>
+                </Box>
+                <Badge
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    if (!user?.verified) setEmailVerificationAlert(true);
+                  }}
+                  badgeContent={user?.verified ? "Verified" : "Verify"}
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      fontSize: "11px",
+                      color: "#fff",
+                      bgcolor: user?.verified ? "#40a0ed" : "#ff7300",
+                    },
+                    ml: "40px",
+                  }}
+                />
+              </FlexBox>
             </Link>
           </MenuItem>
 

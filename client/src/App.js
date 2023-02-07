@@ -7,7 +7,7 @@ import SingleImage from "./scenes/singleImage/SingleImage";
 import SingleImageDashboard from "./scenes/singleImage/SingleImageDashboard";
 import SignIn from "./scenes/auth/SignIn";
 import SignUp from "./scenes/auth/SignUp";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { verifyUser } from "./state/userSlice";
 import Policy from "./scenes/Policy";
 import { fetchPosts } from "./state/postsSlice";
@@ -20,6 +20,7 @@ import Footer from "./scenes/global/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import VerifyEmail from "./scenes/auth/VerifyEmail";
+import VerifyEmailAlert from "./components/verifyEmailAlert";
 
 // const Test = () => {
 //   return (
@@ -60,6 +61,8 @@ import VerifyEmail from "./scenes/auth/VerifyEmail";
 // };
 
 function App() {
+  const [emailVerificationAlert, setEmailVerificationAlert] = useState(false);
+
   const dispatch = useDispatch();
   const { currPage } = useSelector((state) => state.postsReducer, shallowEqual);
 
@@ -77,10 +80,11 @@ function App() {
   );
   const { user } = userReducer;
   const { prompt, images } = formReducer;
+  // console.log(user);
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar />
+        <Navbar {...{ setEmailVerificationAlert }} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<SearchResult />} />
@@ -111,7 +115,13 @@ function App() {
           />
           <Route
             path="/signin"
-            element={user ? <Navigate to="/" /> : <SignIn />}
+            element={
+              user ? (
+                <Navigate to="/" />
+              ) : (
+                <SignIn {...{ setEmailVerificationAlert }} />
+              )
+            }
           />
           <Route path="/policies/content-policy" element={<Policy />} />
           <Route path="/about" element={<About />} />
@@ -124,24 +134,31 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route path="/verifyemail" element={<VerifyEmail />} />
+          <Route
+            path="/verifyemail"
+            element={user && !user?.verified ? <VerifyEmail /> : <Home />}
+          />
           {/* <Route path="/test" element={<Test />} /> */}
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
+        <VerifyEmailAlert
+          {...{ emailVerificationAlert, setEmailVerificationAlert }}
+        />
+        <ToastContainer
+          position="top-center"
+          autoClose={4000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
       </BrowserRouter>
-      <ToastContainer
-        position="top-center"
-        autoClose={4000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+      ;
     </div>
   );
 }

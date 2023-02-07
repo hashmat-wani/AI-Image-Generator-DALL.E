@@ -17,7 +17,7 @@ const PaginationBtns = () => {
   };
   return (
     <>
-      {totalPages && (
+      {totalPages > 0 && (
         <Stack alignItems="center" my="40px">
           <Pagination
             onChange={handlePageChange}

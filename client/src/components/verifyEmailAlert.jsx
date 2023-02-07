@@ -1,0 +1,94 @@
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  DialogContent,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
+import ContactMailIcon from "@mui/icons-material/ContactMail";
+import { useEffect, useState } from "react";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Visibility from "@mui/icons-material/Visibility";
+// import { changePassword } from "../../state/userSlice";
+import { useNavigate } from "react-router-dom";
+import { FlexBox } from "./FlexBox";
+import { sendEmail } from "../state/userSlice";
+import { STATUS } from "../utils";
+
+export default function VerifyEmailAlert({
+  emailVerificationAlert,
+  setEmailVerificationAlert,
+}) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user, status } = useSelector(
+    (state) => state.userReducer,
+    shallowEqual
+  );
+
+  const handleClose = () => {
+    setEmailVerificationAlert(false);
+  };
+
+  const handleVerification = () => {
+    dispatch(sendEmail(navigate, handleClose));
+  };
+
+  return (
+    <div>
+      <Dialog
+        sx={{
+          ".MuiDialog-container .MuiPaper-root": {
+            width: "400px",
+            margin: "10px",
+            minWidth: "320px",
+          },
+        }}
+        open={emailVerificationAlert}
+        // onClose={handleClose}
+      >
+        <DialogTitle>Verify your account</DialogTitle>
+        <DialogContent>
+          <ContactMailIcon
+            sx={{
+              fontSize: "90px",
+              margin: "5px auto 20px",
+              display: "block",
+            }}
+          />
+          <Typography fontSize="18px">Hi {user?.firstName},</Typography>
+          <Typography my="10px">
+            We're happy you signed in. Please confirm your email address and
+            start enjoying DALL.E
+          </Typography>
+          <FlexBox gap="10px" justifyContent="end" mt="40px">
+            <Button
+              disabled={status === STATUS.LOADING}
+              onClick={handleVerification}
+              sx={{ fontSize: "11px" }}
+              variant="contained"
+            >
+              {status === STATUS.LOADING ? "Sending mail..." : "Verify now"}
+            </Button>
+            <Button
+              disabled={status === STATUS.LOADING}
+              onClick={handleClose}
+              sx={{ fontSize: "11px" }}
+            >
+              Do it later
+            </Button>
+          </FlexBox>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}

@@ -22,7 +22,7 @@ import {
 import { login } from "../../state/userSlice";
 import { useDispatch } from "react-redux";
 
-export default function SignIn() {
+export default function SignIn({ setEmailVerificationAlert }) {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -41,7 +41,14 @@ export default function SignIn() {
   });
 
   const handleFormSubmit = (values, { setSubmitting }) => {
-    dispatch(login(values, setSubmitting, navigate, state?.from));
+    const args = {
+      setEmailVerificationAlert,
+      values,
+      setSubmitting,
+      navigate,
+      to: state?.from,
+    };
+    dispatch(login(args));
   };
 
   const formik = useFormik({

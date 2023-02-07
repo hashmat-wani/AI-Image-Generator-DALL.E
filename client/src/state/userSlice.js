@@ -53,7 +53,7 @@ export const register = (values, resetForm, setSubmitting, navigate) => () => {
 };
 
 export const login =
-  (values, setSubmitting, navigate, to = "/") =>
+  ({ values, setSubmitting, navigate, to = "/", setEmailVerificationAlert }) =>
   (dispatch) => {
     const { email, password, isPersistent } = values;
 
@@ -79,7 +79,8 @@ export const login =
           },
         };
         const redirect = { navigate, to };
-        return dispatch(verifyUser(popup, redirect));
+        const alert = { setEmailVerificationAlert };
+        return dispatch(verifyUser(popup, redirect, alert));
       })
       .catch((err) => {
         const { message } = err?.response?.data || err;
@@ -134,11 +135,12 @@ export const loginWithFacebook = () => () => {
   );
 };
 
-export const verifyUser = (popup, redirect) => (dispatch) => {
+export const verifyUser = (popup, redirect, alert) => (dispatch) => {
   privateInstance
     .get("/api/v1/auth/me")
     .then((data) => {
-      dispatch(setUser(data.data?.user));
+      const { user } = data?.data;
+      dispatch(setUser(user));
       if (popup) {
         const { message, type } = popup.onSuccess;
         toast[type](message);
@@ -146,6 +148,9 @@ export const verifyUser = (popup, redirect) => (dispatch) => {
       if (redirect) {
         const { navigate, to } = redirect;
         setTimeout(() => navigate(to, { replace: true }), 0);
+      }
+      if (alert && !user?.verified) {
+        alert.setEmailVerificationAlert(true);
       }
     })
     .catch(async (err) => {
@@ -222,13 +227,13 @@ export const changePassword =
       .finally(() => setSubmitting(false));
   };
 
-export const verifyEmail = (payload, setSubmitting, navigate) => () => {
-  console.log(payload);
+export const verifyEmail = (payload, setSubmitting, navigate) => (dispatch) => {
   instance
     .post("/api/v1/mail/verifyotp", payload)
     .then((data) => {
-      console.log(data);
-      toast.success(data.data.message);
+      toast.success(data.data?.message);
+      dispatch(setUser({ verified: true }));
+      navigate(-1);
     })
     .catch((err) => {
       const { message } = err?.response?.data;
@@ -238,12 +243,14 @@ export const verifyEmail = (payload, setSubmitting, navigate) => () => {
     .finally(() => setSubmitting(false));
 };
 
-export const sendEmail = () => (dispatch) => {
+export const sendEmail = (navigate, cb) => (dispatch) => {
   dispatch(setStatus(STATUS.LOADING));
   privateInstance
     .get("/api/v1/mail/sendotp")
     .then((data) => {
       toast.success(data.data?.message);
+      cb();
+      navigate("/verifyemail");
     })
     .catch((err) => {
       const { message } = err?.response?.data;
