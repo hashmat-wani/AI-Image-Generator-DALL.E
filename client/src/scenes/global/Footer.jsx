@@ -19,7 +19,8 @@ const quickLinks = [
 
 const Footer = () => {
   const { pathname } = useLocation();
-  if (["/account", "/signin", "/signup"].includes(pathname)) return null;
+  if (["/account", "/signin", "/signup", "/verifyemail"].includes(pathname))
+    return null;
   return (
     <Box p="30px 5% 20px" backgroundColor={shades.secondary[900]} color="white">
       {/* header logo*/}

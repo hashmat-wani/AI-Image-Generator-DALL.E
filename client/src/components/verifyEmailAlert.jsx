@@ -50,7 +50,7 @@ export default function VerifyEmailAlert({
           ".MuiDialog-container .MuiPaper-root": {
             width: "400px",
             margin: "10px",
-            minWidth: "320px",
+            minWidth: "300px",
           },
         }}
         open={emailVerificationAlert}
@@ -61,7 +61,7 @@ export default function VerifyEmailAlert({
           <ContactMailIcon
             sx={{
               fontSize: "90px",
-              margin: "5px auto 20px",
+              margin: "0 auto 20px",
               display: "block",
             }}
           />
