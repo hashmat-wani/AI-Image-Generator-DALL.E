@@ -6,8 +6,9 @@ const userSchema = new mongoose.Schema(
     lastName: String,
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    avatar: String,
-    verified: { type: Boolean, required: true },
+    avatar: { type: String, default: null },
+    verified: { type: Boolean, default: false },
+    deactivated: { type: Boolean, default: false },
   },
   { timestamps: true, versionKey: false }
 );

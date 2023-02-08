@@ -36,8 +36,6 @@ const registerController = {
         ...(lastName && { lastName }),
         email,
         password: hashedPwd,
-        avatar: null,
-        verified: false,
       };
 
       // const user = new User(payload);

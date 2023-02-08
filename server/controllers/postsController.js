@@ -19,13 +19,13 @@ const postController = {
     }
 
     try {
-      const user = await User.findById(user);
+      const userDoc = await User.findById(user);
 
-      if (!user) {
+      if (!userDoc) {
         return next(CustomErrorHandler.notFound());
       }
 
-      const post = await Post.create({ image, prompt, user });
+      await Post.create({ image, prompt, user: userDoc?._id });
       res
         .status(201)
         .json({ success: "true", message: "Post created successfully" });

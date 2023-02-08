@@ -21,6 +21,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import VerifyEmail from "./scenes/auth/VerifyEmail";
 import VerifyEmailAlert from "./components/verifyEmailAlert";
+import { Box } from "@mui/material";
 
 // const Test = () => {
 //   return (
@@ -85,62 +86,64 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Navbar {...{ setEmailVerificationAlert }} />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/search" element={<SearchResult />} />
-          <Route
-            path="/search/single"
-            element={
-              <PrivateRoute>
-                {prompt && images.length ? (
-                  <SingleImageDashboard />
-                ) : (
-                  <Navigate to="/" />
-                )}
-              </PrivateRoute>
-            }
-          >
+        <Box flex={1}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/search" element={<SearchResult />} />
             <Route
-              path=":id"
+              path="/search/single"
               element={
                 <PrivateRoute>
-                  <SingleImage />
+                  {prompt && images.length ? (
+                    <SingleImageDashboard />
+                  ) : (
+                    <Navigate to="/" />
+                  )}
+                </PrivateRoute>
+              }
+            >
+              <Route
+                path=":id"
+                element={
+                  <PrivateRoute>
+                    <SingleImage />
+                  </PrivateRoute>
+                }
+              />
+            </Route>
+            <Route
+              path="/signup"
+              element={user ? <Navigate to="/" /> : <SignUp />}
+            />
+            <Route
+              path="/signin"
+              element={
+                user ? (
+                  <Navigate to="/" />
+                ) : (
+                  <SignIn {...{ setEmailVerificationAlert }} />
+                )
+              }
+            />
+            <Route path="/policies/content-policy" element={<Policy />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route
+              path="/account"
+              element={
+                <PrivateRoute>
+                  <Profile />
                 </PrivateRoute>
               }
             />
-          </Route>
-          <Route
-            path="/signup"
-            element={user ? <Navigate to="/" /> : <SignUp />}
-          />
-          <Route
-            path="/signin"
-            element={
-              user ? (
-                <Navigate to="/" />
-              ) : (
-                <SignIn {...{ setEmailVerificationAlert }} />
-              )
-            }
-          />
-          <Route path="/policies/content-policy" element={<Policy />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route
-            path="/account"
-            element={
-              <PrivateRoute>
-                <Profile />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/verifyemail"
-            element={user && !user?.verified ? <VerifyEmail /> : <Home />}
-          />
-          {/* <Route path="/test" element={<Test />} /> */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            <Route
+              path="/verifyemail"
+              element={user && !user?.verified ? <VerifyEmail /> : <Home />}
+            />
+            {/* <Route path="/test" element={<Test />} /> */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Box>
         <Footer />
         <VerifyEmailAlert
           {...{ emailVerificationAlert, setEmailVerificationAlert }}
@@ -158,7 +161,6 @@ function App() {
           theme="light"
         />
       </BrowserRouter>
-      ;
     </div>
   );
 }

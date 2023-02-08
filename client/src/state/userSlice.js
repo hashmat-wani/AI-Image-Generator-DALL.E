@@ -216,9 +216,9 @@ export const changePassword =
         newPassword: newPassword.trim(),
       })
       .then((data) => {
-        toast.success(data.data?.message);
         handleClose();
         dispatch(logOut(navigate, false));
+        toast.success(data.data?.message);
       })
       .catch((err) => {
         const { message } = err?.response?.data || err;
@@ -255,6 +255,38 @@ export const sendEmail = (navigate, cb) => (dispatch) => {
     .catch((err) => {
       const { message } = err?.response?.data;
       console.log(err);
+      toast.error(message);
+    })
+    .finally(() => dispatch(setStatus(STATUS.IDLE)));
+};
+
+export const deactivateAccount = (navigate, cb) => (dispatch) => {
+  dispatch(setStatus(STATUS.LOADING));
+  privateInstance
+    .patch("/api/v1/user/deactivate", {})
+    .then((data) => {
+      cb();
+      dispatch(logOut(navigate, false));
+      toast.success(data?.data?.message);
+    })
+    .catch((err) => {
+      const { message } = err?.response?.data || err;
+      toast.error(message);
+    })
+    .finally(() => dispatch(setStatus(STATUS.IDLE)));
+};
+
+export const deleteAccount = (cb) => (dispatch) => {
+  dispatch(setStatus(STATUS.LOADING));
+  privateInstance
+    .delete("/api/v1/user")
+    .then((data) => {
+      cb();
+      dispatch(verifyUser());
+      toast.success(data?.data?.message);
+    })
+    .catch((err) => {
+      const { message } = err?.response?.data || err;
       toast.error(message);
     })
     .finally(() => dispatch(setStatus(STATUS.IDLE)));

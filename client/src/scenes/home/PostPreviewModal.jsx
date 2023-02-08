@@ -31,7 +31,7 @@ export default function PostPreviewModal({
             maxHeight: "650px",
             width: "400px",
             margin: "10px",
-            minWidth: "320px",
+            minWidth: "300px",
             borderRadius: "15px",
           },
         }}

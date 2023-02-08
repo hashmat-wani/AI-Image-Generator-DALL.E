@@ -57,6 +57,9 @@ const loginController = {
         JWT_REFRESH_SECRET
       );
 
+      // if user had deactivated his/her account
+      await User.findByIdAndUpdate(user._id, { deactivated: false });
+
       return res
         .status(200)
         .cookie("access_token", `Bearer ${access_token}`, {
@@ -89,6 +92,15 @@ const loginController = {
   async oAuthLogin(firstName, lastName, email, cb, avatar = null) {
     try {
       let user = await User.findOne({ email });
+      if (user) {
+        // if user had deactivated his/her account
+        await User.findByIdAndUpdate(user._id, {
+          deactivated: false,
+          firstName,
+          lastName,
+          avatar,
+        });
+      }
 
       if (!user) {
         const password = await bcrypt.hash(uuidv4(), 10);

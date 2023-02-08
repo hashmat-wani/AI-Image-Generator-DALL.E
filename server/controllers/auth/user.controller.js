@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { User } from "../../models/index.js";
+import { Post, User } from "../../models/index.js";
 import CustomErrorHandler from "../../services/CustomErrorHandler.js";
 import bcrypt from "bcrypt";
 import fs from "fs";
@@ -98,6 +98,30 @@ const userController = {
         message: "Password changed successfully. Please login again..!",
       });
     } catch (err) {}
+  },
+
+  async deactivateUser(req, res, next) {
+    try {
+      await User.findByIdAndUpdate(req.user?._id, { deactivated: true });
+      return res
+        .status(200)
+        .json({ success: true, message: "Account deactivated successfully" });
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  async deleteUser(req, res, next) {
+    try {
+      const { _id: userId } = req?.user;
+      await User.findByIdAndDelete(userId);
+      await Post.deleteMany({ user: userId });
+      return res
+        .status(200)
+        .json({ success: true, message: "Account deleted successfully" });
+    } catch (err) {
+      return next(err);
+    }
   },
 };
 

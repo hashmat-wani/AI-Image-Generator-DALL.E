@@ -54,7 +54,7 @@ export default function UpdateAvatar({
             maxWidth: "800px",
             width: "700px",
             margin: "10px",
-            minWidth: "320px",
+            minWidth: "300px",
           },
         }}
         open={openAvatarDialog}

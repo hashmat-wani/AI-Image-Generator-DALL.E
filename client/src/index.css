@@ -11,6 +11,9 @@ body {
   padding: 0;
 }
 .App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   background: #fafafc;
 }
 a {

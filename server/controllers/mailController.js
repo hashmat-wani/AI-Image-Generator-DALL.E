@@ -88,7 +88,7 @@ export const mailController = {
       // delete otps
       await OTPVerification.deleteMany({ userId });
 
-      return res.json({
+      return res.status(200).json({
         Success: true,
         message: "Email verified successfully..!",
       });

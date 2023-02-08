@@ -78,7 +78,7 @@ export default function ChangePassword({ openPwdDialog, setOpenPwdDialog }) {
           ".MuiDialog-container .MuiPaper-root": {
             width: "400px",
             margin: "10px",
-            minWidth: "320px",
+            minWidth: "300px",
           },
         }}
         open={openPwdDialog}
