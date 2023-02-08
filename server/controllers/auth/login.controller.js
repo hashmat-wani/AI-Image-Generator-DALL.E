@@ -98,7 +98,6 @@ const loginController = {
           deactivated: false,
           firstName,
           lastName,
-          avatar,
         });
       }
 

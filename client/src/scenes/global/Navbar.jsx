@@ -18,7 +18,7 @@ import { Badge, Chip, CircularProgress } from "@mui/material";
 import { useState } from "react";
 import { resolvePath, STATUS } from "../../utils";
 
-const pages = ["History", "Collections"];
+const pages = ["Your posts", "History", "Collections"];
 
 const UserAvatar = ({ user, setEmailVerificationAlert }) => {
   return (
@@ -289,13 +289,13 @@ function Navbar({ setEmailVerificationAlert }) {
           <MenuItem
             sx={{
               borderBottom: `1px solid ${shades.secondary[300]}`,
-              minWidth: "230px",
+              minWidth: "210px",
               padding: "8px 10px",
             }}
             onClick={handleCloseUserMenu}
           >
             <Link to="/account">
-              <FlexBox justifyContent="space-between">
+              <FlexBox justifyContent="space-between" gap="35px">
                 <Box>
                   <Typography fontWeight="bold" fontSize="13px">
                     {user?.firstName} {user?.lastName}
@@ -304,23 +304,28 @@ function Navbar({ setEmailVerificationAlert }) {
                     {user?.email}
                   </Typography>
                 </Box>
-                <Badge
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    if (!user?.verified) setEmailVerificationAlert(true);
-                  }}
-                  badgeContent={user?.verified ? "Verified" : "Verify"}
-                  sx={{
-                    "& .MuiBadge-badge": {
-                      fontSize: "11px",
+                <Box>
+                  <Button
+                    sx={{
+                      fontSize: "10px",
+                      padding: 0,
                       color: "#fff",
+                      borderRadius: "50px",
+                      pt: "1px",
                       bgcolor: user?.verified ? "#40a0ed" : "#ff7300",
-                    },
-                    ml: "40px",
-                    mr: "25px",
-                  }}
-                />
+                      ":hover": {
+                        bgcolor: user?.verified ? "#008cff" : "#ff5e00",
+                      },
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      if (!user?.verified) setEmailVerificationAlert(true);
+                    }}
+                  >
+                    {user?.verified ? "Verified" : "Verify"}
+                  </Button>
+                </Box>
               </FlexBox>
             </Link>
           </MenuItem>

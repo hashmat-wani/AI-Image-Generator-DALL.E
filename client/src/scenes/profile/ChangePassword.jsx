@@ -7,9 +7,10 @@ import {
   DialogContent,
   IconButton,
   InputAdornment,
+  Slide,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -17,6 +18,10 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
 import { changePassword } from "../../state/userSlice";
 import { useNavigate } from "react-router-dom";
+
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function ChangePassword({ openPwdDialog, setOpenPwdDialog }) {
   const [showNewPwd, setShowNewPwd] = useState(false);
@@ -83,6 +88,8 @@ export default function ChangePassword({ openPwdDialog, setOpenPwdDialog }) {
         }}
         open={openPwdDialog}
         onClose={handleClose}
+        TransitionComponent={Transition}
+        keepMounted
       >
         <DialogTitle>Change password</DialogTitle>
         <DialogContent>

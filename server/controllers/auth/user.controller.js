@@ -27,7 +27,7 @@ const userController = {
       let user = await User.findById(userId);
 
       // remove current avatar from folder
-      if (user.avatar)
+      if (user.avatar && user.avatar.startsWith("uploads"))
         fs.unlinkSync(`${appRoot}/${user.avatar}`, (err) => {
           return next(err);
         });
@@ -48,9 +48,12 @@ const userController = {
       const { _id: userId } = req.user;
       let user = await User.findById(userId);
 
-      fs.unlinkSync(`${appRoot}/${user.avatar}`, (err) => {
-        return next(err);
-      });
+      if (user.avatar && user.avatar.startsWith("uploads")) {
+        fs.unlinkSync(`${appRoot}/${user.avatar}`, (err) => {
+          return next(err);
+        });
+      }
+
       user = await User.findByIdAndUpdate(
         userId,
         { avatar: null },

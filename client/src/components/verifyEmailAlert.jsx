@@ -1,27 +1,17 @@
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  DialogContent,
-  IconButton,
-  InputAdornment,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, DialogContent, Slide, Typography } from "@mui/material";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
-import { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Visibility from "@mui/icons-material/Visibility";
-// import { changePassword } from "../../state/userSlice";
 import { useNavigate } from "react-router-dom";
 import { FlexBox } from "./FlexBox";
 import { sendEmail } from "../state/userSlice";
 import { STATUS } from "../utils";
+import { forwardRef } from "react";
+
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide ref={ref} {...props} />;
+});
 
 export default function VerifyEmailAlert({
   emailVerificationAlert,
@@ -54,7 +44,8 @@ export default function VerifyEmailAlert({
           },
         }}
         open={emailVerificationAlert}
-        // onClose={handleClose}
+        TransitionComponent={Transition}
+        keepMounted
       >
         <DialogTitle>Verify your account</DialogTitle>
         <DialogContent>

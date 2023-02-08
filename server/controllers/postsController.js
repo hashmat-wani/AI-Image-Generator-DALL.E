@@ -39,12 +39,79 @@ const postController = {
       const page = req.query?.page || 1;
       const size = req.query?.size || 19;
       const skip = (page - 1) * size;
-      const posts = await Post.find()
-        .populate("user", ["firstName", "lastName", "avatar"])
-        .sort({ _id: -1 })
-        .skip(skip)
-        .limit(size);
-      const totalPages = Math.ceil((await Post.find().countDocuments()) / size);
+
+      // total count of posts of activated users only
+      const filtered_posts_count = await Post.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "user",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        {
+          $unwind: "$user",
+        },
+        {
+          $match: {
+            "user.deactivated": false,
+          },
+        },
+
+        {
+          $count: "count",
+        },
+      ]);
+
+      let totalPages;
+
+      if (filtered_posts_count.length) {
+        const [{ count }] = filtered_posts_count;
+        totalPages = Math.ceil(count / size);
+      } else {
+        totalPages = 0;
+      }
+
+      // posts of activated users of single page only
+
+      const posts = await Post.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "user",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        {
+          $unwind: "$user",
+        },
+        {
+          $match: {
+            "user.deactivated": false,
+          },
+        },
+        {
+          $project: {
+            "user.firstName": 1,
+            "user.lastName": 1,
+            "user.avatar": 1,
+            prompt: 1,
+            image: 1,
+          },
+        },
+        {
+          $sort: { _id: -1 },
+        },
+        {
+          $skip: skip,
+        },
+        {
+          $limit: size,
+        },
+      ]);
+
       return res.status(200).json({ success: true, posts, totalPages });
     } catch (err) {
       return next(err);

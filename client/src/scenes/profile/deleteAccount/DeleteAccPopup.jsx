@@ -31,6 +31,7 @@ export default function DeleteAccPopup({
   };
 
   const handleClose = () => {
+    setInput("");
     setOpenDialog(false);
   };
 
@@ -39,7 +40,8 @@ export default function DeleteAccPopup({
       <Dialog
         sx={{
           ".MuiDialog-container .MuiPaper-root": {
-            width: "400px",
+            width: "550px",
+            maxWidth: "550px",
             margin: "10px",
             minWidth: "300px",
           },
@@ -71,6 +73,7 @@ export default function DeleteAccPopup({
             required
             label="Type your email to confirm"
             helperText={user?.email}
+            value={input}
             onChange={(e) => setInput(e.target.value)}
           />
         </DialogContent>
