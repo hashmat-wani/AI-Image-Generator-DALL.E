@@ -15,10 +15,17 @@ import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import { green } from "@mui/material/colors";
 import { logOut } from "../../state/userSlice";
 import { Badge, Chip, CircularProgress } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { resolvePath, STATUS } from "../../utils";
+import { backdropContext } from "../../context/BackdropContext";
 
-const pages = ["Your posts", "History", "Collections"];
+const pages = [
+  { title: "Your posts", url: "/userposts" },
+  { title: "History", url: "/history" },
+  { title: "Collections", url: "/collections" },
+];
+
+// const pages = ["abc", "def"];
 
 const UserAvatar = ({ user, setEmailVerificationAlert }) => {
   return (
@@ -112,6 +119,8 @@ function Navbar({ setEmailVerificationAlert }) {
     shallowEqual
   );
 
+  const { toggleBackdrop } = useContext(backdropContext);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -151,10 +160,12 @@ function Navbar({ setEmailVerificationAlert }) {
 
       {/* pages desktop view */}
       <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-        {pages.map((page) => (
+        {pages.map((page, idx) => (
           <Button
-            key={page}
-            onClick={handleCloseNavMenu}
+            key={idx}
+            onClick={() => {
+              navigate(page.url);
+            }}
             sx={{ display: "block" }}
           >
             <Typography
@@ -163,7 +174,7 @@ function Navbar({ setEmailVerificationAlert }) {
               color={shades.primary[300]}
               textTransform="none"
             >
-              {page}
+              {page.title}
             </Typography>
           </Button>
         ))}
@@ -200,17 +211,20 @@ function Navbar({ setEmailVerificationAlert }) {
             "& ul": { padding: 0 },
           }}
         >
-          {pages.map((page) => (
+          {pages.map((page, idx) => (
             <MenuItem
               sx={{
                 p: "12px 24px",
                 borderBottom: `1px solid ${shades.secondary[300]}`,
               }}
-              key={page}
-              onClick={handleCloseNavMenu}
+              key={idx}
+              onClick={() => {
+                handleCloseNavMenu();
+                navigate(page.url);
+              }}
             >
               <Typography fontSize="16px" fontWeight="bold" textAlign="center">
-                {page}
+                {page.title}
               </Typography>
             </MenuItem>
           ))}
@@ -364,7 +378,7 @@ function Navbar({ setEmailVerificationAlert }) {
             ) : (
               <MenuItem
                 onClick={() => {
-                  dispatch(logOut(navigate));
+                  dispatch(logOut({ toggleBackdrop, navigate }));
                   handleCloseUserMenu();
                 }}
                 sx={{

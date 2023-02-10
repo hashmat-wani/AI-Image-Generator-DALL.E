@@ -117,6 +117,43 @@ const postController = {
       return next(err);
     }
   },
+
+  async deletePost(req, res, next) {
+    try {
+      const { id } = req.params;
+      await Post.findByIdAndDelete(id);
+      return res
+        .status(200)
+        .json({ success: true, message: "Deleted successfully" });
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  async fetchSingleUserPosts(req, res, next) {
+    try {
+      const page = req.query?.page || 1;
+      const size = req.query?.size || 10;
+      const skip = (page - 1) * size;
+      const { id } = req.params;
+      const posts = await Post.find({ user: id })
+        .populate("user", ["firstName", "lastName", "avatar"])
+        .sort({ _id: -1 })
+        .skip(skip)
+        .limit(size);
+
+      const totalPages = Math.ceil(
+        (await Post.find({ user: id }).countDocuments()) / size
+      );
+      console.log(page, totalPages);
+
+      return res
+        .status(200)
+        .json({ success: true, data: posts, currPage: page, totalPages });
+    } catch (err) {
+      return next(err);
+    }
+  },
 };
 
 export default postController;

@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import JwtService from "../../services/JwtService.js";
 import { User } from "../../models/index.js";
 import { v4 as uuidv4 } from "uuid";
+import download from "image-downloader";
 
 import {
   CLIENT_DEV_API,
@@ -102,13 +103,26 @@ const loginController = {
       }
 
       if (!user) {
+        let uniqueFileName;
+        if (avatar) {
+          // download avatar url
+          uniqueFileName = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+
+          const options = {
+            url: avatar,
+            dest: `${appRoot}/uploads/${uniqueFileName}.jpg`,
+          };
+
+          await download.image(options);
+        }
+
         const password = await bcrypt.hash(uuidv4(), 10);
         user = await User.create({
           firstName,
           lastName,
           email,
           password,
-          avatar,
+          avatar: avatar ? `uploads/${uniqueFileName}.jpg` : null,
           verified: true,
         });
       }

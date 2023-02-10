@@ -9,7 +9,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Oauth from "./Oauth";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -21,11 +21,13 @@ import {
 } from "@mui/material";
 import { login } from "../../state/userSlice";
 import { useDispatch } from "react-redux";
+import { backdropContext } from "../../context/BackdropContext";
 
 export default function SignIn({ setEmailVerificationAlert }) {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { toggleBackdrop } = useContext(backdropContext);
 
   const { state } = useLocation();
 
@@ -47,6 +49,7 @@ export default function SignIn({ setEmailVerificationAlert }) {
       setSubmitting,
       navigate,
       to: state?.from,
+      toggleBackdrop,
     };
     dispatch(login(args));
   };

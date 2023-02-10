@@ -9,9 +9,10 @@ import {
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { forwardRef } from "react";
+import { forwardRef, useContext } from "react";
 import { deactivateAccount } from "../../../state/userSlice";
 import { STATUS } from "../../../utils";
+import { backdropContext } from "../../../context/BackdropContext";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -24,9 +25,11 @@ export default function DeactivateAccPopup({
 }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { toggleBackdrop } = useContext(backdropContext);
 
   const handleConfirm = () => {
-    dispatch(deactivateAccount(navigate, handleClose));
+    const args = { navigate, handleClose, toggleBackdrop };
+    dispatch(deactivateAccount(args));
   };
 
   const handleClose = () => {

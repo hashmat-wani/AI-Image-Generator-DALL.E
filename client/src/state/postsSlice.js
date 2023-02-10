@@ -60,9 +60,7 @@ export const fetchPosts =
     dispatch(setStatus(STATUS.LOADING));
     instance
       .get("/api/v1/posts", {
-        params: {
-          page,
-        },
+        params: { page },
       })
       .then((data) => {
         dispatch(setStatus(STATUS.IDLE));

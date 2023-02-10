@@ -1,18 +1,24 @@
 import Dialog from "@mui/material/Dialog";
 import { Box, Typography, Button } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { shades } from "../../theme";
-import { downloadImage } from "../../utils";
-import { generatePosts } from "../../state/formSlice";
+import { shades } from "../theme";
+import { downloadImage } from "../utils";
+import { generatePosts } from "../state/formSlice";
+import { deleteUserPost } from "../state/userPostsSlice";
 
 export default function PostPreviewModal({
   openPost,
   setOpenPost,
   openPostData,
+  community,
+  personal,
+  loadingToggle,
 }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { user } = useSelector((state) => state.userReducer, shallowEqual);
 
   const handleClose = () => {
     setOpenPost(false);
@@ -48,18 +54,45 @@ export default function PostPreviewModal({
             <Typography textAlign="center" fontSize="15px">
               {openPostData.prompt}
             </Typography>
-            <Button
-              sx={{
-                mt: "20px",
-                mb: "10px",
-                background: shades.secondary[300],
-                padding: "10px",
-              }}
-              fullWidth
-              onClick={() => handleGenerate(openPostData.prompt)}
-            >
-              Try this example
-            </Button>
+            {community ? (
+              <Button
+                sx={{
+                  mt: "20px",
+                  mb: "10px",
+                  background: shades.secondary[300],
+                  padding: "10px",
+                }}
+                fullWidth
+                onClick={() => handleGenerate(openPostData.prompt)}
+              >
+                Try this example
+              </Button>
+            ) : (
+              <Button
+                sx={{
+                  mt: "20px",
+                  mb: "10px",
+                  background: "#ff6b60",
+                  padding: "10px",
+                  ":hover": {
+                    background: "#ff4f42",
+                  },
+                }}
+                fullWidth
+                onClick={() =>
+                  dispatch(
+                    deleteUserPost(
+                      openPostData._id,
+                      user?._id,
+                      handleClose,
+                      loadingToggle
+                    )
+                  )
+                }
+              >
+                Delete
+              </Button>
+            )}
             <Button
               sx={{
                 background: shades.secondary[300],

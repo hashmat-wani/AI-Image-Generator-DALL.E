@@ -1,10 +1,19 @@
 import React from "react";
 import { Avatar, Box, Typography } from "@mui/material";
 import { green } from "@mui/material/colors";
-import { resolvePath } from "../../utils";
-import { shades } from "../../theme";
+import { resolvePath } from "../utils";
+import { shades } from "../theme";
 
-const Card = ({ _id, image, prompt, user, setOpenPost, setOpenPostData }) => {
+const Card = ({
+  _id,
+  image,
+  prompt,
+  user,
+  setOpenPost,
+  setOpenPostData,
+  community,
+  personal,
+}) => {
   return (
     <Box
       onClick={() => {
@@ -63,7 +72,7 @@ const Card = ({ _id, image, prompt, user, setOpenPost, setOpenPostData }) => {
             <Typography sx={{ mt: "5px" }}>{user?.firstName}</Typography>
           </Box>
           <Typography fontSize="16px" color={shades.primary[300]}>
-            Click to try
+            {community ? "Click to try" : "Click to view"}
           </Typography>
         </Box>
       </Box>

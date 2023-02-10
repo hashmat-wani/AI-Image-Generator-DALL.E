@@ -50,7 +50,8 @@ export default function SignUp() {
   });
 
   const handleFormSubmit = (values, { resetForm, setSubmitting }) => {
-    dispatch(register(values, resetForm, setSubmitting, navigate));
+    const args = { values, resetForm, setSubmitting, navigate };
+    dispatch(register(args));
   };
 
   const formik = useFormik({

@@ -21,7 +21,11 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import VerifyEmail from "./scenes/auth/VerifyEmail";
 import VerifyEmailAlert from "./components/verifyEmailAlert";
-import { Box } from "@mui/material";
+import { Backdrop, Box, CircularProgress } from "@mui/material";
+import UserPosts from "./scenes/UserPosts";
+import { fetchUserPosts } from "./state/userPostsSlice";
+import { useContext } from "react";
+import { backdropContext } from "./context/BackdropContext";
 
 // const Test = () => {
 //   return (
@@ -67,9 +71,8 @@ function App() {
   const dispatch = useDispatch();
   const { currPage } = useSelector((state) => state.postsReducer, shallowEqual);
 
-  useEffect(() => {
-    dispatch(verifyUser());
-  }, []);
+  const { openBackdrop, toggleBackdrop } = useContext(backdropContext);
+  console.log(openBackdrop);
 
   useEffect(() => {
     dispatch(fetchPosts(currPage));
@@ -81,6 +84,11 @@ function App() {
   );
   const { user } = userReducer;
   const { prompt, images } = formReducer;
+
+  useEffect(() => {
+    dispatch(verifyUser(toggleBackdrop));
+  }, []);
+
   // console.log(user);
   return (
     <div className="App">
@@ -141,6 +149,14 @@ function App() {
               element={user && !user?.verified ? <VerifyEmail /> : <Home />}
             />
             {/* <Route path="/test" element={<Test />} /> */}
+            <Route
+              path="/userposts"
+              element={
+                <PrivateRoute>
+                  <UserPosts />
+                </PrivateRoute>
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Box>
@@ -160,6 +176,12 @@ function App() {
           pauseOnHover
           theme="light"
         />
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={openBackdrop}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </BrowserRouter>
     </div>
   );

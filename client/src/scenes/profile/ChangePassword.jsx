@@ -18,6 +18,8 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
 import { changePassword } from "../../state/userSlice";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { backdropContext } from "../../context/BackdropContext";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -28,6 +30,7 @@ export default function ChangePassword({ openPwdDialog, setOpenPwdDialog }) {
   const [showConfirmNewPwd, setShowConfirmNewPwd] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { toggleBackdrop } = useContext(backdropContext);
 
   const initialValues = {
     oldPassword: "",
@@ -52,7 +55,14 @@ export default function ChangePassword({ openPwdDialog, setOpenPwdDialog }) {
   });
 
   const handleFormSubmit = (values, { resetForm, setSubmitting }) => {
-    dispatch(changePassword(values, setSubmitting, handleClose, navigate));
+    const args = {
+      values,
+      setSubmitting,
+      handleClose,
+      navigate,
+      toggleBackdrop,
+    };
+    dispatch(changePassword(args));
   };
 
   const formik = useFormik({

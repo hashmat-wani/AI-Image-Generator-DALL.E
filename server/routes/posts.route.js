@@ -8,4 +8,9 @@ const router = express.Router();
 router.get("/", postsController.fetchAllPosts);
 
 router.post("/", authenticate, postsController.createPost);
+
+router.delete("/:id", authenticate, postsController.deletePost);
+
+router.get("/:id", authenticate, postsController.fetchSingleUserPosts);
+
 export default router;
