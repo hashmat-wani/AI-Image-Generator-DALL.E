@@ -5,27 +5,26 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { shades } from "../theme";
 import Card from "./Card";
 import SearchIcon from "@mui/icons-material/Search";
-import { useDispatch } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { STATUS } from "../utils";
 import Loading from "./Loading";
 import DisplayAlert from "./DisplayAlert";
-import { fetchPosts } from "../state/postsSlice";
+import { fetchPosts, setSearchPost } from "../state/postsSlice";
 import PostPreviewModal from "./PostPreviewModal";
 
-const RenderCards = ({
-  data,
-  title,
-  setSearchText,
-  community,
-  personal,
-  loadingToggle,
-}) => {
+const RenderCards = ({ data, title, community, personal }) => {
   const [openPost, setOpenPost] = useState(false);
   const [openPostData, setOpenPostData] = useState(null);
+  const { searchPost } = useSelector(
+    (state) => state.postsReducer,
+    shallowEqual
+  );
+
+  const dispatch = useDispatch();
 
   const isSmallScreen = useMediaQuery("(max-width:499px)");
 
@@ -41,7 +40,6 @@ const RenderCards = ({
               openPostData,
               community,
               personal,
-              loadingToggle,
             }}
           />
         )}
@@ -84,58 +82,46 @@ const RenderCards = ({
       type="info"
       title="Oops..."
       message={title}
-      action={setSearchText ? "See all posts" : null}
-      cb={setSearchText ? () => setSearchText("") : null}
+      action={searchPost ? "See all posts" : null}
+      cb={searchPost ? () => dispatch(setSearchPost("")) : null}
     />
   );
 };
 
-const Posts = ({
-  posts,
-  status,
-  community = false,
-  personal = false,
-  loadingToggle,
-}) => {
-  const [searchText, setSearchText] = useState("");
-  const [searchPosts, setSearchPosts] = useState(null);
-  const intervalId = useRef(null);
+const Posts = ({ posts, status, community = false, personal = false }) => {
   const dispatch = useDispatch();
 
-  const handleChange = (e) => {
-    setSearchText(e.target.value);
-    clearTimeout(intervalId.current);
+  const { searchPost } = useSelector(
+    (state) => state.postsReducer,
+    shallowEqual
+  );
 
-    intervalId.current = setTimeout(() => {
-      const searchResult = posts.filter(
-        (post) =>
-          post.user?.firstName
-            .toLowerCase()
-            .includes(e.target.value.toLocaleLowerCase()) ||
-          post.prompt.toLowerCase().includes(e.target.value.toLocaleLowerCase())
-      );
-      setSearchPosts(searchResult);
-    }, 500);
+  const handleChange = (e) => {
+    if (community) {
+      dispatch(setSearchPost(e.target.value));
+    }
   };
 
   return (
     <Box>
       {/* Search */}
-      <Box m="25px 0 10px">
-        <TextField
-          onChange={handleChange}
-          value={searchText}
-          variant="standard"
-          placeholder="Search..."
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Box>
+      {community && (
+        <Box m="25px 0 10px">
+          <TextField
+            onChange={handleChange}
+            value={searchPost}
+            variant="standard"
+            placeholder="Search..."
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Box>
+      )}
 
       {/* Posts */}
       <Box>
@@ -147,35 +133,23 @@ const Posts = ({
             title="Error"
             message="Something went wrong"
             action="Reload"
-            cb={() => dispatch(fetchPosts())}
+            cb={() => dispatch(fetchPosts({}))}
           />
         ) : (
           <>
-            {searchText && (
+            {searchPost && (
               <Typography mt="15px" mb="5px" color={shades.primary[300]}>
                 Showing results for{" "}
-                <span style={{ color: "#000000" }}>{searchText}</span>
+                <span style={{ color: "#000000" }}>{searchPost}</span>
               </Typography>
             )}
 
-            {searchText ? (
-              <RenderCards
-                setSearchText={setSearchText}
-                data={searchPosts}
-                community={community}
-                personal={personal}
-                loadingToggle={loadingToggle}
-                title="No search results found"
-              />
-            ) : (
-              <RenderCards
-                data={posts}
-                community={community}
-                personal={personal}
-                loadingToggle={loadingToggle}
-                title="No posts found"
-              />
-            )}
+            <RenderCards
+              data={posts}
+              community={community}
+              personal={personal}
+              title={searchPost ? "No search results found" : "No posts found"}
+            />
           </>
         )}
       </Box>

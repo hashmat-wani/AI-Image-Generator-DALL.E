@@ -23,59 +23,25 @@ import VerifyEmail from "./scenes/auth/VerifyEmail";
 import VerifyEmailAlert from "./components/verifyEmailAlert";
 import { Backdrop, Box, CircularProgress } from "@mui/material";
 import UserPosts from "./scenes/UserPosts";
-import { fetchUserPosts } from "./state/userPostsSlice";
 import { useContext } from "react";
 import { backdropContext } from "./context/BackdropContext";
-
-// const Test = () => {
-//   return (
-//     <div style={{ textAlign: "center" }}>
-//       <div
-//         style={{
-//           background: "#0a66c2",
-//           padding: "30px",
-//           // textAlign: "center",
-//           color: "white",
-//         }}
-//       >
-//         <h1>Thankyou for choosing DALL.E</h1>
-//         <p>Verify Your E-mail Address</p>
-//       </div>
-//       <h1>Hi,</h1>
-//       <p>You're almost ready to start enjoying DALL.E.</p>
-//       <p>
-//         Simply confirm that hashmatw555@gmail.com is your e-mail address by
-//         using this code:
-//       </p>
-//       <div style={{ padding: "20px" }}>
-//         <h1>2367</h1>
-//         <p>This code will expire in 1 hour</p>
-//         <p>Thanks</p>
-//       </div>
-//       <div style={{ background: "lightgray", padding: "30px" }}>
-//         <h1>Get in touch</h1>
-//         <p>
-//           <a href="tel:7006600835">7006600835</a>
-//         </p>
-//         <p>
-//           <a href="mailto:hashmatwani@icloud.com">hashmatwani@icloud.com</a>
-//         </p>
-//       </div>
-//     </div>
-//   );
-// };
+import useDebounce from "./hooks/useDebounce";
 
 function App() {
   const [emailVerificationAlert, setEmailVerificationAlert] = useState(false);
 
   const dispatch = useDispatch();
-  const { currPage } = useSelector((state) => state.postsReducer, shallowEqual);
-
   const { openBackdrop, toggleBackdrop } = useContext(backdropContext);
-  
+  const { searchPost } = useSelector(
+    (state) => state.postsReducer,
+    shallowEqual
+  );
+
+  const debouncedSearch = useDebounce(searchPost, 2000);
+
   useEffect(() => {
-    dispatch(fetchPosts(currPage));
-  }, [currPage]);
+    dispatch(fetchPosts({ searchPost }));
+  }, [debouncedSearch]);
 
   const { userReducer, formReducer } = useSelector(
     (state) => state,
@@ -146,7 +112,6 @@ function App() {
               path="/verifyemail"
               element={user && !user?.verified ? <VerifyEmail /> : <Home />}
             />
-            {/* <Route path="/test" element={<Test />} /> */}
             <Route
               path="/userposts"
               element={

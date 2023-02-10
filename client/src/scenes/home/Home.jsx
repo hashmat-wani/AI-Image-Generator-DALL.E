@@ -8,7 +8,6 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getRandomPrompt } from "../../utils/getRandomPrompt";
 import { updateForm } from "../../state/formSlice";
 import PaginationBtns from "./PaginationBtns";
-import Search from "../../components/Search";
 
 const Home = () => {
   const isMobile = useMediaQuery("(max-width:767px)");

@@ -7,7 +7,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { backdropContext } from "../context/BackdropContext";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import { STATUS } from "../utils";
 
 const Loader = () => (
   <Stack p="40px 0 10px" alignItems="center">
@@ -42,7 +41,6 @@ const UserPosts = () => {
   } = useSelector((state) => state.userPostsReducer, shallowEqual);
 
   const { user } = useSelector((state) => state.userReducer, shallowEqual);
-
   useEffect(() => {
     dispatch(
       fetchUserPosts({
@@ -56,8 +54,8 @@ const UserPosts = () => {
   }, [page]);
 
   return (
-    <Box maxWidth="1100px" m="30px auto" p="20px">
-      <Typography variant="h3" textAlign="center">
+    <Box maxWidth="1100px" m="0 auto 20px" p="20px">
+      <Typography mb="30px" variant="h3" textAlign="center">
         Posts you've shared with community
       </Typography>
 

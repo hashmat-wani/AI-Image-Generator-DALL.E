@@ -39,6 +39,7 @@ const postController = {
       const page = req.query?.page || 1;
       const size = req.query?.size || 19;
       const skip = (page - 1) * size;
+      const q = req.query?.q || "";
 
       // total count of posts of activated users only
       const filtered_posts_count = await Post.aggregate([
@@ -55,7 +56,10 @@ const postController = {
         },
         {
           $match: {
-            "user.deactivated": false,
+            $and: [
+              { "user.deactivated": false },
+              { prompt: { $regex: q, $options: "i" } },
+            ],
           },
         },
 
@@ -87,9 +91,17 @@ const postController = {
         {
           $unwind: "$user",
         },
+        // {
+        //   $match: {
+        //     "user.deactivated": false,
+        //   },
+        // },
         {
           $match: {
-            "user.deactivated": false,
+            $and: [
+              { "user.deactivated": false },
+              { prompt: { $regex: q, $options: "i" } },
+            ],
           },
         },
         {
@@ -112,7 +124,9 @@ const postController = {
         },
       ]);
 
-      return res.status(200).json({ success: true, posts, totalPages });
+      return res
+        .status(200)
+        .json({ success: true, posts, currPage: page, totalPages });
     } catch (err) {
       return next(err);
     }
@@ -145,8 +159,6 @@ const postController = {
       const totalPages = Math.ceil(
         (await Post.find({ user: id }).countDocuments()) / size
       );
-      console.log(page, totalPages);
-
       return res
         .status(200)
         .json({ success: true, data: posts, currPage: page, totalPages });

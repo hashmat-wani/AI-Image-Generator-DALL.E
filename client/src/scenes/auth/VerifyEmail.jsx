@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { shades } from "../../theme";
 import { sendEmail, verifyEmail } from "../../state/userSlice";
 import { STATUS } from "../../utils";

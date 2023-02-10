@@ -74,7 +74,7 @@ export const deleteUserPost =
         toast.success(data?.data.message);
         dispatch(deletePostFromSlice(id));
         // dispatch(fetchUserPosts({ userId, toggleBackdrop, concat: false }));
-        dispatch(fetchPosts());
+        dispatch(fetchPosts({}));
       })
       .catch((err) => {
         const { message } = err?.response?.data || err;

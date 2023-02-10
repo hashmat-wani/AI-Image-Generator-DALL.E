@@ -32,8 +32,3 @@ const Text = styled(Typography)({
   fontSize: "18px",
   fontFamily: "'Noto Serif JP', serif",
 });
-const TextBold = styled("span")({
-  fontSize: "20px",
-  fontWeight: "bold",
-  fontFamily: "'Noto Serif JP', serif",
-});

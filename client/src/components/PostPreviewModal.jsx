@@ -15,7 +15,6 @@ export default function PostPreviewModal({
   openPostData,
   community,
   personal,
-  loadingToggle,
 }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
