@@ -16,24 +16,21 @@ export const userPostsSlice = createSlice({
   initialState,
   reducers: {
     setUserPosts: (state, action) => {
-      // if its page change
-      if (action.payload?.onScroll) {
-        return {
-          ...state,
-          userPosts: [...state.userPosts, ...action.payload.data],
-          currPage: action.payload.currPage,
-          totalPages: action.payload.totalPages,
-        };
-      }
-
+      const { data, totalPages, currPage, concat } = action?.payload;
       return {
         ...state,
-        userPosts: action.payload.data,
-        currPage: action.payload.currPage,
-        totalPages: action.payload.totalPages,
+        userPosts: concat ? [...state.userPosts, ...data] : data,
+        currPage,
+        totalPages,
       };
     },
 
+    deletePostFromSlice: (state, action) => {
+      return {
+        ...state,
+        userPosts: state.userPosts.filter((el) => el._id !== action.payload),
+      };
+    },
     clearUserPosts: () => initialState,
 
     setStatus: (state, action) => {
@@ -42,45 +39,46 @@ export const userPostsSlice = createSlice({
   },
 });
 
-export const { setUserPosts, clearUserPosts, setStatus } =
+export const { setUserPosts, clearUserPosts, deletePostFromSlice, setStatus } =
   userPostsSlice.actions;
 export default userPostsSlice.reducer;
 
 export const fetchUserPosts =
-  (userId, loadingToggle, page = 1, onScroll = false) =>
+  ({ userId, page = 1, toggleBackdrop, concat }) =>
   (dispatch) => {
-    if (loadingToggle) loadingToggle();
+    if (!concat) toggleBackdrop();
     privateInstance
       .get(`/api/v1/posts/${userId}`, {
         params: { page },
       })
       .then((posts) => {
         const { data, totalPages, currPage } = posts?.data;
-        dispatch(setUserPosts({ data, totalPages, currPage, onScroll }));
+        dispatch(setUserPosts({ data, totalPages, currPage, concat }));
       })
       .catch((err) => {
         dispatch(setStatus(STATUS.ERROR));
         dispatch(clearUserPosts());
       })
       .finally(() => {
-        if (loadingToggle) loadingToggle();
+        if (!concat) toggleBackdrop();
       });
   };
 
 export const deleteUserPost =
-  (postId, userId, handleClose, loadingToggle) => (dispatch) => {
-    loadingToggle();
+  ({ id, userId, toggleBackdrop }) =>
+  (dispatch) => {
+    toggleBackdrop();
     privateInstance
-      .delete(`/api/v1/posts/${postId}`)
+      .delete(`/api/v1/posts/${id}`)
       .then((data) => {
-        handleClose();
         toast.success(data?.data.message);
-        dispatch(fetchUserPosts(userId, loadingToggle));
+        dispatch(deletePostFromSlice(id));
+        // dispatch(fetchUserPosts({ userId, toggleBackdrop, concat: false }));
         dispatch(fetchPosts());
       })
       .catch((err) => {
         const { message } = err?.response?.data || err;
         toast.error(message);
       })
-      .finally(() => loadingToggle());
+      .finally(() => toggleBackdrop());
   };

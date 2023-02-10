@@ -3,7 +3,7 @@ import { STATUS } from "../utils";
 import { MODE, SERVER_DEV_API, SERVER_PROD_API } from "../env";
 import { instance, privateInstance } from "../utils/apiInstances";
 import { toast } from "react-toastify";
-import { clearUserPosts, fetchUserPosts } from "./userPostsSlice";
+import { clearUserPosts } from "./userPostsSlice";
 
 const initialState = {
   user: null,
@@ -254,7 +254,6 @@ export const verifyEmail = (payload, setSubmitting, navigate) => (dispatch) => {
     })
     .catch((err) => {
       const { message } = err?.response?.data;
-      console.log(err);
       toast.error(message);
     })
     .finally(() => setSubmitting(false));
@@ -271,7 +270,6 @@ export const sendEmail = (navigate, cb) => (dispatch) => {
     })
     .catch((err) => {
       const { message } = err?.response?.data;
-      console.log(err);
       toast.error(message);
     })
     .finally(() => dispatch(setStatus(STATUS.IDLE)));

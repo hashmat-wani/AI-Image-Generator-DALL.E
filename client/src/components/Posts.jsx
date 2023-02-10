@@ -121,15 +121,12 @@ const Posts = ({
   return (
     <Box>
       {/* Search */}
-      <Box m="25px 0 10px" borderRadius="8px">
+      <Box m="25px 0 10px">
         <TextField
           onChange={handleChange}
           value={searchText}
           variant="standard"
           placeholder="Search..."
-          sx={{
-            borderRadius: "8px",
-          }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">

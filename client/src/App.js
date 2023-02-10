@@ -72,8 +72,7 @@ function App() {
   const { currPage } = useSelector((state) => state.postsReducer, shallowEqual);
 
   const { openBackdrop, toggleBackdrop } = useContext(backdropContext);
-  console.log(openBackdrop);
-
+  
   useEffect(() => {
     dispatch(fetchPosts(currPage));
   }, [currPage]);
@@ -89,7 +88,6 @@ function App() {
     dispatch(verifyUser(toggleBackdrop));
   }, []);
 
-  // console.log(user);
   return (
     <div className="App">
       <BrowserRouter>

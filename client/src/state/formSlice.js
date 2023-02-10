@@ -48,24 +48,26 @@ export const formSlice = createSlice({
 export const { updateForm, setStatus } = formSlice.actions;
 export default formSlice.reducer;
 
-export const generatePosts = (prompt) => (dispatch) => {
-  dispatch(setStatus(STATUS.LOADING));
-  instance
-    .post("/api/v1/dalle", { prompt })
-    .then((data) => {
-      dispatch(setStatus(STATUS.IDLE));
-      dispatch(
-        updateForm({
-          prompt,
-          images: data.data.images.map((photo, index) => ({
-            id: uuidv4(),
-            index,
-            image: `data:image/jpeg;base64,${photo.b64_json}`,
-          })),
-        })
-      );
-    })
-    .catch((err) => {
-      dispatch(setStatus(STATUS.ERROR));
-    });
-};
+export const generatePosts =
+  ({ prompt }) =>
+  (dispatch) => {
+    dispatch(setStatus(STATUS.LOADING));
+    instance
+      .post("/api/v1/dalle", { prompt })
+      .then((data) => {
+        dispatch(setStatus(STATUS.IDLE));
+        dispatch(
+          updateForm({
+            prompt,
+            images: data.data.images.map((photo, index) => ({
+              id: uuidv4(),
+              index,
+              image: `data:image/jpeg;base64,${photo.b64_json}`,
+            })),
+          })
+        );
+      })
+      .catch((err) => {
+        dispatch(setStatus(STATUS.ERROR));
+      });
+  };

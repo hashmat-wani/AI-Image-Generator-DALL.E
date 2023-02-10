@@ -6,6 +6,8 @@ import { shades } from "../theme";
 import { downloadImage } from "../utils";
 import { generatePosts } from "../state/formSlice";
 import { deleteUserPost } from "../state/userPostsSlice";
+import { useContext } from "react";
+import { backdropContext } from "../context/BackdropContext";
 
 export default function PostPreviewModal({
   openPost,
@@ -20,13 +22,26 @@ export default function PostPreviewModal({
 
   const { user } = useSelector((state) => state.userReducer, shallowEqual);
 
+  const { toggleBackdrop } = useContext(backdropContext);
+
   const handleClose = () => {
     setOpenPost(false);
   };
 
-  const handleGenerate = (prompt) => {
+  const handleGenerate = () => {
     navigate("/search");
-    dispatch(generatePosts(prompt));
+    const args = { prompt: openPostData?.prompt };
+    dispatch(generatePosts(args));
+  };
+
+  const handleDelete = () => {
+    handleClose();
+    const args = {
+      id: openPostData._id,
+      userId: user?._id,
+      toggleBackdrop,
+    };
+    dispatch(deleteUserPost(args));
   };
 
   return (
@@ -63,7 +78,7 @@ export default function PostPreviewModal({
                   padding: "10px",
                 }}
                 fullWidth
-                onClick={() => handleGenerate(openPostData.prompt)}
+                onClick={handleGenerate}
               >
                 Try this example
               </Button>
@@ -79,16 +94,7 @@ export default function PostPreviewModal({
                   },
                 }}
                 fullWidth
-                onClick={() =>
-                  dispatch(
-                    deleteUserPost(
-                      openPostData._id,
-                      user?._id,
-                      handleClose,
-                      loadingToggle
-                    )
-                  )
-                }
+                onClick={handleDelete}
               >
                 Delete
               </Button>
