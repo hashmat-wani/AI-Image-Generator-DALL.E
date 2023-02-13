@@ -11,13 +11,10 @@ import { shades } from "../../theme";
 const SingleImage = () => {
   const isMobile = useMediaQuery("(max-width:767px)");
   const navigate = useNavigate();
-  const { images, prompt } = useSelector(
-    (state) => state.formReducer,
-    shallowEqual
-  );
+  const { posts } = useSelector((state) => state.formReducer, shallowEqual);
   const { id } = useParams();
 
-  let { image, index } = images.find((node) => node.id == id);
+  let { image, index, prompt } = posts.find((node) => node.id == id);
 
   return (
     <FlexBox position="relative" justifyContent="space-between">
@@ -28,7 +25,7 @@ const SingleImage = () => {
         mobile={isMobile.toString()}
         disabled={index == 0}
         variant="prev"
-        onClick={() => navigate(`/search/single/${images[--index].id}`)}
+        onClick={() => navigate(`/search/single/${posts[--index].id}`)}
       >
         <ChevronLeftIcon />
       </SwipeBtn>
@@ -43,7 +40,7 @@ const SingleImage = () => {
         mobile={isMobile.toString()}
         variant="next"
         disabled={index == 3}
-        onClick={() => navigate(`/search/single/${images[++index].id}`)}
+        onClick={() => navigate(`/search/single/${posts[++index].id}`)}
       >
         <ChevronRightIcon />
       </SwipeBtn>

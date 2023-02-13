@@ -55,8 +55,8 @@ const UserPosts = () => {
 
   return (
     <Box maxWidth="1100px" m="0 auto 20px" p="20px">
-      <Typography mb="30px" variant="h3" textAlign="center">
-        Posts you've shared with community
+      <Typography mb="30px" fontSize="20px" textAlign="center">
+        Posts that you've shared with the community.
       </Typography>
 
       <InfiniteScroll
@@ -68,9 +68,11 @@ const UserPosts = () => {
         loader={<Loader />}
         scrollThreshold="1px"
         endMessage={
-          <p style={{ textAlign: "center", margin: "30px" }}>
-            <b>Yay! You have seen it all</b>
-          </p>
+          !!posts.length && (
+            <p style={{ textAlign: "center", margin: "30px" }}>
+              <b>Yay! You have seen it all</b>
+            </p>
+          )
         }
         refreshFunction={() => {
           setNotInitRender(false);

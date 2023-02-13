@@ -20,9 +20,14 @@ const quickLinks = [
 const Footer = () => {
   const { pathname } = useLocation();
   if (
-    ["/account", "/signin", "/signup", "/verifyemail", "/userposts"].includes(
-      pathname
-    )
+    [
+      "/account",
+      "/signin",
+      "/signup",
+      "/verifyemail",
+      "/userposts",
+      "/collections",
+    ].includes(pathname)
   )
     return null;
   return (

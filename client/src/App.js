@@ -1,7 +1,7 @@
 import Navbar from "./scenes/global/Navbar";
 import Home from "./scenes/home/Home";
 import SearchResult from "./scenes/searchResult/SearchResult";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Link, Navigate, Route, Routes } from "react-router-dom";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import SingleImage from "./scenes/singleImage/SingleImage";
 import SingleImageDashboard from "./scenes/singleImage/SingleImageDashboard";
@@ -26,6 +26,7 @@ import UserPosts from "./scenes/UserPosts";
 import { useContext } from "react";
 import { backdropContext } from "./context/BackdropContext";
 import useDebounce from "./hooks/useDebounce";
+import Collections from "./scenes/Collections";
 
 function App() {
   const [emailVerificationAlert, setEmailVerificationAlert] = useState(false);
@@ -48,7 +49,7 @@ function App() {
     shallowEqual
   );
   const { user } = userReducer;
-  const { prompt, images } = formReducer;
+  const { posts } = formReducer;
 
   useEffect(() => {
     dispatch(verifyUser(toggleBackdrop));
@@ -58,6 +59,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Navbar {...{ setEmailVerificationAlert }} />
+        <Link to="/search">search</Link>
         <Box flex={1}>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -66,7 +68,7 @@ function App() {
               path="/search/single"
               element={
                 <PrivateRoute>
-                  {prompt && images.length ? (
+                  {posts.length ? (
                     <SingleImageDashboard />
                   ) : (
                     <Navigate to="/" />
@@ -117,6 +119,15 @@ function App() {
               element={
                 <PrivateRoute>
                   <UserPosts />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/collections"
+              element={
+                <PrivateRoute>
+                  <Collections />
                 </PrivateRoute>
               }
             />

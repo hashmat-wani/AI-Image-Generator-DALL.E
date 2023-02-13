@@ -30,7 +30,7 @@ const Input = () => {
 
   const handleGenerate = () => {
     navigate("/search");
-    dispatch(generatePosts(prompt));
+    dispatch(generatePosts({ prompt }));
   };
 
   return (
@@ -40,7 +40,6 @@ const Input = () => {
       borderRadius="8px"
       flexDirection={{ xs: "column", md: "row" }}
       justifyContent="space-between"
-      
     >
       <TextField
         onChange={(e) => dispatch(updateForm({ prompt: e.target.value }))}

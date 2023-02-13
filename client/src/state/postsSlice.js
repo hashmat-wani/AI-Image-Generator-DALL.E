@@ -38,24 +38,27 @@ export const postsSlice = createSlice({
 export const { setPosts, setStatus, setSearchPost } = postsSlice.actions;
 export default postsSlice.reducer;
 
-export const createPost = (image, prompt) => (dispatch) => {
-  dispatch(setStatus(STATUS.LOADING));
-  privateInstance
-    .post("/api/v1/posts", {
-      image,
-      prompt,
-    })
-    .then(() => {
-      toast.success("Shared successfully!");
-      dispatch(fetchPosts({}));
-    })
-    .catch(() => {
-      toast.error("Something went wrong. Try again..!");
-    })
-    .finally(() => {
-      dispatch(setStatus(STATUS.IDLE));
-    });
-};
+export const createPost =
+  ({ image, prompt }) =>
+  (dispatch) => {
+    dispatch(setStatus(STATUS.LOADING));
+    console.log(image, prompt);
+    privateInstance
+      .post("/api/v1/posts", {
+        image,
+        prompt,
+      })
+      .then(() => {
+        toast.success("Shared successfully!");
+        dispatch(fetchPosts({}));
+      })
+      .catch(() => {
+        toast.error("Something went wrong. Try again..!");
+      })
+      .finally(() => {
+        dispatch(setStatus(STATUS.IDLE));
+      });
+  };
 
 export const fetchPosts =
   ({ page, searchPost }) =>

@@ -17,7 +17,7 @@ const Card = ({
   return (
     <Box
       onClick={() => {
-        setOpenPostData({ image, prompt, _id });
+        setOpenPostData({ image: image.url, prompt, _id });
         setOpenPost(true);
       }}
       sx={{
@@ -76,7 +76,11 @@ const Card = ({
           </Typography>
         </Box>
       </Box>
-      <img style={{ width: "100%", height: "100%" }} src={image} alt="posts" />
+      <img
+        style={{ width: "100%", height: "100%" }}
+        src={image.url}
+        alt="posts"
+      />
     </Box>
   );
 };

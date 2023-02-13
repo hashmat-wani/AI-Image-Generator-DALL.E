@@ -308,3 +308,4 @@ export const deleteAccount = (handleClose, toggleBackdrop) => (dispatch) => {
     })
     .finally(() => dispatch(setStatus(STATUS.IDLE)));
 };
+

@@ -16,7 +16,7 @@ const SearchResult = () => {
 
   const dispatch = useDispatch();
 
-  const { images, prompt, status } = useSelector(
+  const { posts, prompt, status } = useSelector(
     (state) => state.formReducer,
     shallowEqual
   );
@@ -59,11 +59,11 @@ const SearchResult = () => {
           title="Error"
           message="Something went wrong"
           action="Reload"
-          cb={() => dispatch(generatePosts(prompt))}
+          cb={() => dispatch(generatePosts({ prompt }))}
         />
       )}
 
-      {images.length === 0 && status === STATUS.IDLE && (
+      {posts.length === 0 && status === STATUS.IDLE && (
         <DisplayAlert
           type="info"
           title="No images found"
@@ -73,7 +73,7 @@ const SearchResult = () => {
         />
       )}
 
-      {images.length !== 0 && status === STATUS.IDLE && (
+      {posts.length !== 0 && status === STATUS.IDLE && (
         <Box
           mt="50px"
           gap="20px"
@@ -83,7 +83,7 @@ const SearchResult = () => {
             md: "repeat(4, 1fr)",
           }}
         >
-          {images.map((node) => (
+          {posts.map((node) => (
             <Link to={`/search/single/${node.id}`} key={node.id}>
               <Img src={node.image} alt={prompt} />
             </Link>

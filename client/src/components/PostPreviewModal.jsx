@@ -49,7 +49,7 @@ export default function PostPreviewModal({
         sx={{
           ".MuiDialog-container .MuiPaper-root": {
             maxHeight: "650px",
-            width: "400px",
+            width: "350px",
             margin: "10px",
             minWidth: "300px",
             borderRadius: "15px",

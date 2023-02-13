@@ -90,6 +90,7 @@ const RenderCards = ({ data, title, community, personal }) => {
 
 const Posts = ({ posts, status, community = false, personal = false }) => {
   const dispatch = useDispatch();
+  console.log(posts);
 
   const { searchPost } = useSelector(
     (state) => state.postsReducer,
