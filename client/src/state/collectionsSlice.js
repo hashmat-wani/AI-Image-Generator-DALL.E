@@ -31,10 +31,10 @@ export const getUserCollections = () => (dispatch) => {
     .then((data) => {
       dispatch(setStatus(STATUS.IDLE));
       dispatch(setCollections(data?.data?.data));
-      console.log(data);
+      // console.log(data);
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       dispatch(setStatus(STATUS.ERROR));
     });
 };
@@ -63,7 +63,7 @@ export const savePost =
   };
 
 export const createUserCollection =
-  ({ setCreateCollection, input }) =>
+  ({ cb, input, setInput }) =>
   (dispatch) => {
     dispatch(setStatus(STATUS.LOADING));
     privateInstance
@@ -71,7 +71,8 @@ export const createUserCollection =
       .then(() => {
         toast.success("Collection created");
         dispatch(getUserCollections());
-        setCreateCollection(false);
+        setInput("");
+        cb(false);
       })
       .catch((err) => {
         toast.error("Something went wrong. Try again..!");

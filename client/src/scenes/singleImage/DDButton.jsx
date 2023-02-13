@@ -40,12 +40,18 @@ export default function DDButton({ image, prompt }) {
   };
 
   const handleSave = (collectionId, collectionName) => {
-    const args = { handleClose, image, prompt, collectionId, collectionName };
+    const args = {
+      handleClose,
+      image,
+      prompt,
+      collectionId,
+      collectionName,
+    };
     dispatch(savePost(args));
   };
 
   const handleCreate = () => {
-    const args = { setCreateCollection, input };
+    const args = { cb: setCreateCollection, input, setInput };
     dispatch(createUserCollection(args));
   };
 
@@ -112,7 +118,6 @@ export default function DDButton({ image, prompt }) {
               onChange={(e) => setInput(e.target.value)}
               value={input}
               label="Name"
-              autoComplete="email"
             />
           </Box>
         ) : (
@@ -205,7 +210,7 @@ export default function DDButton({ image, prompt }) {
                 mr: "5px",
               }}
             />
-            <Typography fontWeight="bold">Create Collection</Typography>
+            <Typography fontWeight="bold">Create collection</Typography>
           </MenuItem>
         )}
       </Menu>

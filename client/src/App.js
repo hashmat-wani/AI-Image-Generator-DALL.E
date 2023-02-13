@@ -59,7 +59,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Navbar {...{ setEmailVerificationAlert }} />
-        <Link to="/search">search</Link>
+        {/* <Link to="/search">search</Link> */}
         <Box flex={1}>
           <Routes>
             <Route path="/" element={<Home />} />
