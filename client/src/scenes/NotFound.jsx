@@ -17,6 +17,7 @@ const NotFound = () => {
       px="15px"
       m="auto"
     >
+
       {/* some dummy image */}
       <Grid mobile={isMobile.toString()}>
         {posts.slice(0, 6).map((post, idx) => (
