@@ -28,7 +28,7 @@ const Collections = () => {
   console.log(collections);
 
   return (
-    <Box p={{ xs: "30px 10px", md: "30px 120px" }}>
+    <Box p={{ xs: "30px 10px", md: "40px 140px" }}>
       <CreateCollection {...{ open, setOpen }} />
       <FlexBox justifyContent="space-between">
         <Typography fontWeight={600} my="30px" fontSize="24px">
@@ -81,9 +81,9 @@ export default Collections;
 
 const Grid = styled(Box)(({ ismobile }) => ({
   display: "grid",
-  gridAutoRows: "110px",
+  gridAutoRows: "120px",
   gridTemplateColumns: `${
-    ismobile === "true" ? "repeat(2, 1fr)" : "repeat(auto-fill,235px)"
+    ismobile === "true" ? "repeat(2, 1fr)" : "repeat(auto-fill,252px)"
   }`,
   gap: "10px",
   "> div:not(:last-child)": {
