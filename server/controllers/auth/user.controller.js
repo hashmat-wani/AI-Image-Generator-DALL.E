@@ -1,8 +1,9 @@
 import Joi from "joi";
-import { Post, User } from "../../models/index.js";
+import { Collection, Post, SavedPost, User } from "../../models/index.js";
 import CustomErrorHandler from "../../services/CustomErrorHandler.js";
 import bcrypt from "bcrypt";
 import fs from "fs";
+import cloudinary from "../../config/cloudinary.js";
 
 const userController = {
   async me(req, res, next) {
@@ -117,8 +118,28 @@ const userController = {
   async deleteUser(req, res, next) {
     try {
       const { _id: userId } = req?.user;
+      // deleting user
       await User.findByIdAndDelete(userId);
+
+      // deleting userPost from cloudinary
+      const delPosts = await Post.find({ user: userId });
+      delPosts.forEach(async (node) => {
+        await cloudinary.uploader.destroy(node.image.id);
+      });
+
+      // deleting userPosts from database
       await Post.deleteMany({ user: userId });
+      await Collection.deleteMany({ collectionId: userId });
+
+      // deletings userSavedPosts from cloudinary
+      const delSavedPosts = await SavedPost.find({ user: userId });
+      delSavedPosts.forEach(async (node) => {
+        await cloudinary.uploader.destroy(node.image.id);
+      });
+
+      // deletings userSavedPosts from databse
+      await SavedPost.deleteMany({ user: userId });
+
       return res
         .status(200)
         .json({ success: true, message: "Account deleted successfully" });

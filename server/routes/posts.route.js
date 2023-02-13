@@ -13,4 +13,6 @@ router.delete("/:id", authenticate, postsController.deletePost);
 
 router.get("/:id", authenticate, postsController.fetchSingleUserPosts);
 
+
+
 export default router;

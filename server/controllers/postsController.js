@@ -1,4 +1,5 @@
 import Joi from "joi";
+import cloudinary from "../config/cloudinary.js";
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
 
@@ -25,7 +26,13 @@ const postController = {
         return next(CustomErrorHandler.notFound());
       }
 
-      await Post.create({ image, prompt, user: userDoc?._id });
+      const imageUrl = await cloudinary.uploader.upload(image);
+
+      await Post.create({
+        image: { url: imageUrl.url, id: imageUrl.public_id },
+        prompt,
+        user: userDoc?._id,
+      });
       res
         .status(201)
         .json({ success: "true", message: "Post created successfully" });
@@ -135,7 +142,8 @@ const postController = {
   async deletePost(req, res, next) {
     try {
       const { id } = req.params;
-      await Post.findByIdAndDelete(id);
+      const post = await Post.findByIdAndDelete(id);
+      await cloudinary.uploader.destroy(post.image.id);
       return res
         .status(200)
         .json({ success: true, message: "Deleted successfully" });

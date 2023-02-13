@@ -1,12 +1,7 @@
 import express from "express";
 import googlePassport from "../config/passport/google.js";
 import facebookPassport from "../config/passport/facebook.js";
-import {
-  CLIENT_DEV_API,
-  CLIENT_PROD_API,
-  JWT_REFRESH_SECRET,
-  MODE,
-} from "../config/index.js";
+
 import {
   loginController,
   logoutController,
@@ -15,7 +10,6 @@ import {
   userController,
 } from "../controllers/index.js";
 import { authenticate } from "../middlewares/index.js";
-import JwtService from "../services/JwtService.js";
 import CustomErrorHandler from "../services/CustomErrorHandler.js";
 
 const router = express.Router();

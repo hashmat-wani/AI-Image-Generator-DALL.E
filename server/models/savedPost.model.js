@@ -1,10 +1,15 @@
 import mongoose from "mongoose";
 
-const postSchema = new mongoose.Schema(
+const savedPostSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
+    },
+    collectionId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Collection",
       required: true,
     },
     prompt: { type: String, required: true },
@@ -13,6 +18,6 @@ const postSchema = new mongoose.Schema(
   { timestamps: true, versionKey: false }
 );
 
-const Post = mongoose.model("Post", postSchema);
+const SavedPost = mongoose.model("SavedPost", savedPostSchema);
 
-export default Post;
+export default SavedPost;

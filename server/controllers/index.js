@@ -5,3 +5,4 @@ export { default as userController } from "./auth/user.controller.js";
 export { default as refreshTokenController } from "./auth/refreshToken.controller.js";
 export { default as postController } from "./postsController.js";
 export { mailController } from "./mailController.js";
+export { collectionsController } from "./collectionsController.js";

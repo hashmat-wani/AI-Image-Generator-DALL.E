@@ -16,6 +16,7 @@ import {
   postsRoutes,
   userRoutes,
   mailRoutes,
+  collectionsRoutes,
 } from "./routes/index.js";
 import cookieParser from "cookie-parser";
 import path from "path";
@@ -45,6 +46,7 @@ app.use("/api/v1/dalle", dallERoutes);
 app.use("/api/v1/posts", postsRoutes);
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/mail", mailRoutes);
+app.use("/api/v1/collections", collectionsRoutes);
 
 app.get("/", async (req, res) => {
   res.send("Hello from DALL.E");

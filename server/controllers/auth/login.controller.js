@@ -2,7 +2,7 @@ import Joi from "joi";
 import CustomErrorHandler from "../../services/CustomErrorHandler.js";
 import bcrypt from "bcrypt";
 import JwtService from "../../services/JwtService.js";
-import { User } from "../../models/index.js";
+import { User, Collection } from "../../models/index.js";
 import { v4 as uuidv4 } from "uuid";
 import download from "image-downloader";
 
@@ -125,7 +125,9 @@ const loginController = {
           avatar: avatar ? `uploads/${uniqueFileName}.jpg` : null,
           verified: true,
         });
+        await Collection.create({ name: "Favorites", user: user._id });
       }
+
       return cb(null, {
         success: true,
         user,

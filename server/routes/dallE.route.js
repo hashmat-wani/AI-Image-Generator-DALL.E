@@ -2,6 +2,7 @@ import express from "express";
 import { Configuration, OpenAIApi } from "openai";
 import { OPENAI_API_KEY } from "../config/index.js";
 import CustomErrorHandler from "../services/CustomErrorHandler.js";
+import cloudinary from "../config/cloudinary.js";
 
 const router = express.Router();
 
@@ -26,7 +27,8 @@ router.post("/", async (req, res, next) => {
     });
 
     const images = aiResponse.data.data;
-    res.status(200).json({ images });
+
+    res.status(200).json({ images, prompt });
   } catch (err) {
     const { message } = err?.response?.data?.error || err;
     return next(CustomErrorHandler.serverError(message));

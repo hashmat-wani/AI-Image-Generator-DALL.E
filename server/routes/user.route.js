@@ -17,8 +17,17 @@ const storage = multer.diskStorage({
   },
 });
 
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    cb(null, true);
+  } else {
+    cb({ message: "Unsupported file format" }, false);
+  }
+};
+
 const upload = multer({
   storage,
+  fileFilter,
 });
 router.patch(
   "/updateavatar",
@@ -33,5 +42,6 @@ router.patch("/changepassword", authenticate, userController.changePassword);
 router.patch("/deactivate", authenticate, userController.deactivateUser);
 
 router.delete("/", authenticate, userController.deleteUser);
+
 
 export default router;
