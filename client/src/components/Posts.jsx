@@ -5,7 +5,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { shades } from "../theme";
 import Card from "./Card";
 import SearchIcon from "@mui/icons-material/Search";
@@ -15,6 +15,8 @@ import Loading from "./Loading";
 import DisplayAlert from "./DisplayAlert";
 import { fetchPosts, setSearchPost } from "../state/postsSlice";
 import PostPreviewModal from "./PostPreviewModal";
+import { fetchUserPosts } from "../state/userPostsSlice";
+import { backdropContext } from "../context/BackdropContext";
 
 const RenderCards = ({ data, title, community, personal }) => {
   const [openPost, setOpenPost] = useState(false);
@@ -81,16 +83,26 @@ const RenderCards = ({ data, title, community, personal }) => {
     <DisplayAlert
       type="info"
       title="Oops..."
-      message={title}
-      action={searchPost ? "See all posts" : null}
-      cb={searchPost ? () => dispatch(setSearchPost("")) : null}
+      message={
+        community
+          ? title
+          : "Unfortunately, we could not find any posts to display. Your shared images will appear here"
+      }
+      action={searchPost && community ? "See all posts" : null}
+      cb={searchPost && community ? () => dispatch(setSearchPost("")) : null}
     />
   );
 };
 
-const Posts = ({ posts, status, community = false, personal = false }) => {
+const Posts = ({
+  posts,
+  status,
+  userId,
+  community = false,
+  personal = false,
+}) => {
   const dispatch = useDispatch();
-  console.log(posts);
+  const { toggleBackdrop } = useContext(backdropContext);
 
   const { searchPost } = useSelector(
     (state) => state.postsReducer,
@@ -134,7 +146,17 @@ const Posts = ({ posts, status, community = false, personal = false }) => {
             title="Error"
             message="Something went wrong"
             action="Reload"
-            cb={() => dispatch(fetchPosts({}))}
+            cb={() =>
+              dispatch(
+                community
+                  ? fetchPosts({})
+                  : fetchUserPosts({
+                      userId,
+                      toggleBackdrop,
+                      concat: false,
+                    })
+              )
+            }
           />
         ) : (
           <>

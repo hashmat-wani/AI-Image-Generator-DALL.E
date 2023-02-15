@@ -3,6 +3,7 @@ import formReducer from "./formSlice";
 import userReducer from "./userSlice";
 import postsReducer from "./postsSlice";
 import userPostsReducer from "./userPostsSlice";
+import savedPostsReducer from "./savedPostsSlice";
 import collectionsReducer from "./collectionsSlice";
 
 export const store = configureStore({
@@ -11,6 +12,7 @@ export const store = configureStore({
     userReducer,
     postsReducer,
     userPostsReducer,
+    savedPostsReducer,
     collectionsReducer,
   },
 });

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import { Box, Button, styled, Typography, useMediaQuery } from "@mui/material";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getUserCollections } from "../state/collectionsSlice";
@@ -7,8 +6,10 @@ import AppsIcon from "@mui/icons-material/Apps";
 import { shades } from "../theme";
 import { FlexBox } from "../components/FlexBox";
 import CreateCollection from "../components/CreateCollection";
+import DisplayAlert from "../components/DisplayAlert";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
+import { STATUS } from "../utils";
 
 const Collections = () => {
   const [open, setOpen] = useState(false);
@@ -22,7 +23,7 @@ const Collections = () => {
     dispatch(getUserCollections());
   }, []);
 
-  const { collections } = useSelector(
+  const { collections, status } = useSelector(
     (state) => state.collectionsReducer,
     shallowEqual
   );
@@ -48,31 +49,42 @@ const Collections = () => {
           Create collection
         </Button>
       </FlexBox>
-      <Grid ismobile={ismobile.toString()}>
-        {collections.map((node, idx) => (
-          <Box onClick={() => navigate(`${node.slug}/${node._id}`)} key={idx}>
-            <FlexBox gap="10px">
-              <AppsIcon />
+
+      {status === STATUS.ERROR ? (
+        <DisplayAlert
+          type="error"
+          title="Oops..."
+          message="it looks like something went wrong."
+          action="Reload"
+          cb={() => dispatch(getUserCollections())}
+        />
+      ) : (
+        <Grid ismobile={ismobile.toString()}>
+          {collections.map((node, idx) => (
+            <Box onClick={() => navigate(`${node.slug}/${node._id}`)} key={idx}>
+              <FlexBox gap="10px">
+                <AppsIcon />
+                <Typography fontWeight={500} fontSize="13px">
+                  {node.name}
+                </Typography>
+              </FlexBox>
+            </Box>
+          ))}
+          <Box onClick={() => setOpen(true)}>
+            <FlexBox>
+              <AddIcon
+                fontSize="small"
+                sx={{
+                  mr: "5px",
+                }}
+              />
               <Typography fontWeight={500} fontSize="13px">
-                {node.name}
+                Create collection
               </Typography>
             </FlexBox>
           </Box>
-        ))}
-        <Box onClick={() => setOpen(true)}>
-          <FlexBox>
-            <AddIcon
-              fontSize="small"
-              sx={{
-                mr: "5px",
-              }}
-            />
-            <Typography fontWeight={500} fontSize="13px">
-              Create collection
-            </Typography>
-          </FlexBox>
-        </Box>
-      </Grid>
+        </Grid>
+      )}
     </Box>
   );
 };

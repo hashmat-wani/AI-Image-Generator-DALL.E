@@ -42,7 +42,6 @@ export const createPost =
   ({ image, prompt }) =>
   (dispatch) => {
     dispatch(setStatus(STATUS.LOADING));
-    console.log(image, prompt);
     privateInstance
       .post("/api/v1/posts", {
         image,

@@ -6,9 +6,9 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Box, CircularProgress, TextField, Typography } from "@mui/material";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
+  createSavedPost,
   createUserCollection,
   getUserCollections,
-  savePost,
 } from "../../state/collectionsSlice";
 import { STATUS } from "../../utils";
 import AddIcon from "@mui/icons-material/Add";
@@ -16,6 +16,7 @@ import { shades } from "../../theme";
 import LockIcon from "@mui/icons-material/Lock";
 import { useState } from "react";
 import { FlexBox } from "../../components/FlexBox";
+import DisplayAlert from "../../components/DisplayAlert";
 
 export default function DDButton({ image, prompt }) {
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ export default function DDButton({ image, prompt }) {
       collectionId,
       collectionName,
     };
-    dispatch(savePost(args));
+    dispatch(createSavedPost(args));
   };
 
   const handleCreate = () => {
@@ -125,32 +126,46 @@ export default function DDButton({ image, prompt }) {
             />
           </Box>
         ) : (
-          <Box>
-            {collections.map((node, idx) => (
-              <Box key={idx}>
-                <MenuItem
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    m: "5px 0",
-                    ...(status === STATUS.LOADING && {
-                      pointerEvents: "none",
-                      color: shades.primary[100],
-                    }),
-                  }}
-                  onClick={() => handleSave(node._id, node.name)}
-                  disableRipple
-                >
-                  <Typography>{node.name}</Typography>
-                  <LockIcon
-                    sx={{ fontSize: "18px", color: shades.primary[200] }}
-                  />
-                </MenuItem>
-                {idx === 0 && <Divider sx={{ my: 0.5 }} />}
+          <>
+            {status === STATUS.ERROR ? (
+              <Box padding="0 15px">
+                <DisplayAlert
+                  type="error"
+                  title="Oops..."
+                  message="it looks like something went wrong."
+                  action="Reload"
+                  cb={() => dispatch(getUserCollections())}
+                />
               </Box>
-            ))}
-          </Box>
+            ) : (
+              <Box>
+                {collections.map((node, idx) => (
+                  <Box key={idx}>
+                    <MenuItem
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        m: "5px 0",
+                        ...(status === STATUS.LOADING && {
+                          pointerEvents: "none",
+                          color: shades.primary[100],
+                        }),
+                      }}
+                      onClick={() => handleSave(node._id, node.name)}
+                      disableRipple
+                    >
+                      <Typography>{node.name}</Typography>
+                      <LockIcon
+                        sx={{ fontSize: "18px", color: shades.primary[200] }}
+                      />
+                    </MenuItem>
+                    {idx === 0 && <Divider sx={{ my: 0.5 }} />}
+                  </Box>
+                ))}
+              </Box>
+            )}
+          </>
         )}
 
         {createCollection ? (

@@ -3,7 +3,7 @@ import cloudinary from "../config/cloudinary.js";
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
 
-const postController = {
+const postsController = {
   async createPost(req, res, next) {
     const validationSchema = Joi.object({
       user: Joi.string().required(),
@@ -142,8 +142,11 @@ const postController = {
   async deletePost(req, res, next) {
     try {
       const { id } = req.params;
+
+      const post = await Post.findById(id);
       await cloudinary.uploader.destroy(post.image.id);
-      const post = await Post.findByIdAndDelete(id);
+      await Post.findByIdAndDelete(id);
+
       return res
         .status(200)
         .json({ success: true, message: "Deleted successfully" });
@@ -176,4 +179,4 @@ const postController = {
   },
 };
 
-export default postController;
+export default postsController;

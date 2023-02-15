@@ -27,7 +27,7 @@ import { useContext } from "react";
 import { backdropContext } from "./context/BackdropContext";
 import useDebounce from "./hooks/useDebounce";
 import Collections from "./scenes/Collections";
-import CollectionPosts from "./components/CollectionPosts";
+import SavedPosts from "./components/SavedPosts";
 
 function App() {
   const [emailVerificationAlert, setEmailVerificationAlert] = useState(false);
@@ -132,7 +132,7 @@ function App() {
             path="/collections/:slug/:id"
             element={
               <PrivateRoute>
-                <CollectionPosts />
+                <SavedPosts />
               </PrivateRoute>
             }
           />

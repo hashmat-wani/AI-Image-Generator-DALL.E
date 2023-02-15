@@ -8,6 +8,7 @@ import { generatePosts } from "../state/formSlice";
 import { deleteUserPost } from "../state/userPostsSlice";
 import { useContext } from "react";
 import { backdropContext } from "../context/BackdropContext";
+import { removeSavedPost } from "../state/savedPostsSlice";
 
 export default function PostPreviewModal({
   openPost,
@@ -41,6 +42,15 @@ export default function PostPreviewModal({
       toggleBackdrop,
     };
     dispatch(deleteUserPost(args));
+  };
+
+  const handleRemove = () => {
+    handleClose();
+    const args = {
+      id: openPostData._id,
+      toggleBackdrop,
+    };
+    dispatch(removeSavedPost(args));
   };
 
   return (
@@ -81,7 +91,7 @@ export default function PostPreviewModal({
               >
                 Try this example
               </Button>
-            ) : (
+            ) : personal ? (
               <Button
                 sx={{
                   mt: "20px",
@@ -96,6 +106,23 @@ export default function PostPreviewModal({
                 onClick={handleDelete}
               >
                 Delete
+              </Button>
+            ) : (
+              <Button
+                sx={{
+                  textTransform: "none",
+                  mt: "20px",
+                  mb: "10px",
+                  background: "#ff6b60",
+                  padding: "10px",
+                  ":hover": {
+                    background: "#ff4f42",
+                  },
+                }}
+                fullWidth
+                onClick={handleRemove}
+              >
+                Remove from {openPostData.collectionName}
               </Button>
             )}
             <Button

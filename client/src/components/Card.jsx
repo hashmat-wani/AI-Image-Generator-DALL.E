@@ -46,7 +46,7 @@ const Card = ({
           sx={{
             display: "-webkit-box",
             WebkitBoxOrient: "vertical",
-            WebkitLineClamp: { md: 2, lg: 5 },
+            WebkitLineClamp: { md: 2, lg: 4 },
             overflow: "hidden",
             textOverflow: "ellipsis",
           }}

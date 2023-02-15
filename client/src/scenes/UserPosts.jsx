@@ -3,8 +3,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import Posts from "../components/Posts";
 import { fetchUserPosts } from "../state/userPostsSlice";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { backdropContext } from "../context/BackdropContext";
+import InfiniteScroll from "react-infinite-scroll-component";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
@@ -70,7 +70,7 @@ const UserPosts = () => {
         endMessage={
           !!posts.length && (
             <p style={{ textAlign: "center", margin: "30px" }}>
-              <b>Yay! You have seen it all</b>
+              <b>Yay! You've seen it all</b>
             </p>
           )
         }
@@ -83,10 +83,8 @@ const UserPosts = () => {
         pullDownToRefreshContent={<PullDown />}
         releaseToRefreshContent={<Release />}
       >
-        <Posts {...{ posts, status, personal: true }} />
+        <Posts {...{ posts, status, userId: user?._id, personal: true }} />
       </InfiniteScroll>
-
-      {/* <Posts {...{ posts, status, personal: true }} /> */}
     </Box>
   );
 };

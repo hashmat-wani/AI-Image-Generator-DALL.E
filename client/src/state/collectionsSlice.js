@@ -37,29 +37,6 @@ export const getUserCollections = () => (dispatch) => {
     });
 };
 
-export const savePost =
-  ({ handleClose, image, prompt, collectionId, collectionName }) =>
-  (dispatch) => {
-    dispatch(setStatus(STATUS.LOADING));
-    privateInstance
-      .post("/api/v1/savedposts/save", {
-        image,
-        prompt,
-        collectionId,
-      })
-      .then((data) => {
-        handleClose();
-        toast.success(`Added to ${collectionName}`);
-      })
-      .catch((err) => {
-        const { message } = err?.response?.data || err;
-        toast.error(message);
-      })
-      .finally(() => {
-        dispatch(setStatus(STATUS.IDLE));
-      });
-  };
-
 export const createUserCollection =
   ({ cb, input, setInput }) =>
   (dispatch) => {
@@ -116,4 +93,27 @@ export const deleteUserCollection =
         toast.error(message);
       })
       .finally(() => dispatch(setStatus(STATUS.IDLE)));
+  };
+
+export const createSavedPost =
+  ({ handleClose, image, prompt, collectionId, collectionName }) =>
+  (dispatch) => {
+    dispatch(setStatus(STATUS.LOADING));
+    privateInstance
+      .post("/api/v1/savedposts/save", {
+        image,
+        prompt,
+        collectionId,
+      })
+      .then((data) => {
+        handleClose();
+        toast.success(`Added to ${collectionName}`);
+      })
+      .catch((err) => {
+        const { message } = err?.response?.data || err;
+        toast.error(message);
+      })
+      .finally(() => {
+        dispatch(setStatus(STATUS.IDLE));
+      });
   };

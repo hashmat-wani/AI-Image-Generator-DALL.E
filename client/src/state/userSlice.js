@@ -155,7 +155,6 @@ export const loginWithFacebook = () => () => {
 export const verifyUser =
   ({ alert, toggleBackdrop, popup, navigate, to }) =>
   (dispatch) => {
-    console.log(navigate);
     toggleBackdrop();
     privateInstance
       .get("/api/v1/auth/me")
@@ -174,7 +173,6 @@ export const verifyUser =
         }
       })
       .catch(async (err) => {
-        console.log(err);
         dispatch(clearUser());
         dispatch(clearUserPosts());
         if (popup) {
