@@ -6,22 +6,23 @@ import {
   CircularProgress,
   DialogContent,
   Slide,
-  TextField,
+  Typography,
 } from "@mui/material";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { STATUS } from "../utils";
-import { forwardRef, useState } from "react";
-import { createUserCollection } from "../state/collectionsSlice";
-import { FlexBox } from "../components/FlexBox";
+import { forwardRef } from "react";
+import { deleteUserCollection } from "../state/collectionsSlice";
+import { FlexBox } from "./FlexBox";
 import { shades } from "../theme";
+import { useNavigate } from "react-router-dom";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide ref={ref} {...props} />;
 });
 
-export default function CreateCollection({ open, setOpen }) {
+export default function DeleteCollection({ open, setOpen, id }) {
   const dispatch = useDispatch();
-  const [input, setInput] = useState("");
+  const navigate = useNavigate();
 
   const { status } = useSelector(
     (state) => state.collectionsReducer,
@@ -30,12 +31,11 @@ export default function CreateCollection({ open, setOpen }) {
 
   const handleClose = () => {
     setOpen(false);
-    setInput("");
   };
 
-  const handleCreate = () => {
-    const args = { input, setInput, cb: setOpen };
-    dispatch(createUserCollection(args));
+  const handleDelete = () => {
+    const args = { cb: setOpen, id, navigate };
+    dispatch(deleteUserCollection(args));
   };
 
   return (
@@ -54,18 +54,21 @@ export default function CreateCollection({ open, setOpen }) {
         TransitionComponent={Transition}
         keepMounted
       >
-        <DialogTitle>Create Collection</DialogTitle>
+        <DialogTitle>Delete Collection</DialogTitle>
         <DialogContent>
           <Box my="15px">
-            <TextField
-              required
-              fullWidth
-              size="small"
-              placeholder="e.g. Fashion"
-              onChange={(e) => setInput(e.target.value)}
-              value={input}
-              label="Name"
-            />
+            <Typography>
+              Are you sure you want to delete your account?
+            </Typography>
+
+            <Typography fontSize="13px" my="7px">
+              By deleting collection, you'll lose all posts related to this
+              collection.
+            </Typography>
+
+            <Typography fontSize="16px" my="15px">
+              This action cannot be undone.
+            </Typography>
           </Box>
 
           <FlexBox
@@ -97,17 +100,21 @@ export default function CreateCollection({ open, setOpen }) {
               }}
             >
               <Button
-                onClick={handleCreate}
+                onClick={handleDelete}
                 sx={{
+                  background: "#ff6b60",
+                  ":hover": {
+                    background: "#fa4033",
+                  },
                   textTransform: "none",
                   height: "100%",
                   borderRadius: "7px",
                 }}
-                disabled={status === STATUS.LOADING || !input.trim()}
+                disabled={status === STATUS.LOADING}
                 fullWidth
                 variant="contained"
               >
-                Create collection
+                Delete collection
               </Button>
               {status === STATUS.LOADING && (
                 <CircularProgress

@@ -31,10 +31,8 @@ export const getUserCollections = () => (dispatch) => {
     .then((data) => {
       dispatch(setStatus(STATUS.IDLE));
       dispatch(setCollections(data?.data?.data));
-      // console.log(data);
     })
     .catch((err) => {
-      // console.log(err);
       dispatch(setStatus(STATUS.ERROR));
     });
 };
@@ -43,9 +41,8 @@ export const savePost =
   ({ handleClose, image, prompt, collectionId, collectionName }) =>
   (dispatch) => {
     dispatch(setStatus(STATUS.LOADING));
-    console.log(image, prompt);
     privateInstance
-      .post("/api/v1/collections/savepost", {
+      .post("/api/v1/savedposts/save", {
         image,
         prompt,
         collectionId,
@@ -54,8 +51,9 @@ export const savePost =
         handleClose();
         toast.success(`Added to ${collectionName}`);
       })
-      .catch(() => {
-        toast.error("Something went wrong. Try again..!");
+      .catch((err) => {
+        const { message } = err?.response?.data || err;
+        toast.error(message);
       })
       .finally(() => {
         dispatch(setStatus(STATUS.IDLE));
@@ -67,7 +65,7 @@ export const createUserCollection =
   (dispatch) => {
     dispatch(setStatus(STATUS.LOADING));
     privateInstance
-      .post("/api/v1/collections", { name: input })
+      .post("/api/v1/collections", { name: input.trim() })
       .then(() => {
         toast.success("Collection created");
         dispatch(getUserCollections());
@@ -75,7 +73,47 @@ export const createUserCollection =
         cb(false);
       })
       .catch((err) => {
-        toast.error("Something went wrong. Try again..!");
+        const { message } = err?.response?.data || err;
+        toast.error(message);
+      })
+      .finally(() => dispatch(setStatus(STATUS.IDLE)));
+  };
+
+export const editUserCollection =
+  ({ cb, input, setInput, id, setCollectionName }) =>
+  (dispatch) => {
+    dispatch(setStatus(STATUS.LOADING));
+    privateInstance
+      .patch(`/api/v1/collections/${id}`, { name: input.trim() })
+      .then(() => {
+        toast.success("Edited successfully");
+        dispatch(getUserCollections());
+        setCollectionName(input.trim());
+        setInput("");
+        cb(false);
+      })
+      .catch((err) => {
+        const { message } = err?.response?.data || err;
+        toast.error(message);
+      })
+      .finally(() => dispatch(setStatus(STATUS.IDLE)));
+  };
+
+export const deleteUserCollection =
+  ({ cb, id, navigate }) =>
+  (dispatch) => {
+    dispatch(setStatus(STATUS.LOADING));
+    privateInstance
+      .delete(`/api/v1/collections/${id}`)
+      .then(() => {
+        toast.success("Deleted successfully");
+        dispatch(getUserCollections());
+        cb(false);
+        navigate("/collections");
+      })
+      .catch((err) => {
+        const { message } = err?.response?.data || err;
+        toast.error(message);
       })
       .finally(() => dispatch(setStatus(STATUS.IDLE)));
   };

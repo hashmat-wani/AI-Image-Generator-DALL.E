@@ -6,8 +6,12 @@ const router = express.Router();
 
 router.get("/", authenticate, collectionsController.getCollections);
 
+router.get("/:id", authenticate, collectionsController.getSingleCollection);
+
 router.post("/", authenticate, collectionsController.createCollection);
 
-router.post("/savepost", authenticate, collectionsController.savePost);
+router.patch("/:id", authenticate, collectionsController.editCollection);
+
+router.delete("/:id", authenticate, collectionsController.deleteCollection);
 
 export default router;

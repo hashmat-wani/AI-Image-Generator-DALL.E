@@ -24,7 +24,8 @@ privateInstance.interceptors.response.use(
         .dispatch(refreshToken())
         .then(() => axios(error.config)) //calling same api back here
         .catch((err) => {
-          toast.info("Your session has timed out. Please login again.");
+          alert("Your session has timed out. Please login again.");
+          window.location.href = `${window.location.origin}/signin`;
           return Promise.reject(err);
         });
     } else {

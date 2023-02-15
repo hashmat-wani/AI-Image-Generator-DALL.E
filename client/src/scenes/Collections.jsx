@@ -6,13 +6,15 @@ import { getUserCollections } from "../state/collectionsSlice";
 import AppsIcon from "@mui/icons-material/Apps";
 import { shades } from "../theme";
 import { FlexBox } from "../components/FlexBox";
-import CreateCollection from "./CreateCollection";
+import CreateCollection from "../components/CreateCollection";
 import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom";
 
 const Collections = () => {
   const [open, setOpen] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const ismobile = useMediaQuery("(max-width:767px)");
 
@@ -24,8 +26,6 @@ const Collections = () => {
     (state) => state.collectionsReducer,
     shallowEqual
   );
-
-  console.log(collections);
 
   return (
     <Box p={{ xs: "30px 10px", md: "40px 140px" }}>
@@ -50,7 +50,7 @@ const Collections = () => {
       </FlexBox>
       <Grid ismobile={ismobile.toString()}>
         {collections.map((node, idx) => (
-          <Box key={idx}>
+          <Box onClick={() => navigate(`${node.slug}/${node._id}`)} key={idx}>
             <FlexBox gap="10px">
               <AppsIcon />
               <Typography fontWeight={500} fontSize="13px">

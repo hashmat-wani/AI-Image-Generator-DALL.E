@@ -118,8 +118,6 @@ const userController = {
   async deleteUser(req, res, next) {
     try {
       const { _id: userId } = req?.user;
-      // deleting user
-      await User.findByIdAndDelete(userId);
 
       // deleting userPost from cloudinary
       const delPosts = await Post.find({ user: userId });
@@ -139,6 +137,9 @@ const userController = {
 
       // deletings userSavedPosts from databse
       await SavedPost.deleteMany({ user: userId });
+
+      // Finally deleting user
+      await User.findByIdAndDelete(userId);
 
       return res
         .status(200)

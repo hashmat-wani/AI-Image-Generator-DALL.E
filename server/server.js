@@ -17,6 +17,7 @@ import {
   userRoutes,
   mailRoutes,
   collectionsRoutes,
+  savedPostsRoutes,
 } from "./routes/index.js";
 import cookieParser from "cookie-parser";
 import path from "path";
@@ -47,6 +48,7 @@ app.use("/api/v1/posts", postsRoutes);
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/mail", mailRoutes);
 app.use("/api/v1/collections", collectionsRoutes);
+app.use("/api/v1/savedposts", savedPostsRoutes);
 
 app.get("/", async (req, res) => {
   res.send("Hello from DALL.E");

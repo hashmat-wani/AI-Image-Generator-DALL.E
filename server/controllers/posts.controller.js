@@ -142,8 +142,8 @@ const postController = {
   async deletePost(req, res, next) {
     try {
       const { id } = req.params;
-      const post = await Post.findByIdAndDelete(id);
       await cloudinary.uploader.destroy(post.image.id);
+      const post = await Post.findByIdAndDelete(id);
       return res
         .status(200)
         .json({ success: true, message: "Deleted successfully" });

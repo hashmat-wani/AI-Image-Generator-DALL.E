@@ -88,9 +88,14 @@ export const login =
             type: "info",
           },
         };
-        const redirect = { navigate, to };
-        const alert = { setEmailVerificationAlert };
-        return dispatch(verifyUser(toggleBackdrop, popup, redirect, alert));
+        const args = {
+          alert: setEmailVerificationAlert,
+          toggleBackdrop,
+          popup,
+          navigate,
+          to,
+        };
+        return dispatch(verifyUser(args));
       })
       .catch((err) => {
         const { message } = err?.response?.data || err;
@@ -119,11 +124,13 @@ export const logOut =
             }
           : null;
 
-        const redirect = {
+        const args = {
+          toggleBackdrop,
+          popup,
           navigate,
           to: "/signin",
         };
-        return dispatch(verifyUser(toggleBackdrop, popup, redirect));
+        return dispatch(verifyUser(args));
       })
       .catch((err) => {
         const { message } = err?.response?.data || err;
@@ -146,7 +153,9 @@ export const loginWithFacebook = () => () => {
 };
 
 export const verifyUser =
-  (toggleBackdrop, popup, redirect, alert) => (dispatch) => {
+  ({ alert, toggleBackdrop, popup, navigate, to }) =>
+  (dispatch) => {
+    console.log(navigate);
     toggleBackdrop();
     privateInstance
       .get("/api/v1/auth/me")
@@ -157,8 +166,7 @@ export const verifyUser =
           const { message, type } = popup.onSuccess;
           toast[type](message);
         }
-        if (redirect) {
-          const { navigate, to } = redirect;
+        if (navigate && to) {
           setTimeout(() => navigate(to, { replace: true }), 0);
         }
         if (alert && !user?.verified) {
@@ -166,7 +174,7 @@ export const verifyUser =
         }
       })
       .catch(async (err) => {
-        // const message = err?.response?.data?.message || err?.message;
+        console.log(err);
         dispatch(clearUser());
         dispatch(clearUserPosts());
         if (popup) {
@@ -299,7 +307,7 @@ export const deleteAccount = (handleClose, toggleBackdrop) => (dispatch) => {
     .delete("/api/v1/user")
     .then((data) => {
       handleClose();
-      dispatch(verifyUser(toggleBackdrop));
+      dispatch(verifyUser({ toggleBackdrop }));
       toast.success(data?.data?.message);
     })
     .catch((err) => {
@@ -308,4 +316,3 @@ export const deleteAccount = (handleClose, toggleBackdrop) => (dispatch) => {
     })
     .finally(() => dispatch(setStatus(STATUS.IDLE)));
 };
-

@@ -44,7 +44,11 @@ const registerController = {
       // or using create method
 
       const user = await User.create(payload);
-      await Collection.create({ name: "Favorites", user: user._id });
+      await Collection.create({
+        name: "Favorites",
+        slug: "favorites",
+        user: user._id,
+      });
       res.status(201).json({
         success: true,
         message: "Account created Succesfully..!",

@@ -55,6 +55,8 @@ export default function DDButton({ image, prompt }) {
     dispatch(createUserCollection(args));
   };
 
+  const error = () => input.trim().toLowerCase() === "favorites";
+
   return (
     <div>
       <Button
@@ -116,6 +118,8 @@ export default function DDButton({ image, prompt }) {
               size="small"
               placeholder="e.g. Food"
               onChange={(e) => setInput(e.target.value)}
+              helperText={error() && 'Collection name cannot be "favorites"'}
+              error={error()}
               value={input}
               label="Name"
             />
@@ -172,7 +176,7 @@ export default function DDButton({ image, prompt }) {
               <Button
                 onClick={handleCreate}
                 sx={{ textTransform: "none" }}
-                disabled={status === STATUS.LOADING || !input.trim()}
+                disabled={status === STATUS.LOADING || !input.trim() || error()}
                 fullWidth
                 variant="contained"
               >

@@ -15,6 +15,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { downloadImage, STATUS } from "../../utils";
 import { createPost } from "../../state/postsSlice";
 import DDButton from "./DDButton";
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 
 const SingleImageDashboard = () => {
   const isMobile = useMediaQuery("(max-width:767px)");
@@ -75,7 +76,9 @@ const SingleImageDashboard = () => {
         <FlexBox columnGap="10px">
           {!isMobile && (
             <>
-              <Btn onClick={handleDownload}>Download</Btn>
+              <Btn onClick={handleDownload}>
+                <FileDownloadOutlinedIcon />
+              </Btn>
               <Box title={shareBtnlabel} position="relative">
                 <Btn disabled={status === STATUS.LOADING} onClick={handleShare}>
                   Share with community
@@ -154,7 +157,8 @@ export default SingleImageDashboard;
 const Btn = styled(Button)(({ mobile }) => ({
   fontWeight: "bold",
   transition: "0.2s",
-  padding: `${mobile === "true" ? "20px" : "8px 15px"}`,
+  minWidth: 0,
+  padding: `${mobile === "true" ? "20px" : "8px 12px"}`,
   background: `${shades.secondary[300]}`,
   borderRadius: "5px",
   ":hover": {

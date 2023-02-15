@@ -125,7 +125,11 @@ const loginController = {
           avatar: avatar ? `uploads/${uniqueFileName}.jpg` : null,
           verified: true,
         });
-        await Collection.create({ name: "Favorites", user: user._id });
+        await Collection.create({
+          name: "Favorites",
+          slug: "favorites",
+          user: user._id,
+        });
       }
 
       return cb(null, {

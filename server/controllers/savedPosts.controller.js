@@ -1,15 +1,17 @@
-import { Collection, SavedPost } from "../models/index.js";
 import Joi from "joi";
 import cloudinary from "../config/cloudinary.js";
+import { SavedPost } from "../models/index.js";
 
-export const collectionsController = {
-  async getCollections(req, res, next) {
+export const savedPostsController = {
+  async getSingleCollectionPosts(req, res, next) {
     try {
-      const { _id: userId } = req?.user;
-      const collections = await Collection.find({ user: userId });
-      res.status(200).json({ status: "success", data: collections });
+      const { id } = req?.params;
+      const posts = await SavedPost.find({ collectionId: id }).populate(
+        "collectionId"
+      );
+      res.status(200).json({ status: "success", data: posts });
     } catch (err) {
-      next(err);
+      return next(err);
     }
   },
 
@@ -39,18 +41,6 @@ export const collectionsController = {
         user: _id,
       });
       res.status(201).json({ success: "true" });
-    } catch (err) {
-      return next(err);
-    }
-  },
-
-  async createCollection(req, res, next) {
-    try {
-      const { _id } = req?.user;
-      await Collection.create({ name: req.body?.name, user: _id });
-      return res
-        .status(201)
-        .json({ status: "success", message: "Collection created" });
     } catch (err) {
       return next(err);
     }

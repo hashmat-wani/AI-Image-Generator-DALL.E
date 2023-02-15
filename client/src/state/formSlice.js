@@ -13,28 +13,32 @@ export const formSlice = createSlice({
         index: 0,
         image:
           "https://cdn.openai.com/labs/images/An%20armchair%20in%20the%20shape%20of%20an%20avocado.webp?v=1",
-        prompt: "testing",
+        prompt:
+          "Dracula walking down the street of New York City in the 1920s, black and white photography",
       },
       {
         id: 2,
         index: 1,
         image:
           "https://cdn.openai.com/labs/images/An%20armchair%20in%20the%20shape%20of%20an%20avocado.webp?v=1",
-        prompt: "testing",
+        prompt:
+          "Dracula walking down the street of New York City in the 1920s, black and white photography",
       },
       {
         id: 3,
         index: 2,
         image:
           "https://cdn.openai.com/labs/images/An%20armchair%20in%20the%20shape%20of%20an%20avocado.webp?v=1",
-        prompt: "testing",
+        prompt:
+          "Dracula walking down the street of New York City in the 1920s, black and white photography",
       },
       {
         id: 4,
         index: 3,
         image:
           "https://cdn.openai.com/labs/images/An%20armchair%20in%20the%20shape%20of%20an%20avocado.webp?v=1",
-        prompt: "testing",
+        prompt:
+          "Dracula walking down the street of New York City in the 1920s, black and white photography",
       },
     ],
     status: STATUS.IDLE,

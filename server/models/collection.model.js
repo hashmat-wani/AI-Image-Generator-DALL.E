@@ -8,6 +8,7 @@ const collectionSchema = new mongoose.Schema(
       required: true,
     },
     name: { type: String, required: true },
+    slug: { type: String, required: true },
     private: { type: Boolean, default: true },
   },
   { timestamps: true, versionKey: false }
