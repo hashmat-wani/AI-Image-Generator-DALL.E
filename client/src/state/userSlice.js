@@ -49,8 +49,8 @@ export const register =
         toast.success(data.data.message);
       })
       .catch((err) => {
-        const { message } = err?.response?.data || err;
-        toast.error(message);
+        const message = err?.response?.data?.message;
+        toast.error(message || "Something went wrong.");
       })
       .finally(() => setSubmitting(false));
   };
@@ -80,7 +80,7 @@ export const login =
       .then(() => {
         const popup = {
           onSuccess: {
-            message: "Login successful!",
+            message: "Login successfull!",
             type: "success",
           },
           onError: {
@@ -98,8 +98,8 @@ export const login =
         return dispatch(verifyUser(args));
       })
       .catch((err) => {
-        const { message } = err?.response?.data || err;
-        toast.error(message);
+        const message = err?.response?.data?.message;
+        toast.error(message || "Something went wrong.");
       })
       .finally(() => setSubmitting(false));
   };
@@ -133,8 +133,8 @@ export const logOut =
         return dispatch(verifyUser(args));
       })
       .catch((err) => {
-        const { message } = err?.response?.data || err;
-        toast.error(message);
+        const message = err?.response?.data?.message;
+        toast.error(message || "Something went wrong.");
       })
       .finally(() => dispatch(setStatus(STATUS.IDLE)));
   };
@@ -169,7 +169,7 @@ export const verifyUser =
           setTimeout(() => navigate(to, { replace: true }), 0);
         }
         if (alert && !user?.verified) {
-          alert.setEmailVerificationAlert(true);
+          alert(true);
         }
       })
       .catch(async (err) => {
@@ -178,6 +178,9 @@ export const verifyUser =
         if (popup) {
           const { message, type } = popup.onError;
           toast[type](message);
+        }
+        if (navigate && to) {
+          setTimeout(() => navigate(to, { replace: true }), 0);
         }
       })
       .finally(() => {
@@ -206,8 +209,8 @@ export const updateUserAvatar = (handleClose, avatar) => (dispatch) => {
       handleClose(undefined, avatar);
     })
     .catch((err) => {
-      const { message } = err?.response?.data || err;
-      toast.error(message);
+      const message = err?.response?.data?.message;
+      toast.error(message || "Something went wrong.");
     })
     .finally(() => dispatch(setStatus(STATUS.IDLE)));
 };
@@ -223,8 +226,8 @@ export const removeUserAvatar = (handleClose) => (dispatch) => {
       handleClose(undefined, avatar);
     })
     .catch((err) => {
-      const { message } = err?.response?.data || err;
-      toast.error(message);
+      const message = err?.response?.data?.message;
+      toast.error(message || "Something went wrong.");
     })
     .finally(() => dispatch(setStatus(STATUS.IDLE)));
 };
@@ -244,39 +247,42 @@ export const changePassword =
         toast.success(data.data?.message);
       })
       .catch((err) => {
-        const { message } = err?.response?.data || err;
-        toast.error(message);
+        const message = err?.response?.data?.message;
+        toast.error(message || "Something went wrong.");
       })
       .finally(() => setSubmitting(false));
   };
 
-export const verifyEmail = (payload, setSubmitting, navigate) => (dispatch) => {
-  instance
-    .post("/api/v1/mail/verifyotp", payload)
-    .then((data) => {
-      toast.success(data.data?.message);
-      dispatch(setUser({ verified: true }));
-      navigate(-1);
-    })
-    .catch((err) => {
-      const { message } = err?.response?.data;
-      toast.error(message);
-    })
-    .finally(() => setSubmitting(false));
-};
+export const verifyEmail =
+  ({ otp, navigate }) =>
+  (dispatch) => {
+    dispatch(setStatus(STATUS.LOADING));
+    privateInstance
+      .post("/api/v1/mail/verifyemailverificationotp", { otp })
+      .then((data) => {
+        toast.success(data.data?.message);
+        dispatch(setUser({ verified: true }));
+        navigate(-1);
+      })
+      .catch((err) => {
+        const message = err?.response?.data?.message;
+        toast.error(message || "Something went wrong.");
+      })
+      .finally(() => dispatch(setStatus(STATUS.IDLE)));
+  };
 
 export const sendEmail = (navigate, cb) => (dispatch) => {
   dispatch(setStatus(STATUS.LOADING));
   privateInstance
-    .get("/api/v1/mail/sendotp")
+    .post("/api/v1/mail/sendemailverificationotp", {})
     .then((data) => {
       toast.success(data.data?.message);
-      cb();
+      if (cb) cb();
       navigate("/verifyemail");
     })
     .catch((err) => {
-      const { message } = err?.response?.data;
-      toast.error(message);
+      const message = err?.response?.data?.message;
+      toast.error(message || "Something went wrong.");
     })
     .finally(() => dispatch(setStatus(STATUS.IDLE)));
 };
@@ -293,8 +299,8 @@ export const deactivateAccount =
         toast.success(data?.data?.message);
       })
       .catch((err) => {
-        const { message } = err?.response?.data || err;
-        toast.error(message);
+        const message = err?.response?.data?.message;
+        toast.error(message || "Something went wrong.");
       })
       .finally(() => dispatch(setStatus(STATUS.IDLE)));
   };
@@ -309,8 +315,8 @@ export const deleteAccount = (handleClose, toggleBackdrop) => (dispatch) => {
       toast.success(data?.data?.message);
     })
     .catch((err) => {
-      const { message } = err?.response?.data || err;
-      toast.error(message);
+      const message = err?.response?.data?.message;
+      toast.error(message || "Something went wrong.");
     })
     .finally(() => dispatch(setStatus(STATUS.IDLE)));
 };

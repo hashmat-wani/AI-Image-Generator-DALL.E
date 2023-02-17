@@ -6,10 +6,12 @@ const DisplayAlert = ({ type, title, message, action, cb }) => {
     <Stack sx={{ width: "100%" }} height="120px" justifyContent="center">
       <Alert severity={type}>
         <AlertTitle>{title}</AlertTitle>
-        {message} —{" "}
-        <strong onClick={cb} style={{ cursor: "pointer" }}>
-          {action}!
-        </strong>
+        {message}
+        {action && (
+          <strong onClick={cb} style={{ cursor: "pointer" }}>
+            — {action}!
+          </strong>
+        )}
       </Alert>
     </Stack>
   );

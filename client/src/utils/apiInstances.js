@@ -17,7 +17,7 @@ export const privateInstance = axios.create({
 privateInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const { message } = error.response?.data || error;
+    const { message } = error?.response?.data || error;
     // if jwt access_token is expired generate new access_token with refreshtoken
     if (message === "jwt expired") {
       return store

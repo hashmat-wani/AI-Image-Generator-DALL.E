@@ -30,7 +30,9 @@ router.post("/", async (req, res, next) => {
 
     res.status(200).json({ images, prompt });
   } catch (err) {
-    const { message } = err?.response?.data?.error || err;
+    const message =
+      err?.response?.data?.error?.message || "Internal server error";
+
     return next(CustomErrorHandler.serverError(message));
   }
 });

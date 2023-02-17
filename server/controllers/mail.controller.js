@@ -4,19 +4,27 @@ import CustomErrorHandler from "../services/CustomErrorHandler.js";
 import bcrypt from "bcrypt";
 import transporter from "../config/transporter.js";
 import emailVerificationTemplate from "../emailTemplates/emailVerification.js";
+import resetPasswordTemplate from "../emailTemplates/resetPassword.js";
 
 export const mailController = {
-  async sendOtp(req, res, next) {
+  // Email verification
+  async sendEmailVerificationOtp(req, res, next) {
     try {
       const { _id, email } = req.user;
+
       // delete all previous otps
-      await OTPVerification.deleteMany({ userId: _id });
+      await OTPVerification.deleteMany({
+        userId: _id,
+        type: "email-verification",
+      });
+
       const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
 
       const hashedOtp = await bcrypt.hash(otp, 10);
       await OTPVerification.create({
         userId: _id,
         otp: hashedOtp,
+        type: "email-verification",
         createdAt: Date.now(),
         expiresAt: Date.now() + 3600000, //1hr
       });
@@ -31,34 +39,36 @@ export const mailController = {
       return res.status(201).json({
         success: true,
         message: "Otp sent successfully. Please check your mail",
-        // data: { userId: _id, email },
       });
     } catch (err) {
       return next(err);
     }
   },
 
-  async verifyOtp(req, res, next) {
+  async verifyEmailVerificationOtp(req, res, next) {
     try {
       // validation
+      const { _id: userId } = req?.user;
+      const { otp } = req.body;
       const validationSchema = Joi.object({
-        userId: Joi.string().required(),
         otp: Joi.string().min(4).max(4).required(),
       });
 
-      const { error } = validationSchema.validate(req.body);
+      const { error } = validationSchema.validate({ otp });
       if (error) {
         return next(error);
       }
 
       // check database
-      const { userId, otp } = req.body;
       const user = await User.findById(userId);
       if (user?.verified) {
         return next(CustomErrorHandler.alreadyExist("User already verified"));
       }
 
-      const otpVerificationRecord = await OTPVerification.findOne({ userId });
+      const otpVerificationRecord = await OTPVerification.findOne({
+        userId,
+        type: "email-verification",
+      });
       if (!otpVerificationRecord) {
         return next(
           CustomErrorHandler.invalidCredentials("Invalid otp. Please try again")
@@ -85,8 +95,12 @@ export const mailController = {
       }
 
       await User.findByIdAndUpdate(userId, { verified: true });
-      // delete otps
-      await OTPVerification.deleteMany({ userId });
+
+      // delete all  otps
+      await OTPVerification.deleteMany({
+        userId,
+        type: "email-verification",
+      });
 
       return res.status(200).json({
         Success: true,
@@ -96,6 +110,119 @@ export const mailController = {
       next(err);
     }
   },
-};
 
-// export const sendOTPVerifcationMail = async ({ _id, email }, res, next) => {};
+  // ResetPassword
+
+  async sendResetPasswordOtp(req, res, next) {
+    const { email } = req.body;
+
+    // validation
+    const schema = Joi.object({
+      email: Joi.string().email().required(),
+    });
+
+    const { error } = schema.validate({ email });
+
+    if (error) {
+      return next(error);
+    }
+    try {
+      const user = await User.findOne({ email });
+      if (!user) {
+        return next(CustomErrorHandler.invalidCredentials("Invalid Email"));
+      }
+
+      // delete all previous otps
+      await OTPVerification.deleteMany({
+        userId: user._id,
+        type: "reset-password",
+      });
+      const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
+
+      const hashedOtp = await bcrypt.hash(otp, 10);
+      await OTPVerification.create({
+        userId: user._id,
+        otp: hashedOtp,
+        type: "reset-password",
+        createdAt: Date.now(),
+        expiresAt: Date.now() + 3600000, //1hr
+      });
+
+      await transporter.sendMail({
+        from: '"hashtech #️⃣" <hashmatw555@gmail.com>', // sender address
+        to: email, // list of receivers
+        subject: `Reset Password code: ${otp}`, // Subject line
+        html: resetPasswordTemplate(email, user.firstName, otp),
+      });
+
+      return res.status(201).json({
+        success: true,
+        message: "Otp sent successfully. Please check your mail",
+      });
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  async verifyResetPasswordOtp(req, res, next) {
+    try {
+      // validation
+      const { otp, email } = req.body;
+      const validationSchema = Joi.object({
+        email: Joi.string().required(),
+        otp: Joi.string().min(4).max(4).required(),
+      });
+
+      const { error } = validationSchema.validate({ otp, email });
+      if (error) {
+        return next(error);
+      }
+
+      // check database
+      const user = await User.findOne({ email });
+      const { _id: userId } = user;
+
+      const otpVerificationRecord = await OTPVerification.findOne({
+        userId,
+        type: "reset-password",
+      });
+      if (!otpVerificationRecord) {
+        return next(
+          CustomErrorHandler.invalidCredentials("Invalid otp. Please try again")
+        );
+      }
+      const { expiresAt } = otpVerificationRecord;
+      const { otp: hashedOtp } = otpVerificationRecord;
+
+      // if expired
+      if (expiresAt < Date.now()) {
+        await OTPVerification.deleteMany({ userId });
+        return next(
+          CustomErrorHandler.invalidCredentials(
+            "Otp expired. Please request new one"
+          )
+        );
+      }
+
+      const match = await bcrypt.compare(otp, hashedOtp);
+      if (!match) {
+        return next(
+          CustomErrorHandler.invalidCredentials("Invalid otp. Please try again")
+        );
+      }
+
+      // delete all  otps
+      await OTPVerification.deleteMany({
+        userId,
+        type: "reset-password",
+      });
+
+      return res.status(200).json({
+        Success: true,
+        message: "Otp matched",
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+};

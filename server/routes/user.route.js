@@ -39,9 +39,10 @@ router.post("/removeavatar", authenticate, userController.removeAvatar);
 
 router.patch("/changepassword", authenticate, userController.changePassword);
 
+router.patch("/resetpassword", userController.resetPassword);
+
 router.patch("/deactivate", authenticate, userController.deactivateUser);
 
 router.delete("/", authenticate, userController.deleteUser);
-
 
 export default router;

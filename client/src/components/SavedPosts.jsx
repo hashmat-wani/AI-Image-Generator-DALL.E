@@ -21,6 +21,9 @@ import { fetchSavedPosts } from "../state/savedPostsSlice";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import { STATUS } from "../utils";
+import Loading from "./Loading";
+import DisplayAlert from "./DisplayAlert";
 
 const Loader = () => (
   <Stack p="40px 0 10px" alignItems="center">
@@ -150,99 +153,141 @@ const SavedPosts = () => {
             )}
           </FlexBox>
 
-          <InfiniteScroll
-            dataLength={posts.length}
-            next={() => {
-              if (page < totalPages) setPage((prev) => prev + 1);
-            }}
-            hasMore={page < totalPages}
-            loader={<Loader />}
-            scrollThreshold="1px"
-            endMessage={
-              !!posts.length && (
-                <p style={{ textAlign: "center", margin: "30px" }}>
-                  <b>Yay! You've seen it all</b>
-                </p>
-              )
-            }
-            refreshFunction={() => {
-              setNotInitRender(false);
-              setPage(1);
-            }}
-            pullDownToRefresh
-            pullDownToRefreshThreshold={80}
-            pullDownToRefreshContent={<PullDown />}
-            releaseToRefreshContent={<Release />}
-          >
-            <Grid
-              gridTemplateColumns={{
-                xs: "repeat(2, 1fr)",
-                md: "repeat(3, 1fr)",
-                lg: "repeat(4, 1fr)",
+          {status === STATUS.ERROR ? (
+            <DisplayAlert
+              type="error"
+              title="Error"
+              message="it looks like something went wrong."
+              action="Reload"
+              cb={() => {
+                dispatch(
+                  fetchSavedPosts({
+                    collectionId: id,
+                    page,
+                    toggleBackdrop,
+                    concat: notInitRender,
+                  })
+                );
               }}
-            >
-              {posts.map((post, idx) => (
-                <Box
-                  onClick={() => {
-                    setOpenPostData({
-                      image: post.image?.url,
-                      prompt: post?.prompt,
-                      _id: post?._id,
-                      collectionName,
-                    });
-                    setOpenPost(true);
+            />
+          ) : (
+            <>
+              <Typography color={shades.primary[300]}>
+                {posts.length}
+                {posts.length === 1 ? " generation" : " generations"}
+              </Typography>
+              {posts.length === 0 ? (
+                <DisplayAlert
+                  type="info"
+                  title="Oops..."
+                  message="Unfortunately, we could not find any posts to display. Your saved images will appear here. You can save images as you're creating. "
+                  action={"Create with DALL.E"}
+                  cb={() => navigate("/")}
+                />
+              ) : (
+                <InfiniteScroll
+                  dataLength={posts.length}
+                  next={() => {
+                    if (page < totalPages) setPage((prev) => prev + 1);
                   }}
-                  sx={{
-                    ":hover > div": {
-                      display: { md: "flex" },
-                    },
-                    cursor: "pointer",
+                  hasMore={page < totalPages}
+                  loader={<Loader />}
+                  scrollThreshold="1px"
+                  endMessage={
+                    !!posts.length && (
+                      <p style={{ textAlign: "center", margin: "30px" }}>
+                        <b>Yay! You've seen it all</b>
+                      </p>
+                    )
+                  }
+                  refreshFunction={() => {
+                    setNotInitRender(false);
+                    setPage(1);
                   }}
-                  key={idx}
-                  position="relative"
+                  pullDownToRefresh
+                  pullDownToRefreshThreshold={80}
+                  pullDownToRefreshContent={<PullDown />}
+                  releaseToRefreshContent={<Release />}
                 >
-                  <Box
-                    sx={{
-                      display: "none",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                      backgroundColor: "#fafafcf2",
-                      padding: "15px",
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
+                  <Grid
+                    gridTemplateColumns={{
+                      xs: "repeat(2, 1fr)",
+                      md: "repeat(3, 1fr)",
+                      lg: "repeat(4, 1fr)",
                     }}
                   >
-                    <Typography
-                      sx={{
-                        display: "-webkit-box",
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: { md: 2, lg: 4 },
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
-                      fontSize="16px"
-                      fontFamily="'Noto Serif JP', serif"
-                    >
-                      {post?.prompt}
-                    </Typography>
-                    <Box alignItems="end" display="flex" justifyContent="end">
-                      <Typography fontSize="16px" color={shades.primary[300]}>
-                        "Click to view"
-                      </Typography>
-                    </Box>
-                  </Box>
-                  <img
-                    style={{ width: "100%" }}
-                    src={post.image.url}
-                    alt="demoimages"
-                  />
-                </Box>
-              ))}
-            </Grid>
-          </InfiniteScroll>
+                    {posts.map((post, idx) => (
+                      <Box
+                        onClick={() => {
+                          setOpenPostData({
+                            image: post.image?.url,
+                            prompt: post?.prompt,
+                            _id: post?._id,
+                            collectionName,
+                          });
+                          setOpenPost(true);
+                        }}
+                        sx={{
+                          ":hover > div": {
+                            display: { md: "flex" },
+                          },
+                          cursor: "pointer",
+                        }}
+                        key={idx}
+                        position="relative"
+                      >
+                        <Box
+                          sx={{
+                            display: "none",
+                            flexDirection: "column",
+                            justifyContent: "space-between",
+                            backgroundColor: "#fafafcf2",
+                            padding: "15px",
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              display: "-webkit-box",
+                              WebkitBoxOrient: "vertical",
+                              WebkitLineClamp: { md: 2, lg: 4 },
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                            }}
+                            fontSize="16px"
+                            fontFamily="'Noto Serif JP', serif"
+                          >
+                            {post?.prompt}
+                          </Typography>
+                          <Box
+                            alignItems="end"
+                            display="flex"
+                            justifyContent="end"
+                          >
+                            <Typography
+                              fontSize="16px"
+                              color={shades.primary[300]}
+                            >
+                              "Click to view"
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <img
+                          style={{ width: "100%" }}
+                          src={post.image.url}
+                          alt="demoimages"
+                        />
+                      </Box>
+                    ))}
+                  </Grid>
+                </InfiniteScroll>
+              )}
+            </>
+          )}
         </Box>
       )}
     </>
@@ -252,7 +297,7 @@ const SavedPosts = () => {
 export default SavedPosts;
 
 const Grid = styled(Box)({
-  margin: "40px 0",
+  margin: "10px 0 30px",
   display: "grid",
   gap: "15px",
 });

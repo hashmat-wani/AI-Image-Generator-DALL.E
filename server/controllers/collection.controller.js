@@ -2,6 +2,7 @@ import { Collection, SavedPost } from "../models/index.js";
 import { createSlug } from "../utils/index.js";
 import cloudinary from "../config/cloudinary.js";
 import CustomErrorHandler from "../services/CustomErrorHandler.js";
+import Joi from "joi";
 
 export const collectionsController = {
   async getCollections(req, res, next) {
@@ -28,6 +29,17 @@ export const collectionsController = {
     try {
       const { _id } = req?.user;
       const { name } = req?.body;
+      // validation
+      const validationSchema = Joi.object({
+        name: Joi.string().lowercase().invalid("favorites").required(),
+      });
+
+      const { error } = validationSchema.validate({ name });
+
+      if (error) {
+        return next(error);
+      }
+
       await Collection.create({
         name,
         slug: createSlug(name),
@@ -45,6 +57,16 @@ export const collectionsController = {
     try {
       const { id } = req?.params;
       const { name } = req?.body;
+
+      const validationSchema = Joi.object({
+        name: Joi.string().lowercase().invalid("favorites").required(),
+      });
+
+      const { error } = validationSchema.validate({ name });
+
+      if (error) {
+        return next(error);
+      }
 
       const collection = await Collection.findById(id);
       if (collection.name === "Favorites") {

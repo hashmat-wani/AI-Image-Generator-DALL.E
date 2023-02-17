@@ -28,6 +28,9 @@ import { backdropContext } from "./context/BackdropContext";
 import useDebounce from "./hooks/useDebounce";
 import Collections from "./scenes/Collections";
 import SavedPosts from "./components/SavedPosts";
+import ResetPwd from "./scenes/auth/resetPassword/ResetPwd";
+import ResetPwdOTP from "./scenes/auth/resetPassword/ResetPwdOTP";
+import NewPassword from "./scenes/auth/resetPassword/NewPassword";
 
 function App() {
   const [emailVerificationAlert, setEmailVerificationAlert] = useState(false);
@@ -40,7 +43,9 @@ function App() {
     shallowEqual
   );
 
-  const debouncedSearch = useDebounce(searchPost, 2000);
+  const { email } = useSelector((state) => state.resetPwdReducer, shallowEqual);
+
+  const debouncedSearch = useDebounce(searchPost);
 
   useEffect(() => {
     dispatch(fetchPosts({ searchPost }));
@@ -95,6 +100,16 @@ function App() {
               )
             }
           />
+          <Route path="/reset-password" element={<ResetPwd />} />
+          <Route
+            path="/reset-password/otp"
+            element={email ? <ResetPwdOTP /> : <ResetPwd />}
+          />
+          <Route
+            path="/reset-password/otp/new-password"
+            element={email ? <NewPassword email={email} /> : <ResetPwd />}
+          />
+
           <Route path="/policies/content-policy" element={<Policy />} />
           <Route path="/about" element={<About />} />
           <Route path="/terms" element={<Terms />} />

@@ -77,8 +77,8 @@ export const deleteUserPost =
         dispatch(fetchPosts({}));
       })
       .catch((err) => {
-        const { message } = err?.response?.data || err;
-        toast.error(message);
+        const message = err?.response?.data?.message;
+        toast.error(message || "Something went wrong.");
       })
       .finally(() => toggleBackdrop());
   };

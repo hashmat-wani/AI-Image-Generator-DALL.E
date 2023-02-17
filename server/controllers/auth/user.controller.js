@@ -101,7 +101,36 @@ const userController = {
         success: true,
         message: "Password changed successfully. Please login again..!",
       });
-    } catch (err) {}
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  async resetPassword(req, res, next) {
+    // validation
+    const validationSchema = Joi.object({
+      email: Joi.string().required(),
+      newPassword: Joi.string().required(),
+    });
+
+    const { error } = validationSchema.validate(req.body);
+
+    if (error) {
+      return next(error);
+    }
+
+    try {
+      const { newPassword, email } = req.body;
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      await User.findOneAndUpdate({ email }, { password: hashedPassword });
+
+      return res.status(201).json({
+        success: true,
+        message: "Password changed successfully..!",
+      });
+    } catch (err) {
+      return next(err);
+    }
   },
 
   async deactivateUser(req, res, next) {

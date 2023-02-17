@@ -98,19 +98,18 @@ const Grid = styled(Box)(({ ismobile }) => ({
     ismobile === "true" ? "repeat(2, 1fr)" : "repeat(auto-fill,252px)"
   }`,
   gap: "10px",
-  "> div:not(:last-child)": {
+  "> div": {
     cursor: "pointer",
-    background: `${shades.secondary[300]}`,
     padding: `${ismobile === "true" ? "20px 10px" : "20px"}`,
     borderRadius: "8px",
+  },
+  "> div:not(:last-child)": {
+    background: `${shades.secondary[300]}`,
     ":hover": {
       background: `${shades.secondary[400]}`,
     },
   },
   "> div:last-child": {
-    cursor: "pointer",
-    padding: "20px",
-    borderRadius: "8px",
     border: `1.5px dashed ${shades.secondary[500]}`,
     ":hover": { border: `1.5px dashed ${shades.secondary[600]}` },
   },

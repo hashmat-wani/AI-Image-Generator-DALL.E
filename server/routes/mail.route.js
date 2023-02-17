@@ -4,7 +4,20 @@ import { authenticate } from "../middlewares/index.js";
 
 const router = express.Router();
 
-router.post("/verifyotp", mailController.verifyOtp);
-router.get("/sendotp", authenticate, mailController.sendOtp);
+router.post(
+  "/sendemailverificationotp",
+  authenticate,
+  mailController.sendEmailVerificationOtp
+);
+
+router.post(
+  "/verifyemailverificationotp",
+  authenticate,
+  mailController.verifyEmailVerificationOtp
+);
+
+router.post("/sendresetpasswordotp", mailController.sendResetPasswordOtp);
+
+router.post("/verifyresetpasswordotp", mailController.verifyResetPasswordOtp);
 
 export default router;

@@ -8,7 +8,7 @@ router.get("/", authenticate, collectionsController.getCollections);
 
 router.get("/:id", authenticate, collectionsController.getSingleCollection);
 
-router.post("/", authenticate, collectionsController.createCollection);
+router.post("/", collectionsController.createCollection);
 
 router.patch("/:id", authenticate, collectionsController.editCollection);
 

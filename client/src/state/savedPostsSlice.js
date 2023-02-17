@@ -60,8 +60,8 @@ export const fetchSavedPosts =
         dispatch(setSavedPosts({ data, totalPages, currPage, concat }));
       })
       .catch((err) => {
-        dispatch(setStatus(STATUS.ERROR));
         dispatch(clearSavedPosts());
+        dispatch(setStatus(STATUS.ERROR));
       })
       .finally(() => {
         if (!concat) toggleBackdrop();
@@ -79,8 +79,8 @@ export const removeSavedPost =
         dispatch(deletePostFromSlice(id));
       })
       .catch((err) => {
-        const { message } = err?.response?.data || err;
-        toast.error(message);
+        const message = err?.response?.data?.message;
+        toast.error(message || "Something went wrong.");
       })
       .finally(() => toggleBackdrop());
   };
