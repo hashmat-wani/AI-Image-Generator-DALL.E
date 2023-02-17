@@ -29,8 +29,9 @@ import useDebounce from "./hooks/useDebounce";
 import Collections from "./scenes/Collections";
 import SavedPosts from "./components/SavedPosts";
 import ResetPwd from "./scenes/auth/resetPassword/ResetPwd";
-import ResetPwdOTP from "./scenes/auth/resetPassword/ResetPwdOTP";
+import ResetPwdInstructions from "./scenes/auth/resetPassword/ResetPwdInstructions";
 import NewPassword from "./scenes/auth/resetPassword/NewPassword";
+import { getCookie } from "./utils";
 
 function App() {
   const [emailVerificationAlert, setEmailVerificationAlert] = useState(false);
@@ -102,12 +103,18 @@ function App() {
           />
           <Route path="/reset-password" element={<ResetPwd />} />
           <Route
-            path="/reset-password/otp"
-            element={email ? <ResetPwdOTP /> : <ResetPwd />}
+            path="/reset-password/instructions"
+            element={
+              email && getCookie("reset_token") ? (
+                <ResetPwdInstructions />
+              ) : (
+                <ResetPwd />
+              )
+            }
           />
           <Route
-            path="/reset-password/otp/new-password"
-            element={email ? <NewPassword email={email} /> : <ResetPwd />}
+            path="/reset-password/new-password"
+            element={getCookie("reset_token") ? <NewPassword /> : <ResetPwd />}
           />
 
           <Route path="/policies/content-policy" element={<Policy />} />
@@ -151,7 +158,6 @@ function App() {
               </PrivateRoute>
             }
           />
-
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Box>

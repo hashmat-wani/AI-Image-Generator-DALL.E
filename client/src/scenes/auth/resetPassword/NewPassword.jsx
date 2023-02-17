@@ -14,10 +14,10 @@ import * as yup from "yup";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
-import { newPassword } from "../../../state/resetPwdSlice";
+import { resetPassword } from "../../../state/resetPwdSlice";
 import { shades } from "../../../theme";
 
-export default function NewPassword({ email }) {
+export default function NewPassword() {
   const [showNewPwd, setShowNewPwd] = useState(false);
   const [showConfirmNewPwd, setShowConfirmNewPwd] = useState(false);
   const dispatch = useDispatch();
@@ -46,12 +46,11 @@ export default function NewPassword({ email }) {
   const handleFormSubmit = (values, { setSubmitting, resetForm }) => {
     const args = {
       newPassword: values.newPassword.trim(),
-      email,
       setSubmitting,
       navigate,
       resetForm,
     };
-    dispatch(newPassword(args));
+    dispatch(resetPassword(args));
   };
 
   const formik = useFormik({
@@ -75,7 +74,7 @@ export default function NewPassword({ email }) {
     <Box
       sx={{
         minWidth: "300px",
-        width: "360px",
+        width: "400px",
         padding: "20px",
         margin: "80px auto auto",
         display: "flex",

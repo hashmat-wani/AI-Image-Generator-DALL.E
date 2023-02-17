@@ -72,7 +72,8 @@ export default function SignUp() {
   return (
     <Box
       sx={{
-        maxWidth: "400px",
+        minWidth: "300px",
+        width: "400px",
         padding: "20px",
         margin: "30px auto auto",
         display: "flex",

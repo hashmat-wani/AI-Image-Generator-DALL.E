@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import { STATUS } from "../utils";
-import { instance } from "../utils/apiInstances";
+import { privateInstance } from "../utils/apiInstances";
 
 const initialState = { email: null, status: STATUS.IDLE };
 const resetPwdSlice = createSlice({
@@ -26,12 +26,12 @@ export const sendEmail =
   ({ email, navigate }) =>
   (dispatch) => {
     dispatch(setStatus(STATUS.LOADING));
-    instance
-      .post("/api/v1/mail/sendresetpasswordotp", { email })
+    privateInstance
+      .post("/api/v1/mail/sendresetpasswordlink", { email })
       .then((data) => {
         dispatch(setEmail(email));
         toast.success(data.data?.message);
-        navigate("/reset-password/otp");
+        navigate("/reset-password/instructions");
       })
       .catch((err) => {
         const message = err?.response?.data?.message;
@@ -40,30 +40,12 @@ export const sendEmail =
       .finally(() => dispatch(setStatus(STATUS.IDLE)));
   };
 
-export const verifyResetPwdOtp =
-  ({ otp, email, navigate }) =>
+export const resetPassword =
+  ({ newPassword, resetForm, setSubmitting, navigate }) =>
   (dispatch) => {
-    dispatch(setStatus(STATUS.LOADING));
-    instance
-      .post("/api/v1/mail/verifyresetpasswordotp", { otp, email })
-      .then((data) => {
-        toast.success(data.data?.message);
-        navigate("/reset-password/otp/new-password");
-      })
-      .catch((err) => {
-        const message = err?.response?.data?.message;
-        toast.error(message || "Something went wrong.");
-      })
-      .finally(() => dispatch(setStatus(STATUS.IDLE)));
-  };
-
-export const newPassword =
-  ({ newPassword, resetForm, email, setSubmitting, navigate }) =>
-  (dispatch) => {
-    instance
+    privateInstance
       .patch("/api/v1/user/resetpassword", {
         newPassword,
-        email,
       })
       .then((data) => {
         resetForm();
