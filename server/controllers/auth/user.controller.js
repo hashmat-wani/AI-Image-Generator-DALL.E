@@ -108,8 +108,8 @@ const userController = {
 
   async resetPassword(req, res, next) {
     // validation
+    const { newPassword } = req.body;
     const validationSchema = Joi.object({
-      email: Joi.string().required(),
       newPassword: Joi.string().required(),
     });
 
@@ -120,14 +120,33 @@ const userController = {
     }
 
     try {
-      const { newPassword, email } = req.body;
+      const reset_token = req?.cookies?.reset_token;
+      if (!reset_token) {
+        return next(CustomErrorHandler.unAuthorised("Invalid Link!"));
+      }
       const hashedPassword = await bcrypt.hash(newPassword, 10);
-      await User.findOneAndUpdate({ email }, { password: hashedPassword });
+      const user = await User.findOneAndUpdate(
+        {
+          "resetToken.token": reset_token,
+          "resetToken.expiresIn": { $gt: Date.now() },
+        },
+        { password: hashedPassword, resetToken: null },
+        { new: true }
+      );
+      if (!user) {
+        return next(CustomErrorHandler.invalidCredentials("Link has expired."));
+      }
 
-      return res.status(201).json({
-        success: true,
-        message: "Password changed successfully..!",
-      });
+      return res
+        .status(201)
+        .clearCookie("reset_token", {
+          sameSite: "None",
+          secure: true,
+        })
+        .json({
+          success: true,
+          message: "Password changed successfully..!",
+        });
     } catch (err) {
       return next(err);
     }

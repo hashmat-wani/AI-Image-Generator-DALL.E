@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema(
     avatar: { type: String, default: null },
     verified: { type: Boolean, default: false },
     deactivated: { type: Boolean, default: false },
+    resetToken: { type: Object, default: null },
   },
   { timestamps: true, versionKey: false }
 );
