@@ -37,7 +37,7 @@ const corsOptions = {
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
   methods: "GET,POST,PUT,DELETE,PATCH",
-  exposedHeaders: ["set-cookie"],
+  // exposedHeaders: ["set-cookie"],
 };
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: false }));
