@@ -101,20 +101,33 @@ function App() {
               )
             }
           />
-          <Route path="/reset-password" element={<ResetPwd />} />
+          <Route
+            path="/reset-password"
+            element={user ? <Navigate to="/" /> : <ResetPwd />}
+          />
           <Route
             path="/reset-password/instructions"
             element={
-              email && getCookie("reset_token") ? (
+              user ? (
+                <Navigate to="/" />
+              ) : email ? (
                 <ResetPwdInstructions />
               ) : (
-                <ResetPwd />
+                <Navigate to="/reset-password" />
               )
             }
           />
           <Route
             path="/reset-password/new-password"
-            element={getCookie("reset_token") ? <NewPassword /> : <ResetPwd />}
+            element={
+              user ? (
+                <Navigate to="/" />
+              ) : (
+                // getCookie("reset_token") ?
+                <NewPassword />
+              )
+              // : <ResetPwd />
+            }
           />
 
           <Route path="/policies/content-policy" element={<Policy />} />

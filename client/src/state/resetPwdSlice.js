@@ -32,9 +32,9 @@ export const sendEmail =
         const { message, token } = data?.data;
         dispatch(setEmail(email));
         toast.success(message);
-        const date = new Date();
-        date.setTime(date.getTime() + 3600000);
-        document.cookie = `reset_token=${token}; expires=${date.toUTCString()}; path=/`;
+        // const date = new Date();
+        // date.setTime(date.getTime() + 3600000);
+        // document.cookie = `reset_token=${token}; expires=${date.toUTCString()}; path=/`;
         navigate("/reset-password/instructions");
       })
       .catch((err) => {

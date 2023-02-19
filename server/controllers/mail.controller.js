@@ -270,7 +270,7 @@ export const mailController = {
       return res.status(201).json({
         success: true,
         message: "Please check your mail",
-        token,
+        // token,
       });
     } catch (err) {
       return next(err);
@@ -307,6 +307,11 @@ export const mailController = {
 
       return res
         .status(200)
+        .cookie("reset_token", token, {
+          sameSite: "None",
+          secure: true,
+          httpOnly: true,
+        })
         .redirect(
           `${
             MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API
