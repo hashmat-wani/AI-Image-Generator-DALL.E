@@ -281,6 +281,7 @@ export const mailController = {
     try {
       // validation
       const { token } = req.params;
+      // console.log(token);
       // const validationSchema = Joi.object({
       //   token: Joi.string().required(),
       // });

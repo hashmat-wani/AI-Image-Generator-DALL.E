@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import { instance } from "../../../utils/apiInstances";
+import { useLocation } from "react-router-dom";
+import { privateInstance } from "../../../utils/apiInstances";
 import Expired from "./Expired";
 import ChangePwd from "./ChangePwd";
 
@@ -13,7 +12,7 @@ export default function NewPassword() {
   const ticket = location.search.split("=")[1];
 
   useEffect(() => {
-    instance
+    privateInstance
       .get(`/api/v1/mail/verifyticket/${ticket}`)
       .then(() => setExpired(false))
       .catch(() => setExpired(true))
