@@ -36,7 +36,7 @@ const LeftPanel = ({ user, status }) => {
         p="0 20px 20px"
         position="relative"
       >
-        {user.avatar ? (
+        {user?.avatar ? (
           <img
             style={{
               width: "170px",
@@ -44,7 +44,7 @@ const LeftPanel = ({ user, status }) => {
               borderRadius: "50%",
               objectFit: "cover",
             }}
-            src={resolvePath(user.avatar)}
+            src={resolvePath(user?.avatar?.url)}
             alt="avatar"
           />
         ) : (

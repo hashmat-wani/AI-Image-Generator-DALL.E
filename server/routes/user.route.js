@@ -6,16 +6,18 @@ import path from "path";
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/"),
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => cb(null, "uploads/"),
 
-  filename: (req, file, cb) => {
-    const uniqueFileName = `${Date.now()}-${Math.round(
-      Math.random() * 1e9
-    )}${path.extname(file.originalname)}`;
-    cb(null, uniqueFileName);
-  },
-});
+//   filename: (req, file, cb) => {
+//     const uniqueFileName = `${Date.now()}-${Math.round(
+//       Math.random() * 1e9
+//     )}${path.extname(file.originalname)}`;
+//     cb(null, uniqueFileName);
+//   },
+// });
+
+const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
   if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {

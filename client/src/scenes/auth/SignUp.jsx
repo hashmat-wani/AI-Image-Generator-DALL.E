@@ -72,8 +72,8 @@ export default function SignUp() {
   return (
     <Box
       sx={{
-        minWidth: "300px",
-        width: "400px",
+        minWidth: "320px",
+        maxWidth: "400px",
         padding: "20px",
         margin: "30px auto auto",
         display: "flex",
@@ -232,13 +232,7 @@ export default function SignUp() {
 
         <Typography color={shades.primary[400]} textAlign="center">
           Already have an account?{" "}
-          <Link
-            style={{
-              color: "#000000",
-              textDecoration: "none",
-            }}
-            to="/signin"
-          >
+          <Link style={{ color: "#0066C0" }} to="/signin">
             Sign in
           </Link>
         </Typography>

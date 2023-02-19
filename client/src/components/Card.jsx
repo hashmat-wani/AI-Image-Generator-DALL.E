@@ -59,7 +59,7 @@ const Card = ({
         <Box alignItems="end" display="flex" justifyContent="space-between">
           <Box>
             {user?.avatar ? (
-              <Avatar src={resolvePath(user?.avatar)} />
+              <Avatar src={resolvePath(user?.avatar?.url)} />
             ) : (
               <Avatar
                 sx={{

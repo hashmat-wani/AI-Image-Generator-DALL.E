@@ -28,11 +28,11 @@ const UserAvatar = ({ user, setEmailVerificationAlert }) => {
   return (
     <>
       {user?.verified ? (
-        <Avatar src={resolvePath(user?.avatar)} />
+        <Avatar src={resolvePath(user?.avatar?.url)} />
       ) : (
         <Chip
           sx={{ cursor: "pointer" }}
-          avatar={<Avatar src={resolvePath(user?.avatar)} />}
+          avatar={<Avatar src={resolvePath(user?.avatar?.url)} />}
           label={
             <Badge
               onClick={(e) => {

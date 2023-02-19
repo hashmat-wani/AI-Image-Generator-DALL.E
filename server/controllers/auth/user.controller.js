@@ -2,7 +2,6 @@ import Joi from "joi";
 import { Collection, Post, SavedPost, User } from "../../models/index.js";
 import CustomErrorHandler from "../../services/CustomErrorHandler.js";
 import bcrypt from "bcrypt";
-import fs from "fs";
 import cloudinary from "../../config/cloudinary.js";
 
 const userController = {
@@ -24,19 +23,33 @@ const userController = {
   async updateAvatar(req, res, next) {
     try {
       const { _id: userId } = req.user;
-      const { path: avatar } = req.file;
-      let user = await User.findById(userId);
+      const { buffer } = req?.file;
 
       // remove current avatar from folder
-      if (user.avatar && user.avatar.startsWith("uploads"))
-        fs.unlinkSync(`${appRoot}/${user.avatar}`, (err) => {
-          return next(err);
-        });
+      // if (user.avatar && user.avatar.startsWith("uploads"))
+      //   fs.unlinkSync(`${appRoot}/${user.avatar}`, (err) => {
+      //     return next(err);
+      //   });
+      // Adding new avatar to cloudinary
+      const uri = `data:text/plain;charset=utf-8;base64,${buffer.toString(
+        "base64"
+      )}`;
+      const image = await cloudinary.uploader.upload(uri);
 
-      user = await User.findByIdAndUpdate(userId, { avatar }, { new: true });
+      // removing old avatar from cloudinary
+      let user = await User.findById(userId);
+      if (user?.avatar) {
+        await cloudinary.uploader.destroy(user.avatar?.id);
+      }
+
+      user = await User.findByIdAndUpdate(
+        userId,
+        { avatar: { url: image.url, id: image.public_id } },
+        { new: true }
+      );
       return res.status(201).json({
         success: true,
-        avatar: user.avatar,
+        avatar: user?.avatar?.url,
         message: "Avatar changed successfully!",
       });
     } catch (err) {
@@ -47,13 +60,17 @@ const userController = {
   async removeAvatar(req, res, next) {
     try {
       const { _id: userId } = req.user;
-      let user = await User.findById(userId);
 
-      if (user.avatar && user.avatar.startsWith("uploads")) {
-        fs.unlinkSync(`${appRoot}/${user.avatar}`, (err) => {
-          return next(err);
-        });
-      }
+      // removing old avatar from cloudinary
+      let user = await User.findById(userId);
+      const oldAvatar = user.avatar?.id;
+      await cloudinary.uploader.destroy(oldAvatar);
+
+      // if (user.avatar && user.avatar.startsWith("uploads")) {
+      //   fs.unlinkSync(`${appRoot}/${user.avatar}`, (err) => {
+      //     return next(err);
+      //   });
+      // }
 
       user = await User.findByIdAndUpdate(
         userId,
@@ -167,6 +184,12 @@ const userController = {
     try {
       const { _id: userId } = req?.user;
 
+      // deleting userAvatar from cloudinary
+      const user = await User.findById(userId);
+      if (user?.avatar) {
+        await cloudinary.uploader.destroy(user.avatar?.id);
+      }
+     
       // deleting userPost from cloudinary
       const delPosts = await Post.find({ user: userId });
       delPosts.forEach(async (node) => {
@@ -175,7 +198,6 @@ const userController = {
 
       // deleting userPosts from database
       await Post.deleteMany({ user: userId });
-      await Collection.deleteMany({ collectionId: userId });
 
       // deletings userSavedPosts from cloudinary
       const delSavedPosts = await SavedPost.find({ user: userId });
@@ -185,6 +207,9 @@ const userController = {
 
       // deletings userSavedPosts from databse
       await SavedPost.deleteMany({ user: userId });
+
+      // deletings userCollections from databse
+      await Collection.deleteMany({ user: userId });
 
       // Finally deleting user
       await User.findByIdAndDelete(userId);

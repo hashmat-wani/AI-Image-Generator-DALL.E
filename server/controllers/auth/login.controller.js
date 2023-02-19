@@ -12,6 +12,7 @@ import {
   JWT_REFRESH_SECRET,
   MODE,
 } from "../../config/index.js";
+import cloudinary from "../../config/cloudinary.js";
 
 const loginController = {
   async login(req, res, next) {
@@ -103,17 +104,19 @@ const loginController = {
       }
 
       if (!user) {
-        let uniqueFileName;
+        // let uniqueFileName;
         if (avatar) {
+          const image = await cloudinary.uploader.upload(avatar);
+          avatar = { url: image.url, id: image.public_id };
           // download avatar url
-          uniqueFileName = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+          // uniqueFileName = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
 
-          const options = {
-            url: avatar,
-            dest: `${appRoot}/uploads/${uniqueFileName}.jpg`,
-          };
+          // const options = {
+          //   url: avatar,
+          //   dest: `${appRoot}/uploads/${uniqueFileName}.jpg`,
+          // };
 
-          await download.image(options);
+          // await download.image(options);
         }
 
         const password = await bcrypt.hash(uuidv4(), 10);
@@ -122,7 +125,7 @@ const loginController = {
           lastName,
           email,
           password,
-          avatar: avatar ? `uploads/${uniqueFileName}.jpg` : null,
+          avatar,
           verified: true,
         });
         await Collection.create({

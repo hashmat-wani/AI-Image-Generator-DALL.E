@@ -30,10 +30,10 @@ export default function UpdateAvatar({
 }) {
   const avatarRef = useRef(null);
 
-  const [avatar, setAvatar] = useState(user.avatar);
-  const [preview, setPreview] = useState(user.avatar);
+  const [avatar, setAvatar] = useState(user?.avatar?.url);
+  const [preview, setPreview] = useState(user?.avatar?.url);
 
-  const handleClose = (e, avatar = user.avatar) => {
+  const handleClose = (e, avatar = user?.avatar?.url) => {
     setAvatar(avatar);
     setPreview(avatar);
     setOpenAvatarDialog(false);
@@ -159,7 +159,7 @@ export default function UpdateAvatar({
               <Box
                 sx={{
                   display: `${
-                    typeof avatar === "string" || avatar === user.avatar
+                    typeof avatar === "string" || avatar === user?.avatar?.url
                       ? "none"
                       : "block"
                   }`,

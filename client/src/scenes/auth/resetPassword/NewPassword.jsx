@@ -73,8 +73,8 @@ export default function NewPassword() {
   return (
     <Box
       sx={{
-        minWidth: "300px",
-        width: "400px",
+        minWidth: "320px",
+        maxWidth: "400px",
         padding: "20px",
         margin: "80px auto auto",
         display: "flex",

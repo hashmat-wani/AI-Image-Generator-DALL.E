@@ -21,7 +21,6 @@ export default function resetPassword(email, name, token) {
           MODE === "dev" ? DEV_API : PROD_API
         }/api/v1/mail/verifyresetpasswordlink/${token}" target="_blank">Reset password</a>
         <p style="margin-top:50px;">If you didn't make this request please disregard this email.</p>
-        <p>Please note that your password </p>
         <p>This link will expire in 1 hour. If your link has expired, you can always request another</p>
         <p>Thanks</p>
       </div>
