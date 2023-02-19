@@ -156,13 +156,13 @@ const userController = {
 
       return res
         .status(201)
-        .clearCookie("reset_token", {
-          sameSite: "None",
-          secure: true,
-          httpOnly: false,
-          domain: ".ai-img-generatorr.vercel.app",
-          path: "/",
-        })
+        // .clearCookie("reset_token", {
+        //   sameSite: "None",
+        //   secure: true,
+        //   httpOnly: false,
+        //   domain: ".ai-img-generatorr.vercel.app",
+        //   path: "/",
+        // })
         .json({
           success: true,
           message: "Password changed successfully..!",

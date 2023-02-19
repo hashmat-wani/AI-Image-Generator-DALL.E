@@ -48,6 +48,8 @@ function App() {
 
   const debouncedSearch = useDebounce(searchPost);
 
+  console.log(getCookie("reset_token"));
+
   useEffect(() => {
     dispatch(fetchPosts({ searchPost }));
   }, [debouncedSearch]);

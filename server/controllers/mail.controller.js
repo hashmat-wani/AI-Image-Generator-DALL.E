@@ -265,19 +265,22 @@ export const mailController = {
         html: resetPasswordTemplate(email, user.firstName, token),
       });
 
-      return res
-        .status(201)
-        .cookie("reset_token", token, {
-          sameSite: "None",
-          secure: true,
-          httpOnly: false,
-          domain: ".ai-img-generatorr.vercel.app",
-          path: "/",
-        })
-        .json({
-          success: true,
-          message: "Please check your mail",
-        });
+      return (
+        res
+          .status(201)
+          // .cookie("reset_token", token, {
+          //   sameSite: "None",
+          //   secure: true,
+          //   httpOnly: false,
+          //   domain: ".ai-img-generatorr.vercel.app",
+          //   path: "/",
+          // })
+          .json({
+            success: true,
+            message: "Please check your mail",
+            token,
+          })
+      );
     } catch (err) {
       return next(err);
     }

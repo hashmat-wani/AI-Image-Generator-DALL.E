@@ -29,8 +29,10 @@ export const sendEmail =
     privateInstance
       .post("/api/v1/mail/sendresetpasswordlink", { email })
       .then((data) => {
+        const { message, token } = data?.data;
         dispatch(setEmail(email));
-        toast.success(data.data?.message);
+        toast.success(message);
+        document.cookie = `reset_token=${token}; path=/`;
         navigate("/reset-password/instructions");
       })
       .catch((err) => {
@@ -50,6 +52,9 @@ export const resetPassword =
       .then((data) => {
         resetForm();
         dispatch(setEmail(null));
+        // deleting a cookie
+        document.cookie =
+          "reset_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         toast.success(data.data?.message);
         navigate("/signin");
       })
