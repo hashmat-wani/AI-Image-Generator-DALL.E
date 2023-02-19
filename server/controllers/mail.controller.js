@@ -258,31 +258,20 @@ export const mailController = {
         expiresIn: Date.now() + 3600000, //1hr
       };
 
-      // await transporter.sendMail({
-      //   from: '"hashtech #️⃣" <hashmatw555@gmail.com>', // sender address
-      //   to: email, // list of receivers
-      //   subject: "Change password for OpenAI",
-      //   html: resetPasswordTemplate(email, user.firstName, token),
-      // });
+      await transporter.sendMail({
+        from: '"hashtech #️⃣" <hashmatw555@gmail.com>', // sender address
+        to: email, // list of receivers
+        subject: "Change password for OpenAI",
+        html: resetPasswordTemplate(email, user.firstName, token),
+      });
 
       await User.findByIdAndUpdate(user?._id, { resetToken }, { new: true });
 
-      return (
-        res
-          .status(201)
-          // .cookie("reset_token", token, {
-          //   sameSite: "None",
-          //   secure: true,
-          //   httpOnly: false,
-          //   domain: ".ai-img-generatorr.vercel.app",
-          //   path: "/",
-          // })
-          .json({
-            success: true,
-            message: "Please check your mail",
-            token,
-          })
-      );
+      return res.status(201).json({
+        success: true,
+        message: "Please check your mail",
+        token,
+      });
     } catch (err) {
       return next(err);
     }

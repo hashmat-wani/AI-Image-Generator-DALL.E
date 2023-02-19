@@ -154,19 +154,10 @@ const userController = {
         return next(CustomErrorHandler.invalidCredentials("Link has expired."));
       }
 
-      return res
-        .status(201)
-        // .clearCookie("reset_token", {
-        //   sameSite: "None",
-        //   secure: true,
-        //   httpOnly: false,
-        //   domain: ".ai-img-generatorr.vercel.app",
-        //   path: "/",
-        // })
-        .json({
-          success: true,
-          message: "Password changed successfully..!",
-        });
+      return res.status(201).json({
+        success: true,
+        message: "Password changed successfully..!",
+      });
     } catch (err) {
       return next(err);
     }
