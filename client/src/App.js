@@ -32,6 +32,7 @@ import ResetPwd from "./scenes/auth/resetPassword/ResetPwd";
 import ResetPwdInstructions from "./scenes/auth/resetPassword/ResetPwdInstructions";
 import NewPassword from "./scenes/auth/resetPassword/NewPassword";
 import { getCookie } from "./utils";
+import Expired from "./scenes/auth/resetPassword/Expired";
 
 function App() {
   const [emailVerificationAlert, setEmailVerificationAlert] = useState(false);
@@ -118,16 +119,8 @@ function App() {
             }
           />
           <Route
-            path="/reset-password/new-password"
-            element={
-              user ? (
-                <Navigate to="/" />
-              ) : (
-                // getCookie("reset_token") ?
-                <NewPassword />
-              )
-              // : <ResetPwd />
-            }
+            path="/new-password"
+            element={user ? <Navigate to="/" /> : <NewPassword />}
           />
 
           <Route path="/policies/content-policy" element={<Policy />} />

@@ -1,6 +1,6 @@
 import React from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { sendEmail } from "../../../state/resetPwdSlice";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 import {
@@ -8,10 +8,10 @@ import {
   Button,
   CircularProgress,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 import { STATUS } from "../../../utils";
+import logo from "../../../assets/smallLogo.svg";
 
 const ResetPwdInstructions = () => {
   const dispatch = useDispatch();
@@ -29,13 +29,21 @@ const ResetPwdInstructions = () => {
   return (
     <Stack
       sx={{
-        width: "300px",
+        minWidth: "320px",
+        maxWidth: "360px",
         padding: "20px",
         height: "500px",
         margin: "40px auto",
         alignItems: "center",
       }}
     >
+      <Link to="/">
+        <img
+          style={{ width: "32px", marginBottom: "60px" }}
+          src={logo}
+          alt="logo"
+        />
+      </Link>
       <MarkEmailReadIcon sx={{ fontSize: "100px", mb: "15px" }} />
 
       <Box sx={{ textAlign: "center", my: "10px" }}>

@@ -26,4 +26,6 @@ router.get(
   mailController.verifyResetPasswordLink
 );
 
+router.get("/verifyticket/:ticket", mailController.verifyTicket);
+
 export default router;

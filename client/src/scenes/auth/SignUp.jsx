@@ -17,6 +17,7 @@ import { CircularProgress, IconButton, InputAdornment } from "@mui/material";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { register } from "../../state/userSlice";
+import logo from "../../assets/smallLogo.svg";
 
 export default function SignUp() {
   const dispatch = useDispatch();
@@ -81,6 +82,13 @@ export default function SignUp() {
         alignItems: "center",
       }}
     >
+      <Link to="/">
+        <img
+          style={{ width: "32px", marginBottom: "30px" }}
+          src={logo}
+          alt="logo"
+        />
+      </Link>
       <Typography color={shades.primary[400]} fontSize="28px" fontWeight="bold">
         Create your account
       </Typography>

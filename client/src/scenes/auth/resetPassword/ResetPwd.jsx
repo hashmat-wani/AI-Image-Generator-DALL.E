@@ -12,6 +12,7 @@ import * as yup from "yup";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { sendEmail } from "../../../state/resetPwdSlice";
 import { STATUS } from "../../../utils";
+import logo from "../../../assets/smallLogo.svg";
 
 export default function ResetPwd() {
   const dispatch = useDispatch();
@@ -50,15 +51,22 @@ export default function ResetPwd() {
   return (
     <Box
       sx={{
-        minWidth: "300px",
-        width: "360px",
+        minWidth: "320px",
+        maxWidth: "360px",
         padding: "20px",
-        margin: "80px auto auto",
+        margin: "50px auto auto",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
       }}
     >
+      <Link to="/">
+        <img
+          style={{ width: "32px", marginBottom: "60px" }}
+          src={logo}
+          alt="logo"
+        />
+      </Link>
       <Typography color={shades.primary[400]} fontSize="28px" fontWeight="bold">
         Reset your password
       </Typography>

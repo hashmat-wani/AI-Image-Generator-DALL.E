@@ -55,7 +55,8 @@ const VerifyEmail = () => {
   return (
     <Stack
       sx={{
-        width: "300px",
+        minWidth: "320px",
+        maxWidth: "360px",
         padding: "20px",
         height: "500px",
         margin: "40px auto",

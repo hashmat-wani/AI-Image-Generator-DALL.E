@@ -6,7 +6,7 @@ import transporter from "../config/transporter.js";
 import emailVerificationTemplate from "../emailTemplates/emailVerification.js";
 import resetPasswordTemplate from "../emailTemplates/resetPassword.js";
 import { CLIENT_DEV_API, CLIENT_PROD_API, MODE } from "../config/index.js";
-import randomBytes from "randombytes";
+import { generateRandomString } from "../utils/index.js";
 
 export const mailController = {
   // Email verification
@@ -251,7 +251,7 @@ export const mailController = {
           CustomErrorHandler.invalidCredentials("This email doesn't exist")
         );
       }
-      const token = randomBytes(16).toString("hex");
+      const token = generateRandomString(16);
 
       const resetToken = {
         token,
@@ -281,11 +281,63 @@ export const mailController = {
     try {
       // validation
       const { token } = req.params;
+      // const validationSchema = Joi.object({
+      //   token: Joi.string().required(),
+      // });
+
+      // const { error } = validationSchema.validate({ token });
+      // if (error) {
+      //   return res
+      //     .status(401)
+      //     .redirect(
+      //       `${MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API}/expired`
+      //     );
+
+      //   // return next(error);
+      // }
+
+      // // check database
+
+      // const user = await User.findOne({
+      //   "resetToken.token": token,
+      //   "resetToken.expiresIn": { $gt: Date.now() },
+      // });
+
+      // if (!user) {
+      //   return res
+      //     .status(401)
+      //     .redirect(
+      //       `${MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API}/expired`
+      //     );
+      // }
+
+      // return res
+      //   .status(200)
+      //   .cookie("reset_token", token, {
+      //     sameSite: "None",
+      //     secure: true,
+      //     httpOnly: true,
+      //   })
+      //   .
+      res.redirect(
+        `${
+          MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API
+        }/new-password?ticket=${token}`
+      );
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  async verifyTicket(req, res, next) {
+    try {
+      // validation
+      const { ticket } = req.params;
       const validationSchema = Joi.object({
-        token: Joi.string().required(),
+        ticket: Joi.string().required(),
       });
 
-      const { error } = validationSchema.validate({ token });
+      const { error } = validationSchema.validate({ ticket });
       if (error) {
         return next(error);
       }
@@ -293,7 +345,7 @@ export const mailController = {
       // check database
 
       const user = await User.findOne({
-        "resetToken.token": token,
+        "resetToken.token": ticket,
         "resetToken.expiresIn": { $gt: Date.now() },
       });
 
@@ -307,18 +359,14 @@ export const mailController = {
 
       return res
         .status(200)
-        .cookie("reset_token", token, {
+        .cookie("reset_token", ticket, {
           sameSite: "None",
           secure: true,
           httpOnly: true,
         })
-        .redirect(
-          `${
-            MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API
-          }/reset-password/new-password`
-        );
+        .json({ success: true, message: "valid ticket" });
     } catch (err) {
-      next(err);
+      return next(err);
     }
   },
 };

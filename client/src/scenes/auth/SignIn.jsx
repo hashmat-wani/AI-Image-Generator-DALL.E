@@ -23,6 +23,7 @@ import { login } from "../../state/userSlice";
 import { useDispatch } from "react-redux";
 import { backdropContext } from "../../context/BackdropContext";
 import { FlexBox } from "../../components/FlexBox";
+import logo from "../../assets/smallLogo.svg";
 
 export default function SignIn({ setEmailVerificationAlert }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -95,6 +96,13 @@ export default function SignIn({ setEmailVerificationAlert }) {
         alignItems: "center",
       }}
     >
+      <Link to="/">
+        <img
+          style={{ width: "32px", marginBottom: "30px" }}
+          src={logo}
+          alt="logo"
+        />
+      </Link>
       <Typography color={shades.primary[400]} fontSize="28px" fontWeight="bold">
         Welcome back
       </Typography>
@@ -250,7 +258,7 @@ export default function SignIn({ setEmailVerificationAlert }) {
             to="/reset-password"
             style={{ textDecoration: "underline", color: "#0066C0" }}
           >
-            Forgot Password
+            Forgot Password?
           </Link>
         </FlexBox>
       </Box>

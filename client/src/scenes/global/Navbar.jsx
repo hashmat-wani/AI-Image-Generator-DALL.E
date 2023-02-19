@@ -7,7 +7,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.svg";
 import { FlexBox } from "../../components/FlexBox";
 import { shades } from "../../theme";
@@ -138,6 +138,19 @@ function Navbar({ setEmailVerificationAlert }) {
   const handleCloseUserMenu = () => {
     status !== STATUS.LOADING && setAnchorElUser(null);
   };
+
+  const { pathname } = useLocation();
+  if (
+    [
+      "/signin",
+      "/signup",
+      "/new-password",
+      "/reset-password/instructions",
+      "/reset-password",
+      "/expired",
+    ].includes(pathname)
+  )
+    return null;
 
   return (
     <FlexBox

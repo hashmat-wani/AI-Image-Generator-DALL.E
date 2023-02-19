@@ -29,7 +29,7 @@ export const sendEmail =
     privateInstance
       .post("/api/v1/mail/sendresetpasswordlink", { email })
       .then((data) => {
-        const { message, token } = data?.data;
+        const { message } = data?.data;
         dispatch(setEmail(email));
         toast.success(message);
         // const date = new Date();
@@ -43,6 +43,8 @@ export const sendEmail =
       })
       .finally(() => dispatch(setStatus(STATUS.IDLE)));
   };
+
+  
 
 export const resetPassword =
   ({ newPassword, resetForm, setSubmitting, navigate }) =>
