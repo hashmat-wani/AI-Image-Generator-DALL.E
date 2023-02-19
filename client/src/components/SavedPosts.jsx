@@ -22,7 +22,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { STATUS } from "../utils";
-import Loading from "./Loading";
 import DisplayAlert from "./DisplayAlert";
 
 const Loader = () => (
@@ -172,12 +171,13 @@ const SavedPosts = () => {
             />
           ) : (
             <>
-              <Typography color={shades.primary[300]}>
+              <Typography mb="10px" color={shades.primary[300]}>
                 {posts.length}
                 {posts.length === 1 ? " generation" : " generations"}
               </Typography>
               {posts.length === 0 ? (
                 <DisplayAlert
+                  mt="10px"
                   type="info"
                   title="Oops..."
                   message="Unfortunately, we could not find any posts to display. Your saved images will appear here. You can save images as you're creating. "
@@ -297,7 +297,7 @@ const SavedPosts = () => {
 export default SavedPosts;
 
 const Grid = styled(Box)({
-  margin: "10px 0 30px",
+  marginBottom: "30px",
   display: "grid",
   gap: "15px",
 });
