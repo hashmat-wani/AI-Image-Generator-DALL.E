@@ -158,7 +158,7 @@ const userController = {
         .status(201)
         .clearCookie("reset_token", {
           sameSite: "None",
-          secure: true,
+          // secure: true,
         })
         .json({
           success: true,
@@ -189,7 +189,7 @@ const userController = {
       if (user?.avatar) {
         await cloudinary.uploader.destroy(user.avatar?.id);
       }
-     
+
       // deleting userPost from cloudinary
       const delPosts = await Post.find({ user: userId });
       delPosts.forEach(async (node) => {
