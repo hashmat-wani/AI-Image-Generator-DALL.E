@@ -161,7 +161,7 @@ const userController = {
           secure: true,
           httpOnly: false,
           domain: ".ai-img-generatorr.vercel.app",
-          // path: "/",
+          path: "/",
         })
         .json({
           success: true,
