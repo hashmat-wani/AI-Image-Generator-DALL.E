@@ -31,8 +31,6 @@ import SavedPosts from "./components/SavedPosts";
 import ResetPwd from "./scenes/auth/resetPassword/ResetPwd";
 import ResetPwdInstructions from "./scenes/auth/resetPassword/ResetPwdInstructions";
 import NewPassword from "./scenes/auth/resetPassword/NewPassword";
-import { getCookie } from "./utils";
-import Expired from "./scenes/auth/resetPassword/Expired";
 
 function App() {
   const [emailVerificationAlert, setEmailVerificationAlert] = useState(false);

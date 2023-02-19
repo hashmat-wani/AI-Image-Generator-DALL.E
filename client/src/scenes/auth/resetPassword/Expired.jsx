@@ -1,7 +1,5 @@
 import React from "react";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { sendEmail } from "../../../state/resetPwdSlice";
+import { Link } from "react-router-dom";
 import { Box, Stack, Typography } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 

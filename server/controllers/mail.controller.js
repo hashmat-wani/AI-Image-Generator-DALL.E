@@ -281,45 +281,6 @@ export const mailController = {
     try {
       // validation
       const { token } = req.params;
-      // console.log(token);
-      // const validationSchema = Joi.object({
-      //   token: Joi.string().required(),
-      // });
-
-      // const { error } = validationSchema.validate({ token });
-      // if (error) {
-      //   return res
-      //     .status(401)
-      //     .redirect(
-      //       `${MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API}/expired`
-      //     );
-
-      //   // return next(error);
-      // }
-
-      // // check database
-
-      // const user = await User.findOne({
-      //   "resetToken.token": token,
-      //   "resetToken.expiresIn": { $gt: Date.now() },
-      // });
-
-      // if (!user) {
-      //   return res
-      //     .status(401)
-      //     .redirect(
-      //       `${MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API}/expired`
-      //     );
-      // }
-
-      // return res
-      //   .status(200)
-      //   .cookie("reset_token", token, {
-      //     sameSite: "None",
-      //     secure: true,
-      //     httpOnly: true,
-      //   })
-      //   .
       res.redirect(
         `${
           MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API

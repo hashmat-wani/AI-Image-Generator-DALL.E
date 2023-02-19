@@ -247,7 +247,7 @@ export default function SignIn({ setEmailVerificationAlert }) {
           )}
         </Box>
 
-        <FlexBox gap="15px" justifyContent="space-between">
+        <FlexBox mt="15px" gap="15px" justifyContent="space-between">
           <Typography color={shades.primary[400]}>
             Don't have an account?{" "}
             <Link to="/signup" style={{ color: "#0066C0" }}>
