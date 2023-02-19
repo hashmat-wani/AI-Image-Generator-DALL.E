@@ -269,7 +269,8 @@ export const mailController = {
         .status(201)
         .cookie("reset_token", token, {
           sameSite: "None",
-          // secure: true,
+          httpOnly: false,
+          secure: true,
         })
         .json({
           success: true,

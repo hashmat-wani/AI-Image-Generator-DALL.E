@@ -158,7 +158,8 @@ const userController = {
         .status(201)
         .clearCookie("reset_token", {
           sameSite: "None",
-          // secure: true,
+          httpOnly: false,
+          secure: true,
         })
         .json({
           success: true,
