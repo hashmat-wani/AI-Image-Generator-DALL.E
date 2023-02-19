@@ -270,8 +270,6 @@ export const mailController = {
         .cookie("reset_token", token, {
           sameSite: "None",
           secure: true,
-          domain: "https://ai-img-generatorr.vercel.app",
-          path: "/",
         })
         .json({
           success: true,

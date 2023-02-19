@@ -35,7 +35,7 @@ app.use(cookieParser());
 const corsOptions = {
   origin: `${MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API}`,
   credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
+  // optionSuccessStatus: 200,
   methods: "GET,POST,PUT,DELETE,PATCH",
   // exposedHeaders: ["set-cookie"],
 };
