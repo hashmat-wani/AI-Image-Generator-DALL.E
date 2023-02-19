@@ -158,8 +158,9 @@ const userController = {
         .status(201)
         .clearCookie("reset_token", {
           sameSite: "None",
-          httpOnly: false,
           secure: true,
+          domain: "https://ai-img-generatorr.vercel.app",
+          path: "/",
         })
         .json({
           success: true,
