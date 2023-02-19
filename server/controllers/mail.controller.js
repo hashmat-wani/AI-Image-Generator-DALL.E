@@ -23,18 +23,19 @@ export const mailController = {
       const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
 
       const hashedOtp = await bcrypt.hash(otp, 10);
-      await OTPVerification.create({
-        userId: _id,
-        otp: hashedOtp,
-        type: "email-verification",
-        expiresIn: Date.now() + 3600000, //1hr
-      });
 
       await transporter.sendMail({
         from: '"hashtech #️⃣" <hashmatw555@gmail.com>', // sender address
         to: email, // list of receivers
         subject: `Email verification code: ${otp}`, // Subject line
         html: emailVerificationTemplate(email, otp),
+      });
+
+      await OTPVerification.create({
+        userId: _id,
+        otp: hashedOtp,
+        type: "email-verification",
+        expiresIn: Date.now() + 3600000, //1hr
       });
 
       return res.status(201).json({
@@ -256,14 +257,15 @@ export const mailController = {
         token,
         expiresIn: Date.now() + 3600000, //1hr
       };
-      await User.findByIdAndUpdate(user?._id, { resetToken }, { new: true });
 
-      await transporter.sendMail({
-        from: '"hashtech #️⃣" <hashmatw555@gmail.com>', // sender address
-        to: email, // list of receivers
-        subject: "Change password for OpenAI",
-        html: resetPasswordTemplate(email, user.firstName, token),
-      });
+      // await transporter.sendMail({
+      //   from: '"hashtech #️⃣" <hashmatw555@gmail.com>', // sender address
+      //   to: email, // list of receivers
+      //   subject: "Change password for OpenAI",
+      //   html: resetPasswordTemplate(email, user.firstName, token),
+      // });
+
+      await User.findByIdAndUpdate(user?._id, { resetToken }, { new: true });
 
       return (
         res
