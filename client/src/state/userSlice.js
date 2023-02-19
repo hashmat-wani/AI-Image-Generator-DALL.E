@@ -105,12 +105,13 @@ export const login =
   };
 
 export const logOut =
-  ({ toggleBackdrop, navigate, popupMsg = true }) =>
+  ({ toggleBackdrop, navigate, handleCloseUserMenu, popupMsg = true }) =>
   (dispatch) => {
     dispatch(setStatus(STATUS.LOADING));
     privateInstance
       .post("/api/v1/auth/logout")
       .then(() => {
+        if (handleCloseUserMenu) handleCloseUserMenu();
         const popup = popupMsg
           ? {
               onSuccess: {

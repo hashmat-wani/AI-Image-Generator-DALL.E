@@ -414,8 +414,10 @@ function Navbar({ setEmailVerificationAlert }) {
             ) : (
               <MenuItem
                 onClick={() => {
-                  dispatch(logOut({ toggleBackdrop, navigate }));
-                  handleCloseUserMenu();
+                  dispatch(
+                    logOut({ toggleBackdrop, navigate, handleCloseUserMenu })
+                  );
+                  // handleCloseUserMenu();
                 }}
                 sx={{
                   p: "8px 10px",

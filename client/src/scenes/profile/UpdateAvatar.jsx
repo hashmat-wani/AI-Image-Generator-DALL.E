@@ -30,12 +30,12 @@ export default function UpdateAvatar({
 }) {
   const avatarRef = useRef(null);
 
-  const [avatar, setAvatar] = useState(user?.avatar?.url);
+  const [avatar, setAvatar] = useState(user?.avatar);
   const [preview, setPreview] = useState(user?.avatar?.url);
 
-  const handleClose = (e, avatar = user?.avatar?.url) => {
+  const handleClose = (e, avatar = user?.avatar) => {
     setAvatar(avatar);
-    setPreview(avatar);
+    setPreview(avatar?.url);
     setOpenAvatarDialog(false);
   };
 
@@ -101,33 +101,55 @@ export default function UpdateAvatar({
 
           {/* action buttons */}
 
-          <FlexBox padding="15px 20px" justifyContent="space-between">
+          <FlexBox
+            sx={{
+              opacity: status === STATUS.LOADING ? 0.5 : 1,
+              color: "#fff",
+            }}
+            padding="15px 20px"
+            justifyContent="space-between"
+          >
             {/* left side buttons */}
-            <FlexBox columnGap="20px">
+            <FlexBox columnGap="10px">
               {/* Add photo */}
-              <Box
-                sx={{ cursor: "pointer" }}
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                flexDirection="column"
+              <Button
+                disabled={status === STATUS.LOADING}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  textTransform: "none",
+                  color: "#fff",
+                  ":disabled": {
+                    color: "#fff",
+                  },
+                }}
                 onClick={() => avatarRef.current.click()}
               >
                 <CameraAltIcon />
                 <Typography>Add photo</Typography>
-              </Box>
+              </Button>
               {/* Delete photo */}
-              <Box
+              <Button
                 onClick={() => setAvatar(null)}
-                sx={{ cursor: "pointer" }}
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                flexDirection="column"
+                disabled={status === STATUS.LOADING || !avatar}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  textTransform: "none",
+                  color: "#fff",
+                  ":disabled": {
+                    opacity: 0.5,
+                    color: "#fff",
+                  },
+                }}
               >
                 <DeleteIcon />
                 <Typography>Delete</Typography>
-              </Box>
+              </Button>
               <input
                 onChange={(e) => {
                   const file = e.target.files[0];
@@ -146,20 +168,28 @@ export default function UpdateAvatar({
             {/* Right side buttons */}
 
             <FlexBox columnGap="20px">
-              <Box
+              <Button
+                disabled={status === STATUS.LOADING}
                 onClick={handleClose}
-                sx={{ cursor: "pointer", border: "1px solid #0a66c2" }}
-                padding="8px 18px"
-                borderRadius="20px"
+                sx={{
+                  border: "1px solid #0a66c2",
+                  textTransform: "none",
+                  color: "#fff",
+                  padding: "8px 18px",
+                  borderRadius: "20px",
+                  ":disabled": {
+                    color: "#fff",
+                  },
+                }}
               >
                 <Typography>Cancel</Typography>
-              </Box>
+              </Button>
 
               {/* save button */}
               <Box
                 sx={{
                   display: `${
-                    typeof avatar === "string" || avatar === user?.avatar?.url
+                    typeof avatar?.url === "string" || avatar === user?.avatar
                       ? "none"
                       : "block"
                   }`,
