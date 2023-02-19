@@ -270,6 +270,7 @@ export const mailController = {
         .cookie("reset_token", token, {
           sameSite: "None",
           secure: true,
+          httpOnly: false,
         })
         .json({
           success: true,
