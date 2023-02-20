@@ -74,7 +74,14 @@ function App() {
       <Box flex={1}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/search" element={<SearchResult />} />
+          <Route
+            path="/search"
+            element={
+              <PrivateRoute>
+                <SearchResult />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="/search/single"
             element={

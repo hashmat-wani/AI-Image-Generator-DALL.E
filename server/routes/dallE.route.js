@@ -2,7 +2,7 @@ import express from "express";
 import { Configuration, OpenAIApi } from "openai";
 import { OPENAI_API_KEY } from "../config/index.js";
 import CustomErrorHandler from "../services/CustomErrorHandler.js";
-import cloudinary from "../config/cloudinary.js";
+import { authenticate } from "../middlewares/index.js";
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.get("/", (req, res) => {
   res.send("Hello from DALL.E");
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", authenticate, async (req, res, next) => {
   try {
     const { prompt } = req.body;
     const aiResponse = await openai.createImage({
