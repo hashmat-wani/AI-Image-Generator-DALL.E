@@ -22,9 +22,7 @@ This project allows users to share images with community. To store these images,
 
 <ins>How it works</ins>
 
-When a user shares an image, it is sent to the server using a multipart/form-data form. The server then uses the multer middleware to handle the file upload and store the image temporarily on the server's disk.
-
-Once the image is uploaded, the server uses the Cloudinary API to upload the image to the Cloudinary platform. The Cloudinary API returns a URL for the image, which is stored in the database along with the user's ID and other metadata.
+When a user shares an image, the server uses the Cloudinary API to upload the image to the Cloudinary platform. The Cloudinary API returns a URL for the image, which is stored in the database along with the user's ID and other metadata.
 
 To display the image, the client-side application fetches the image URL from the database and uses it to display the image in the user interface.
 
@@ -114,7 +112,9 @@ When a user registers on the platform(without Google and Facebook OAuth), they a
 
 ### **8. Changing User Profile Picture with Cloudinary**
 
-This project includes a feature that allows users to change their profile picture. The new picture is uploaded to Cloudinary, a cloud-based image and video management service. Cloudinary stores the new image and provides a URL that can be used to display the image on the platform.
+This project includes a feature that allows users to change their profile picture. When user selects an picture, it is sent to the server using a multipart/form-data form. The server then uses the multer middleware to handle the file upload and store the picture temporarily on the server's disk.
+
+Once the picture is uploaded, the server uses the Cloudinary API to upload the picture to the Cloudinary platform. Cloudinary then stores the new picture and provides a URL that can be used to display the picture on the platform.
 
 <ins>Changing Profile Picture Workflow</ins>
 
