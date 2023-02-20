@@ -60,7 +60,7 @@ const loginController = {
       );
 
       // if user had deactivated his/her account
-      await User.findByIdAndUpdate(user._id, { deactivated: false });
+      await User.findByIdAndUpdate(user._id, { isActive: true });
 
       return res
         .status(200)
@@ -97,7 +97,7 @@ const loginController = {
       if (user) {
         // if user had deactivated his/her account
         await User.findByIdAndUpdate(user._id, {
-          deactivated: false,
+          isActive: true,
           firstName,
           lastName,
         });

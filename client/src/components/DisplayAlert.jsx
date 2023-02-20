@@ -3,7 +3,7 @@ import { Alert, AlertTitle, Stack } from "@mui/material";
 
 const DisplayAlert = ({ type, title, message, action, cb }) => {
   return (
-    <Stack sx={{ width: "100%" }} justifyContent="center">
+    <Stack sx={{ my: "20px", width: "100%" }} justifyContent="center">
       <Alert severity={type}>
         <AlertTitle>{title}</AlertTitle>
         {message}

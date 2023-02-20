@@ -173,7 +173,7 @@ const userController = {
 
   async deactivateUser(req, res, next) {
     try {
-      await User.findByIdAndUpdate(req.user?._id, { deactivated: true });
+      await User.findByIdAndUpdate(req.user?._id, { isActive: false });
       return res
         .status(200)
         .json({ success: true, message: "Account deactivated successfully" });

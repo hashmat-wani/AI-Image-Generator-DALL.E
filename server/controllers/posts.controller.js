@@ -64,7 +64,7 @@ const postsController = {
         {
           $match: {
             $and: [
-              { "user.deactivated": false },
+              { "user.isActive": true },
               { prompt: { $regex: q, $options: "i" } },
             ],
           },
@@ -101,7 +101,7 @@ const postsController = {
         {
           $match: {
             $and: [
-              { "user.deactivated": false },
+              { "user.isActive": true },
               { prompt: { $regex: q, $options: "i" } },
             ],
           },

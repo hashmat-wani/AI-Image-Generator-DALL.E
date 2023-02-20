@@ -6,7 +6,11 @@ const PrivateRoute = ({ children }) => {
   const { user } = useSelector((state) => state.userReducer, shallowEqual);
   const { pathname } = useLocation();
 
-  return user ? children : <Navigate to="/signin" state={{ from: pathname }} />;
+  return user ? (
+    children
+  ) : (
+    <Navigate to="/signin" state={{ from: pathname }} replace />
+  );
 };
 
 export default PrivateRoute;

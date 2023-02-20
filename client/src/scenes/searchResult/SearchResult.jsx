@@ -66,7 +66,7 @@ const SearchResult = () => {
       {posts.length === 0 && status === STATUS.IDLE && (
         <DisplayAlert
           type="info"
-          title="No images found"
+          title="No results found for your search"
           message="Please search first"
           action="Surprise me"
           cb={handleSurpriseMe}

@@ -8,38 +8,13 @@ export const formSlice = createSlice({
   initialState: {
     prompt: "",
     posts: [
-      {
-        id: 1,
-        index: 0,
-        image:
-          "https://cdn.openai.com/labs/images/An%20armchair%20in%20the%20shape%20of%20an%20avocado.webp?v=1",
-        prompt:
-          "Dracula walking down the street of New York City in the 1920s, black and white photography",
-      },
-      {
-        id: 2,
-        index: 1,
-        image:
-          "https://cdn.openai.com/labs/images/An%20armchair%20in%20the%20shape%20of%20an%20avocado.webp?v=1",
-        prompt:
-          "Dracula walking down the street of New York City in the 1920s, black and white photography",
-      },
-      {
-        id: 3,
-        index: 2,
-        image:
-          "https://cdn.openai.com/labs/images/An%20armchair%20in%20the%20shape%20of%20an%20avocado.webp?v=1",
-        prompt:
-          "Dracula walking down the street of New York City in the 1920s, black and white photography",
-      },
-      {
-        id: 4,
-        index: 3,
-        image:
-          "https://cdn.openai.com/labs/images/An%20armchair%20in%20the%20shape%20of%20an%20avocado.webp?v=1",
-        prompt:
-          "Dracula walking down the street of New York City in the 1920s, black and white photography",
-      },
+      // {
+      //   prompt: "A BBQ that is alive, in the style of a Pixar animated movie",
+      //   image:
+      //     "https://res.cloudinary.com/dykpwekmx/image/upload/v1676893665/raw4xi7edgxpikfptd9v.png",
+      //   id: "raw4xi7edgxpikfptd9v",
+      //   index: 0,
+      // },
     ],
     status: STATUS.IDLE,
   },

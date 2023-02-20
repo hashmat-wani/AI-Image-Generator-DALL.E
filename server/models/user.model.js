@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     avatar: { type: Object, default: null },
     verified: { type: Boolean, default: false },
-    deactivated: { type: Boolean, default: false },
+    isActive: { type: Boolean, default: true },
     resetToken: { type: Object, default: null },
   },
   { timestamps: true, versionKey: false }
