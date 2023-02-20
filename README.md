@@ -1,6 +1,6 @@
 # AI Image Generator
 
-This is a web application that generates original, realistic images and art from a short text description and allows users to download, share, or save them in their collections. It uses OpenAI APIs to generate the images and various technologies such as _React, Redux, Formik, Yup, MUI, Node.js, Express.js, MongoDB, mongoose, Joi, Google Oauth, Facebook Oauth, Nodemailer, JWT, Redis, multer, Cloudinary, and Bcrypt_ for implementation.
+This is a web application that generates original, realistic images and art from a short text description and allows users to download, share, or save them in their collections. It uses OpenAI APIs to generate the images and various technologies such as **_React, Redux, Formik, Yup, MUI, Node.js, Express.js, MongoDB, mongoose, Joi, Google Oauth, Facebook Oauth, Nodemailer, JWT, Redis, multer, Cloudinary,_** _and_ **_Bcrypt_** for implementation.
 
 ![Image](./readmeImages/home.png)
 ![Image](./readmeImages/home2.png)
