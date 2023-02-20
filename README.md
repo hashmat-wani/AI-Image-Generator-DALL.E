@@ -18,11 +18,11 @@ user can create images from textual prompts, then choose to share it publicly or
 
 ### **2. Storing Images with Cloudinary**
 
-This project allows users to upload images for use in generating AI images. To store these images, we use Cloudinary, a cloud-based image and video management platform that provides APIs for uploading, manipulating, and delivering images and videos.
+This project allows users to share images with community. To store these images, we use Cloudinary, a cloud-based image and video management platform that provides APIs for uploading, manipulating, and delivering images and videos.
 
 <ins>How it works</ins>
 
-When a user uploads an image, it is sent to the server using a multipart/form-data form. The server then uses the multer middleware to handle the file upload and store the image temporarily on the server's disk.
+When a user shares an image, it is sent to the server using a multipart/form-data form. The server then uses the multer middleware to handle the file upload and store the image temporarily on the server's disk.
 
 Once the image is uploaded, the server uses the Cloudinary API to upload the image to the Cloudinary platform. The Cloudinary API returns a URL for the image, which is stored in the database along with the user's ID and other metadata.
 
@@ -135,7 +135,7 @@ This project uses Axios interceptors and cookies to implement refresh tokens for
 
 When a user logs in or authenticates, the server generates an access token and a refresh token. The access token is a short-lived token that is used to authenticate the user for a limited period of time. The refresh token is a longer-lived token that is used to obtain a new access token when the original access token expires.
 
-When the user's access token expires, the client sends a request to the server to obtain a new access token. The server verifies the user's refresh token and generates a new access token, which is then sent back to the client. This process is transparent to the user and does not require the user to re-authenticate.
+When the user's access token expires, the client sends a request to the server to obtain a new access token with the help of axios interceptor. The server verifies the user's refresh token and generates a new access token, which is then sent back to the client. This process is transparent to the user and does not require the user to re-authenticate.
 
 ### **10. Logout Feature with Redis**
 
