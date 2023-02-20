@@ -10,7 +10,7 @@ import { STATUS } from "../utils";
 import { forwardRef } from "react";
 
 const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="left" ref={ref} {...props} />;
+  return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function VerifyEmailAlert({
