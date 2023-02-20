@@ -79,7 +79,7 @@ const UserPosts = () => {
           setPage(1);
         }}
         pullDownToRefresh
-        pullDownToRefreshThreshold={30}
+        pullDownToRefreshThreshold={25}
         pullDownToRefreshContent={<PullDown />}
         releaseToRefreshContent={<Release />}
       >

@@ -194,7 +194,7 @@ function App() {
         <Stack alignItems="center" px="10px">
           <CircularProgress color="inherit" />
           <Typography textAlign="center" fontSize="18px">
-            Please wait a moment while we verify your login status.
+            Please wait while we verify your login status.
           </Typography>
         </Stack>
       </Backdrop>
