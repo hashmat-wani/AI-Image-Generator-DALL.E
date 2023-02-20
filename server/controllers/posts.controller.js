@@ -29,7 +29,7 @@ const postsController = {
       const imageUrl = await cloudinary.uploader.upload(image);
 
       await Post.create({
-        image: { url: imageUrl.url, id: imageUrl.public_id },
+        image: { url: imageUrl.secure_url, id: imageUrl.public_id },
         prompt,
         user: userDoc?._id,
       });
@@ -98,11 +98,6 @@ const postsController = {
         {
           $unwind: "$user",
         },
-        // {
-        //   $match: {
-        //     "user.deactivated": false,
-        //   },
-        // },
         {
           $match: {
             $and: [

@@ -45,7 +45,7 @@ export const savedPostsController = {
       const { _id } = req?.user;
 
       await SavedPost.create({
-        image: { url: imageUrl.url, id: imageUrl.public_id },
+        image: { url: imageUrl.secure_url, id: imageUrl.public_id },
         prompt,
         collectionId,
         user: _id,

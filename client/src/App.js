@@ -71,12 +71,6 @@ function App() {
   return (
     <div className="App">
       <Navbar {...{ setEmailVerificationAlert }} />
-      <a
-        href="https://res.cloudinary.com/dykpwekmx/image/upload/fl_attachment/hbn4w30ybxssmf4fsc1d.png"
-        download="abc"
-      >
-        download image
-      </a>
       <Box flex={1}>
         <Routes>
           <Route path="/" element={<Home />} />

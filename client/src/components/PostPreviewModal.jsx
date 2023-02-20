@@ -131,7 +131,9 @@ export default function PostPreviewModal({
                 padding: "10px",
               }}
               fullWidth
-              onClick={() => downloadImage(openPostData.image)}
+              onClick={() =>
+                downloadImage({ ...openPostData.image, cloudinaryUrl: true })
+              }
             >
               Download
             </Button>

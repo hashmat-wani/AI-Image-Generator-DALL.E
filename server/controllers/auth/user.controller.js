@@ -36,17 +36,14 @@ const userController = {
       )}`;
       const image = await cloudinary.uploader.upload(uri);
 
-      console.log("coming1");
-
       // removing old avatar from cloudinary
       let user = await User.findById(userId);
       if (user?.avatar) {
         await cloudinary.uploader.destroy(user.avatar?.id);
       }
-      console.log("coming2");
       user = await User.findByIdAndUpdate(
         userId,
-        { avatar: { url: image.url, id: image.public_id } },
+        { avatar: { url: image.secure_url, id: image.public_id } },
         { new: true }
       );
 
