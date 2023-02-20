@@ -73,8 +73,7 @@ export default function DeleteAccPopup({
             size="small"
             fullWidth
             required
-            label="Type your email to confirm"
-            helperText={user?.email}
+            label={user?.email}
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
