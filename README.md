@@ -1,6 +1,6 @@
 # AI Image Generator
 
-This is a web application that generates original, realistic images and art from a short text description and allows users to download, share, or save them in their collections. It uses OpenAI APIs to generate the images and various technologies such as React, Redux, Formik, Yup, MUI, Node, Express, Mongoose, Joi, Google Oauth, Facebook Oauth, nodemailer, jsonwebtokens, redis, multer, cloudinary, and bcrypt for implementation.
+This is a web application that generates original, realistic images and art from a short text description and allows users to download, share, or save them in their collections. It uses OpenAI APIs to generate the images and various technologies such as _React, Redux, Formik, Yup, MUI, Node.js, Express.js, MongoDB, mongoose, Joi, Google Oauth, Facebook Oauth, Nodemailer, JWT, Redis, multer, Cloudinary, and Bcrypt_ for implementation.
 
 ![Image](./readmeImages/home.png)
 ![Image](./readmeImages/home2.png)
@@ -217,7 +217,7 @@ Installation
 Clone this repository to your local machine by running the below command:
 
 ```
-git clone https://github.com/hashmat-noorani/repo-name.git.
+git clone https://github.com/hashmat-noorani/AI-Image-Generator-DALL.E.git
 ```
 
 Install the dependencies by running the command:
