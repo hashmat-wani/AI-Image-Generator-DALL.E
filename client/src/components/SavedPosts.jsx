@@ -220,7 +220,7 @@ const SavedPosts = () => {
                       <Box
                         onClick={() => {
                           setOpenPostData({
-                            image: post.image?.url,
+                            image: post.image,
                             prompt: post?.prompt,
                             _id: post?._id,
                             collectionName,

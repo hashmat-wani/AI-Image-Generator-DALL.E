@@ -126,7 +126,7 @@ export default function DDButton({ image, prompt }) {
             />
           </Box>
         ) : (
-          <>
+          <Box>
             {status === STATUS.ERROR ? (
               <Box padding="0 15px">
                 <DisplayAlert
@@ -165,7 +165,7 @@ export default function DDButton({ image, prompt }) {
                 ))}
               </Box>
             )}
-          </>
+          </Box>
         )}
 
         {createCollection ? (

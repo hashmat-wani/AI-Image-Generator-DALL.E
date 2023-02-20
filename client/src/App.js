@@ -72,8 +72,8 @@ function App() {
     <div className="App">
       <Navbar {...{ setEmailVerificationAlert }} />
       <a
-        href="http://res.cloudinary.com/dykpwekmx/image/upload/v1676826839/si6lh3roxrrstqebveiy.webp"
-        download
+        href="https://res.cloudinary.com/dykpwekmx/image/upload/fl_attachment/hbn4w30ybxssmf4fsc1d.png"
+        download="abc"
       >
         download image
       </a>

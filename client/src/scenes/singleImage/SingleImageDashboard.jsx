@@ -41,7 +41,7 @@ const SingleImageDashboard = () => {
   };
 
   const handleDownload = () => {
-    downloadImage(id, image);
+    downloadImage({ id, url: image });
   };
 
   return (

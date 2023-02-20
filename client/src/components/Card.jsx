@@ -17,7 +17,7 @@ const Card = ({
   return (
     <Box
       onClick={() => {
-        setOpenPostData({ image: image.url, prompt, _id });
+        setOpenPostData({ image, prompt, _id });
         setOpenPost(true);
       }}
       sx={{
