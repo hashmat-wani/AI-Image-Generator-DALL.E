@@ -136,7 +136,7 @@ function Navbar({ setEmailVerificationAlert }) {
   };
 
   const handleCloseUserMenu = () => {
-    status !== STATUS.LOADING && setAnchorElUser(null);
+    setAnchorElUser(null);
   };
 
   const { pathname } = useLocation();
@@ -393,7 +393,11 @@ function Navbar({ setEmailVerificationAlert }) {
               },
               { label: "Visit the OpenAI API", url: "https://openai.com/api/" },
             ].map((node, idx) => (
-              <MenuItem key={idx} sx={{ p: "8px 10px" }}>
+              <MenuItem
+                onClick={handleCloseUserMenu}
+                key={idx}
+                sx={{ p: "8px 10px" }}
+              >
                 <a
                   style={{ fontSize: "13px" }}
                   href={node.url}
@@ -417,7 +421,6 @@ function Navbar({ setEmailVerificationAlert }) {
                   dispatch(
                     logOut({ toggleBackdrop, navigate, handleCloseUserMenu })
                   );
-                  // handleCloseUserMenu();
                 }}
                 sx={{
                   p: "8px 10px",
