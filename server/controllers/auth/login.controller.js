@@ -55,7 +55,7 @@ const loginController = {
 
       const refresh_token = JwtService.sign(
         { _id: user._id, email: user.email },
-        "1d",
+        "2d",
         JWT_REFRESH_SECRET
       );
 
@@ -68,7 +68,7 @@ const loginController = {
           httpOnly: true,
           sameSite: "None",
           secure: true,
-          maxAge: isPersistent ? 2 * 24 * 60 * 60 * 1000 : null,
+          maxAge: isPersistent ? 6 * 60 * 60 * 1000 : null,
           // days,hours,mins,secs,milisecs.. total-> 2 days
         })
         .cookie("refresh_token", `Bearer ${refresh_token}`, {
@@ -156,7 +156,7 @@ const loginController = {
 
       const refresh_token = JwtService.sign(
         { _id: user._id, email: user.email },
-        "1d",
+        "2d",
         JWT_REFRESH_SECRET
       );
 
@@ -166,15 +166,13 @@ const loginController = {
           httpOnly: true,
           sameSite: "None",
           secure: true,
-          maxAge: 2 * 24 * 60 * 60 * 1000,
-          // days,hours,mins,secs,milisecs.. total-> 2 days
+          maxAge: 6 * 60 * 60 * 1000, //6hrs
         })
         .cookie("refresh_token", `Bearer ${refresh_token}`, {
           httpOnly: true,
           sameSite: "None",
           secure: true,
-          maxAge: 2 * 24 * 60 * 60 * 1000,
-          // days,hours,mins,secs,milisecs.. total-> 2 days
+          maxAge: 2 * 24 * 60 * 60 * 1000, //2 days
         })
         .redirect(`${MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API}`);
     } catch (err) {
