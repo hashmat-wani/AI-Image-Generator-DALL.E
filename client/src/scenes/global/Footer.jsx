@@ -86,13 +86,10 @@ const Footer = () => {
             <Typography fontSize="13px">
               DALL·E is an AI system developed by OpenAI that can create
               original, realistic images and art from a short text description.
-              It can make realistic and context-aware edits, including
-              inserting, removing, or retouching specific sections of an image
-              from a natural language description. DALL·E was trained by
-              learning the relationship between images and the text used to
-              describe them. It uses a process called diffusion, which starts
-              with a pattern of random dots and gradually alters that pattern
-              towards a final output.
+              DALL·E was trained by learning the relationship between images and
+              the text used to describe them. It uses a process called
+              diffusion, which starts with a pattern of random dots and
+              gradually alters that pattern towards a final output.
             </Typography>
           </Box>
         </Box>
