@@ -44,12 +44,15 @@ const Input = () => {
       <TextField
         onChange={(e) => dispatch(updateForm({ prompt: e.target.value }))}
         name="prompt"
+        multiline={isMobile ? true : false}
+        rows={3}
         fullWidth
         value={prompt}
         variant="standard"
         placeholder="An Impressionist oil painting of sunflowerrs in a purple vase..."
         sx={{
-          p: { xs: "13px 14px 40px", md: "9px 14px" },
+          // p: { xs: "13px 14px 40px", md: "9px 14px" },
+          p: "9px 14px",
           borderBottom: `${
             isMobile ? `1px solid ${shades.secondary[200]}` : "none"
           }`,
