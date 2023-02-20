@@ -50,7 +50,7 @@ export default function DeactivateAccPopup({
         TransitionComponent={Transition}
         keepMounted
       >
-        <DialogTitle>Deactivat account</DialogTitle>
+        <DialogTitle>Deactivate account</DialogTitle>
         <DialogContent>
           <Typography mb="7px">
             Are you sure you want to deactivate your account.
