@@ -2,7 +2,7 @@ import express from "express";
 import multer from "multer";
 import { userController } from "../controllers/index.js";
 import { authenticate } from "../middlewares/authenticate.js";
-import path from "path";
+import CustomErrorHandler from "../services/CustomErrorHandler.js";
 
 const router = express.Router();
 
@@ -23,7 +23,7 @@ const fileFilter = (req, file, cb) => {
   if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
     cb(null, true);
   } else {
-    cb({ message: "Unsupported file format" }, false);
+    cb(CustomErrorHandler.validationError("Unsupported file format"), false);
   }
 };
 
