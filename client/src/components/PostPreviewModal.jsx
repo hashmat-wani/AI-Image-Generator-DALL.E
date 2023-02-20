@@ -4,7 +4,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { shades } from "../theme";
 import { downloadImage } from "../utils";
-import { generatePosts } from "../state/formSlice";
+import { generatePosts, updateForm } from "../state/formSlice";
 import { deleteUserPost } from "../state/userPostsSlice";
 import { useContext } from "react";
 import { backdropContext } from "../context/BackdropContext";
@@ -30,6 +30,7 @@ export default function PostPreviewModal({
 
   const handleGenerate = () => {
     navigate("/search");
+    dispatch(updateForm({ prompt: openPostData?.prompt }));
     const args = { prompt: openPostData?.prompt };
     dispatch(generatePosts(args));
   };

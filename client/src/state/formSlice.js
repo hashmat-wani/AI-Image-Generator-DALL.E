@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { STATUS } from "../utils/enums";
 import { v4 as uuidv4 } from "uuid";
-import { instance } from "../utils/apiInstances";
+import { privateInstance } from "../utils/apiInstances";
 
 export const formSlice = createSlice({
   name: "form",
@@ -35,7 +35,7 @@ export const generatePosts =
   ({ prompt }) =>
   (dispatch) => {
     dispatch(setStatus(STATUS.LOADING));
-    instance
+    privateInstance
       .post("/api/v1/dalle", { prompt })
       .then((data) => {
         dispatch(setStatus(STATUS.IDLE));

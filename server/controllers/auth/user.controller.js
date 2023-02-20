@@ -47,7 +47,6 @@ const userController = {
         { new: true }
       );
 
-      console.log("coming3");
       return res.status(201).json({
         success: true,
         avatar: user?.avatar,
