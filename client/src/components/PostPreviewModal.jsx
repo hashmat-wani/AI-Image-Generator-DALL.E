@@ -99,6 +99,7 @@ export default function PostPreviewModal({
                   mb: "10px",
                   background: "#ff6b60",
                   padding: "10px",
+                  color: "#fff",
                   ":hover": {
                     background: "#ff4f42",
                   },
@@ -116,6 +117,7 @@ export default function PostPreviewModal({
                   mb: "10px",
                   background: "#ff6b60",
                   padding: "10px",
+                  color: "#fff",
                   ":hover": {
                     background: "#ff4f42",
                   },
