@@ -24,7 +24,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-import redis from "./config/redis.js";
+// import redis from "./config/redis.js";
 const app = express();
 
 const PORT = APP_PORT || 3000;

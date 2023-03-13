@@ -44,7 +44,8 @@ export const generatePosts =
             posts: data.data.images.map((photo, index) => ({
               id: uuidv4(),
               index,
-              image: `data:image/jpeg;base64,${photo.b64_json}`,
+              image: `data:image/jpeg;base64,${photo.b64_json}`, // for base64 images
+              // image: photo.url, // for url version
               prompt: data?.data?.prompt,
             })),
           })

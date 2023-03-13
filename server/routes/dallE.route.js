@@ -13,7 +13,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 router.get("/", (req, res) => {
-  res.send("Hello from DALL.E");
+  res.send("Hello from DALL.E Routes");
 });
 
 router.post("/", authenticate, async (req, res, next) => {
@@ -21,15 +21,18 @@ router.post("/", authenticate, async (req, res, next) => {
     const { prompt } = req.body;
     const aiResponse = await openai.createImage({
       prompt,
-      n: 4,
+      n: 1,
       size: "512x512",
+      // size: "256x256", // for testing purpose
       response_format: "b64_json",
+      // response_format: "url",
     });
 
-    const images = aiResponse.data.data;
+    const images = aiResponse?.data?.data;
 
     res.status(200).json({ images, prompt });
   } catch (err) {
+    // console.log(err?.message || err?.response?.data?.error?.message);
     const message =
       err?.response?.data?.error?.message || "Internal server error";
 

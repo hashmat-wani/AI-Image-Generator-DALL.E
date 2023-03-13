@@ -6,5 +6,6 @@ export async function downloadImage({ id, url, cloudinaryUrl = false }) {
     url[url.length - 2] = "fl_attachment";
     url = url.join("/");
   }
+  // console.log(url);
   FileSaver.saveAs(url, `dallE-${id}`);
 }
