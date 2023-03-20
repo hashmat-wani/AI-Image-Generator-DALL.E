@@ -79,6 +79,7 @@ const Card = ({
       <img
         style={{ width: "100%", height: "100%" }}
         src={image.url}
+        loading="lazy"
         alt="posts"
       />
     </Box>
