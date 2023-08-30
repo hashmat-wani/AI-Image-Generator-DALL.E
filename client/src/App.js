@@ -43,7 +43,8 @@ function App() {
 
   const dispatch = useDispatch();
 
-  const { openBackdrop, toggleBackdrop } = useContext(backdropContext);
+  const { openBackdrop, toggleBackdrop, backdropMsg } =
+    useContext(backdropContext);
   const { searchPost } = useSelector(
     (state) => state.postsReducer,
     shallowEqual
@@ -200,9 +201,11 @@ function App() {
       >
         <Stack alignItems="center" px="10px">
           <CircularProgress color="inherit" />
-          <Typography textAlign="center" fontSize="18px">
-            Please wait while we verify your login status.
-          </Typography>
+          {backdropMsg && (
+            <Typography textAlign="center" fontSize="18px">
+              {backdropMsg}
+            </Typography>
+          )}
         </Stack>
       </Backdrop>
     </div>

@@ -4,13 +4,17 @@ export const backdropContext = createContext();
 
 const BackdropContext = ({ children }) => {
   const [openBackdrop, setOpenBackdrop] = useState(false);
+  const [backdropMsg, setBackdropMsg] = useState("");
 
-  const toggleBackdrop = () => {
+  const toggleBackdrop = (msg = "") => {
     setOpenBackdrop((prev) => !prev);
+    setBackdropMsg(msg);
   };
 
   return (
-    <backdropContext.Provider value={{ openBackdrop, toggleBackdrop }}>
+    <backdropContext.Provider
+      value={{ openBackdrop, toggleBackdrop, backdropMsg, setBackdropMsg }}
+    >
       {children}
     </backdropContext.Provider>
   );

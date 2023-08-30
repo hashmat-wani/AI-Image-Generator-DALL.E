@@ -156,7 +156,7 @@ export const loginWithFacebook = () => () => {
 export const verifyUser =
   ({ alert, toggleBackdrop, popup, navigate, to }) =>
   (dispatch) => {
-    toggleBackdrop();
+    toggleBackdrop("Please wait while we verify your login status.");
     privateInstance
       .get("/api/v1/auth/me")
       .then((data) => {
